@@ -1,0 +1,99 @@
+<!--phan khong lien quan-->
+
+<!--<a href="login/register">Đăng kí tài khoản</a> <br>-->
+<!--<a href="login/login">Đăng nhập hệ thống</a>-->
+
+<!--phan index chinh-->
+
+<style type="text/css">
+
+    body, html {
+        height: 100%;
+        margin:0;
+    }
+
+
+</style>
+
+<script type="text/javascript">
+    $('body').addClass('bodyLoginPage');
+</script>
+
+
+
+<section class="wrapper">
+    <section class="header">
+        <div class="divLogo">
+            <div class="logoName">ZESS</div>
+            <div class="sloganName">Mạng xã hội Du lịch và Ẩm thực</div>
+        </div>
+    </section>
+    <aside class="right-sec">
+        <div class="title">
+            Đăng ký
+        </div>
+        <div class="description">
+            Bạn chưa có tài khoản? <br />
+            Hãy đăng ký mới để cùng nhau khám phá những điểm đến thú vị
+        </div>
+        <hr>
+        <div class="form">
+            <form action="#">
+                <input style="float:left;" class="percent" type="text" placeholder="Họ" />
+                <input style="float:right;" class="percent" type="text" placeholder="Tên" />
+                <input type="text" placeholder="Email" />
+                <input type="password" placeholder="Mật khẩu" />
+                <input type="password" placeholder="Nhập lại mật khẩu" />
+                <input type="submit" value="Đăng ký" />
+            </form>
+
+
+
+        </div>
+    </aside>
+    <aside class="left-sec">
+        <div class="title">
+            Đăng nhập
+        </div>
+        <div class="description">
+            Nào, đăng nhập và cùng nhau chia sẻ
+        </div>
+        <hr>
+        <div class="form">
+<!--            <form action="#">-->
+<!--                <input type="text" placeholder="Email" />-->
+<!--                <input type="text" placeholder="Mật khẩu" />-->
+<!--                <input type="submit" value="Đăng nhập" />-->
+<!--            </form>-->
+
+        <?php
+            if(isset($error))
+                echo $error;
+
+            $form = $this->form;
+            $form->setAttribute('action', $this->url('login', array('action' => 'login')));
+            $form->prepare();
+
+            echo $this->form()->openTag($form);
+            echo $this->formHidden($form->get('id'));
+            echo $this->formRow($form->get('username'));
+            echo $this->formRow($form->get('password'));
+            echo $this->formSubmit($form->get('submit'));
+            echo $this->form()->closeTag();
+
+        ?>
+
+        </div>
+        <a class="forgetPass" href="#">Quên mật khẩu?</a>
+    </aside>
+</section>
+<footer>
+    <div class="introduction">
+        KHÓA LUẬN TỐT NGHIỆP <br />
+        NIÊN KHÓA: 2009 - 2014 <br />
+        Sinh viên thực hiện: <br />
+        &bull;Nguyễn Xuân Bình - 09520471 <br />
+        &bull;Nguyễn Phúc Hưng - 09520532
+    </div>
+</footer>
+

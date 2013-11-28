@@ -1,0 +1,250 @@
+<style type="text/css">
+
+    body, html {
+        height: 100%;
+        margin:0;
+    }
+
+</style>
+
+
+<section class="wrapper">
+    <section class="header">
+        <div class="divLogo">
+            <div class="logoName">ZESS</div>
+            <div class="sloganName">Mạng xã hội Du lịch và Ẩm thực</div>
+        </div>
+    </section>
+    <aside class="right-sec">
+        <div class="title">
+            Đăng ký
+        </div>
+        <div class="description">
+            Bạn chưa có tài khoản? <br />
+            Hãy đăng ký mới để cùng nhau khám phá những điểm đến thú vị
+        </div>
+        <hr>
+        <div class="form">
+<!--            --><?php //echo $this->basePath(). '/register'; ?>
+            <form action="" method="post" name="reg-form" id="reg-form">
+                <div class="errorRegister"></div>
+                <div class="divHoTen" style="width: 100%;">
+                    <div style="width: 50%; float: left;">
+                        <input style="float:left;" name="firstname" id="regFirstname" class="percent" type="text" placeholder="Họ" />
+                    </div>
+                    <div style="width: 50%; float: right;">
+                        <input style="float:right;" name="lastname" id="regLastname" class="percent" type="text" placeholder="Tên" />
+                    </div>
+                </div>
+                <input type="text" name="email" id="regEmail" placeholder="Email" />
+                <input type="password" name="password" id="regPassword" placeholder="Mật khẩu" />
+                <input type="password" name="retypePassword" placeholder="Nhập lại mật khẩu" />
+                <input type="submit" name="submit" id="regSubmit" value="Đăng ký" />
+            </form>
+        </div>
+    </aside>
+    <aside class="left-sec">
+        <div class="title">
+            Đăng nhập
+        </div>
+        <div class="description">
+            Nào, đăng nhập và cùng nhau chia sẻ
+        </div>
+        <hr>
+        <div class="form">
+            <?php
+            if(isset($error))
+                echo $error;
+
+            $form = $this->form;
+            $form->prepare();
+
+            echo $this->form()->openTag($form);
+            echo $this->formHidden($form->get('id'));
+            echo "<div style='display: block; float: left;' id='errorContent'></div>";
+            echo $this->formRow($form->get('username'));
+            echo $this->formRow($form->get('password'));
+            echo $this->formSubmit($form->get('submit'));
+            echo $this->form()->closeTag();
+            ?>
+
+        </div>
+        <a class="forgetPass" href="#">Quên mật khẩu?</a>
+
+    </aside>
+</section>
+<footer>
+    <div class="introduction">
+        KHÓA LUẬN TỐT NGHIỆP <br />
+        NIÊN KHÓA: 2009 - 2014 <br />
+        Sinh viên thực hiện: <br />
+        &bull;Nguyễn Xuân Bình - 09520471 <br />
+        &bull;Nguyễn Phúc Hưng - 09520532
+    </div>
+</footer>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('body').addClass('bodyLoginPage');
+
+        $('#submitbutton').click( function() {
+            $('#errorContent').html('');
+            formValidate();
+        });
+
+        $('#regSubmit').click(function(){
+            regFormValidate();
+        });
+
+        function regFormValidate()
+        {
+            $('#reg-form').validate({
+                errorElement : "div",
+                rules : {
+                    firstname: {
+                        required: true
+                    },
+                    lastname: {
+                        required: true
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    password: {
+                        required: true,
+                        minlength: 6
+                    },
+                    retypePassword: {
+                        required : true,
+                        equalTo: "#regPassword"
+                    }
+                },
+                messages: {
+                    firstname: {
+                        required: "Nhập vào Tên của bạn."
+                    },
+                    lastname: {
+                        required: "Nhập vào Họ của bạn."
+                    },
+                    email: {
+                        required: "Nhập vào địa chỉ Email.",
+                        email: "Nhập địa chỉ Email đúng định dạng."
+                    },
+                    password: {
+                        required: "Nhập vào mật khẩu.",
+                        minlength: "Mật khẩu nhập vào ít nhất 6 kí tự."
+                    },
+                    retypePassword: {
+                        equalTo: "Mật khẩu nhập lại chưa chính xác",
+                        required: "Nhập lại mật khẩu."
+                    }
+                },
+                submitHandler: function(){
+                    doAjaxRegisterAction();
+                }
+            });
+        }
+
+        function doAjaxRegisterAction()
+        {
+            var firstname = $('#regFirstname').val();
+            var lastname = $('#regLastname').val();
+            var email = $('#regEmail').val();
+            var password = $('#regPassword').val();
+            var data = "?firstname="+firstname+"&lastname="+lastname+"&email="+email+"&password="+password;
+
+            $.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('register'); ?>",
+                data: data,
+                async:false,
+                success: function(data) {
+
+                    data = JSON.parse(data);
+                    var success = data['success'];
+                    if(success == "0")
+                    {
+                        $('.errorRegister').html(data.error);
+                    }
+                    else
+                    {
+
+                        window.location.replace(data.path.toString());
+                    }
+                },
+                error: function() {
+                    alert("Đăng nhập thất bại, hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+
+
+        function formValidate()
+        {
+            $('#login-form').validate({
+
+                errorElement : "div",
+                rules: {
+                    username: {
+                        required: true,
+                        email: true
+                    },
+                    password: {
+                        required: true,
+                        minlength: 6
+                    }
+                },
+
+                messages: {
+                    password: {
+                        required: "Nhập mật khẩu.",
+                        minlength: "Mật khẩu nhập vào ít nhất 6 kí tự."
+                    },
+                    username: "Nhập địa chỉ email đúng định dạng."
+                },
+
+                submitHandler: function() {
+                    doAjaxLoginAction();
+                }
+            });
+        }
+
+        function doAjaxLoginAction()
+        {
+
+            var email = $('.ajax-email').val();
+            var password = $('.ajax-password').val();
+            var data = "email=" + email + "&password=" + password;
+
+            $.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('test'); ?>",
+                data: data,
+                async:false,
+                success: function(data) {
+
+                    data = JSON.parse(data);
+
+                    var success = data['success'];
+                    if(success == "0")
+                    {
+                        var error = data['error'];
+                        $('#errorContent').html(error);
+                    }
+                    else
+                    {
+                        window.location.replace(data.path.toString());
+                    }
+                },
+                error: function() {
+                    alert("Đăng nhập thất bại, hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+
+        }
+});
+
+</script>

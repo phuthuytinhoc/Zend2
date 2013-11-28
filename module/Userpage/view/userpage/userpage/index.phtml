@@ -1,0 +1,203 @@
+<style type="text/css">
+
+    .logoZess:hover{
+        text-decoration: none;
+    }
+
+
+
+</style>
+
+<script type="text/javascript">
+    $('body').addClass('bodyUserpage');
+    $('html').addClass('bodyUserpage');
+</script>
+
+<div class="divLeft">
+    <div class="divSubMenu">
+        <a class="logoZess" href="<?php echo $this->basePath(); ?>"><div class="divLogo">ZESS</div></a>
+        <div class="divSearch">
+            <form action="#">
+                <input id="txtSearch" type="text" placeholder="Search ..." />
+                <input id="btnSearch" type="submit" value=" " />
+            </form>
+        </div>
+        <div class="divSub about">
+            <div class="divHead"> About me </div>
+            <div class="divContent">
+                <div class="aboutImg job">
+                </div>
+                <div class="aboutInfo">
+                    Consultant/Web Developer at Trobz
+                </div>
+            </div>
+            <div class="divContent">
+                <div class="aboutImg study">
+                </div>
+                <div class="aboutInfo">
+                    Studies Hệ thống thông tin at Đại học Công Nghệ Thông Tin
+                </div>
+            </div>
+            <div class="divContent">
+                <div class="aboutImg relationship">
+                </div>
+                <div class="aboutInfo">
+                    Single
+                </div>
+            </div>
+        </div>
+        <div class="divSub friend">
+            <div class="divHead"> Friend </div>
+            <div class="divContent">
+                <?php
+                for ($i = 0; $i < 12; $i++){
+                    echo '<div class="subImage"></div>';
+                }
+                ?>
+            </div>
+        </div>
+        <div class="divSub photo">
+            <div class="divHead"> Photos </div>
+            <div class="divContent">
+                <?php
+                for ($i = 0; $i < 12; $i++){
+                    echo '<div class="subImage"></div>';
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="divMenu">
+        <div class="menuSub home">
+            <div class="divMenuIcon home"></div>
+            <div class="divMenuName home">Home</div>
+        </div>
+        <div class="menuSub me">
+            <div class="divMenuIcon me"></div>
+            <div class="divMenuName me">Me</div>
+        </div>
+        <div class="menuSub noti">
+            <div class="divMenuIcon noti"></div>
+            <div class="divMenuName noti">Shake</div>
+        </div>
+        <div class="menuSub friend">
+            <div class="divMenuIcon friend"></div>
+            <div class="divMenuName friend">Friend</div>
+        </div>
+        <div class="menuSub mail">
+            <div class="divMenuIcon mail"></div>
+            <div class="divMenuName mail">Mail</div>
+        </div>
+        <div class="menuSub config">
+            <div class="divMenuIcon config"></div>
+            <div class="divMenuName config">Config</div>
+        </div>
+    </div>
+
+    <div class="divUserPanel">
+        <div class="userAvatar">
+            <img src="<?php echo $this->basePath(); ?>/img/avatar2.jpg" id="userAvatar" />
+        </div>
+        <div class="userInfo">
+            <div class="info name">Nguyễn Xuân Bình</div>
+            <div class="info age">
+                <div class="infoIcon age"></div>
+                <div class="infoContent age">08 Dec 1991</div>
+            </div>
+            <div class="info address">
+                <div class="infoIcon address"></div>
+                <div class="infoContent address">Kí túc xá Đại học Quốc gia, Ho Chi Minh, Viet Nam</div>
+            </div>
+            <div class="info quote">
+                <div class="infoIcon quote"></div>
+                <div class="infoContent quote">Đôi khi không đạt được một điều gì đó lại là một điều may mắn</div>
+            </div>
+            <div class="logOut">
+                <div class="infoIcon logout"></div>
+                <a href="<?php echo $this->url('success', array('action' => 'logout')); ?>" style="color: white;"><div class="infoContent logout">Log Out</div></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="divRight">
+    <div class="divCover">
+        <img id="imgCover" src="<?php echo $this->basePath(); ?>/img/cover.jpg" />
+    </div>
+    <div class="statusBlock">
+        <div class="statusType">
+            <div class="type normal">Status</div>
+            <div class="type share">Share</div>
+            <div class="type image">Image</div>
+            <div class="type video">Video</div>
+        </div>
+        <div class="statusContent">
+            <div class="statusComposeArea">
+                <textarea></textarea>
+            </div>
+            <div class="btnSubmit">
+                <input id="btnPost" type="button" value="Feel" />
+            </div>
+        </div>
+    </div>
+    <div class="divAction">
+        <div class="divStatus">
+            <div class="statusAvatar">
+                <img src="<?php echo $this->basePath(); ?>/img/avatar2.jpg" />
+            </div>
+            <div class="statusRightPanel">
+                <div class="statusPosition"><span>Nguyễn Xuân Bình</span> &curren; 5 minutes ago at Ho Chi Minh</div>
+                <div class="statusContent">
+                    Hôm nay trời đẹp quá :)
+                </div>
+                <div class="statusFooter">
+                    <div class="summary">
+                        <a class="like" href="#">Like</a>
+                        <a class="comment" href="#">Comment</a>
+                        <a class="share" href="#">Share</a>
+                    </div>
+                    <div class="icon">
+                        <a class="like" href="#"></a><span>30</span>
+                        <a class="comment" href="#"></a><span>30</span>
+                        <a class="share" href="#"></a><span>30</span>
+
+                    </div>
+                </div>
+                <div class="divComment">
+                    <div class="commentAction">
+                        <div class="commentUserAvatar">
+                            <img src="<?php echo $this->basePath(); ?>/img/avatar.jpg" />
+                        </div>
+                        <div class="commentRight">
+                            <div class="commentContent"><div class="commentUserName">Fu Hu</div>Thằng này bị điên rồi =.="</div>
+                            <div class="commentFooter">
+                                <div class="commentTime">5 minites ago</div>
+                                <div class="commentLike">
+                                    <a href="#"> Like</a>
+                                    <a href="#" class="number">10</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="commentCompose">
+                        <div class="commentUserAvatar">
+                            <img src="<?php echo $this->basePath(); ?>/img/avatar2.jpg" />
+                        </div>
+                        <div class="commentRight">
+                            <textarea></textarea>
+                        </div>
+                        <input type="button" value="Post" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+
+
+    });
+</script>

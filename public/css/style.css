@@ -1,0 +1,990 @@
+body {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.zf-green {
+    color: #68b604;
+}
+
+.btn-success {
+  background-color: #57a900;
+  background-image: -moz-linear-gradient(top, #70d900, #57a900);
+  background-image: -ms-linear-gradient(top, #70d900, #57a900);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#70d900), to(#57a900));
+  background-image: -webkit-linear-gradient(top, #70d900, #57a900);
+  background-image: -o-linear-gradient(top, #70d900, #57a900);
+  background-image: linear-gradient(top, #70d900, #57a900);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#70d900', endColorstr='#57a900', GradientType=0);
+}
+
+.btn-success:hover,
+.btn-success:active,
+.btn-success.active,
+.btn-success.disabled,
+.btn-success[disabled] {
+  background-color: #57a900;
+}
+
+.btn-success:active, .btn-success.active {
+  background-color: #57a900;
+}
+
+div.container a.brand {
+    background: url("../img/zf2-logo.png") no-repeat scroll 0 10px transparent;
+    margin-left: 0;
+    padding: 8px 20px 12px 40px;
+}
+
+/*MUC LUC*/
+/*
+
+1. LOGIN PAGE
+2. USER PAGE
+3.
+
+*/
+
+
+/* 1. START LOGIN PAGE */
+
+@font-face {
+    font-family: 'Roboto Slab';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Roboto Slab Regular'),
+    local('RobotoSlab-Regular'),
+    url(http://themes.googleusercontent.com/static/fonts/robotoslab/v2/y7lebkjgREBJK96VQi37ZobN6UDyHWBl620a-IRfuBk.woff) format('woff');
+}
+
+/*body, html {*/
+    /*height: 100%;*/
+    /*margin:0;*/
+/*}*/
+
+.bodyLoginPage {
+    background-image: url(../img/dawn.jpg);
+    background-size: 100% auto;
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+    font-family: 'Roboto Slab', Tahoma;
+    color:white;
+}
+
+
+.wrapper {
+    /*	background:rgba(66, 66, 66, .5); */
+    min-width: 100%;
+    min-height: 100%;
+    height:auto;
+    display:block;
+}
+
+.wrapper .header {
+    width: 100%;
+    height:100px;
+    clear:both;
+    margin:0 auto;
+    text-align:center;
+    /*padding-top:50px;*/
+}
+
+.wrapper .header .divLogo {
+    transition: color 0.4s ease;
+}
+
+
+.wrapper .header .divLogo:hover {
+    color: #1fa3ff;
+    cursor:pointer;
+}
+
+.wrapper .header .divLogo .logoName {
+    width:100%;
+    height:100%;
+    font-size:40px;
+    font-weight:700;
+}
+
+.wrapper .right-sec{
+    width:35%;
+    height:auto;
+    float:right;
+    border: 3px solid #fff;
+    margin-right:10%;
+    background:rgba(0, 0, 0, .5);
+    margin-bottom:20px;
+    padding-bottom: 20px;
+}
+
+.wrapper .left-sec {
+    width: 35%;
+    height:300px;
+    float:left;
+    margin-left:10%;
+    border: 3px solid #fff;
+    background:rgba(0, 0, 0, .5);
+}
+
+.wrapper .title {
+    margin-top:10px;
+    margin-left:8%;
+    margin-right:8%;
+    text-transform:uppercase;
+    clear:both;
+
+}
+
+.wrapper .description {
+    font-size: 13px;
+    margin-top:5px;
+    margin-left: 8%;
+    margin-right:8%;
+    clear:both;
+}
+
+.wrapper hr {
+    margin-left:14%;
+    margin-right:9%;
+}
+
+.wrapper .form {
+    margin-left: 8%;
+    margin-right: 8%;
+    height:55%;
+    width:83%;
+}
+
+.wrapper .form input {
+    font-family:"Roboto Slab", Tahoma;
+    font-size: 16px;
+    border: 1px solid #fff;
+    /*width: 80%;*/
+    width: 100%;
+    height:40px;
+    background-color:transparent;
+    padding-top: 3px;
+    padding-left:10%;
+    padding-right:10%;
+    margin-top:3%;
+    color:#fff;
+    float:right;
+}
+
+.wrapper .form input:focus {
+    background:rgba(200, 200, 200, .3);
+}
+
+.wrapper .form input:hover{
+    border-color:#FF3;
+}
+
+.wrapper .form input[type="submit"]{
+    color:#fff;
+    float: right;
+    width: 30%;
+    padding-left:1%;
+    padding-right:1%;
+    cursor:pointer;
+    transition: background-color 0.5s ease;
+}
+
+.wrapper .form input[type="submit"]:hover{
+    background-color:#1fa3ff;
+    border-color:#fff;
+}
+
+.wrapper .form input.percent {
+    padding-left:10%;
+    width:95%;
+    padding-right:1%;
+}
+
+.wrapper .form div {
+    float: left;
+
+}
+
+.wrapper .left-sec a{
+    text-decoration: none;
+    color:#fff;
+    margin-left:8%;
+    float:left;
+}
+
+.wrapper .left-sec a:hover{
+    text-decoration:underline;
+}
+
+footer {
+    background:rgba(0, 0, 0, .7);
+    border-top: 1px solid #fff;
+    width:100%;
+    height:auto;
+    clear:both;
+    color:#fff;
+    font-size:12px;
+    margin: 0 auto;
+    text-align:center;
+}
+
+/*Phan them vao*/
+.forgetPass{
+
+}
+#reg-form div {
+
+}
+.divHoTen > div:last-child > div{
+    margin-left: 5%;
+}
+
+/****** END LOGIN PAGE ******/
+
+
+
+/* 2. START USER PAGE */
+
+/*body, html {*/
+    /*background-image:url(../images/bg_userpage.JPG); */
+    /*background-color: #e5e5e5;*/
+    /*font-family: "Roboto Slab", Tahoma;*/
+/*}*/
+
+.bodyUserpage {
+    /*background-image:url("../img/bg_userpage.JPG");*/
+    background-color: #e5e5e5;
+    font-family: "Roboto Slab", Tahoma;
+}
+
+.divLeft {
+    height: auto;
+    width: 50%;
+    display:inline-block;
+    position:static;
+    float:left;
+}
+
+.divLeft .divSubMenu{
+    float:left;
+    width: 50%;
+    height:auto;
+    position:static;
+    float:left;
+}
+
+.divLeft .divSubMenu .divLogo {
+    width:100%;
+    height:auto;
+    font-size:40px;
+    font-weight:700;
+    text-align:center;
+    transition: color 0.4s ease;
+    -o-transition: color 0.4s ease;
+    -webkit-transition: color 0.4s ease;
+    -moz-transition: color 0.4s ease;
+    clear:both;
+    display: block;
+    color: #1fa3ff;
+}
+
+.divLeft .divSubMenu .divLogo:hover {
+    color: #3b5998;
+    cursor:pointer;
+}
+
+.divLeft .divSubMenu .divSearch {
+    width: 100%;
+    height:35px;
+    margin-left:9px;
+    clear:both;
+    display:block;
+}
+
+.divLeft .divSubMenu .divSearch #txtSearch {
+    font-family: "Roboto Slab", Tahoma;
+    font-size:14px;
+    color: #006699;
+    width:75%;
+    /*height:35px;*/
+    height:41px;
+    border:2px solid #1fa3ff;
+    float:left;
+    background-color: #FFF;
+    padding-left: 5px;
+    transition: border-color 0.4s ease;
+    -o-transition: border-color 0.4s ease;
+    -webkit-transition: border-color 0.4s ease;
+    -moz-transition: border-color 0.4s ease;
+}
+
+.divLeft .divSubMenu .divSearch #txtSearch:focus {
+    outline: 0;
+}
+
+.divLeft .divSubMenu .divSearch #btnSearch {
+    width: 15%;
+    height: 41px;
+    float:left;
+    background-color: transparent;
+    background:url(../img/search.png) no-repeat center;
+    border-top: 2px solid #1fa3ff;
+    border-right: 2px solid #1fa3ff;
+    border-bottom: 2px solid #1fa3ff;
+    border-left: 0;
+    transition: border-color 0.4s ease;
+    -o-transition: border-color 0.4s ease;
+    -webkit-transition: border-color 0.4s ease;
+    -moz-transition: border-color 0.4s ease;
+}
+
+.divLeft .divSubMenu .divSearch #btnSearch:focus {
+    outline: 0;
+}
+
+.divLeft .divSubMenu .divSearch #btnSearch:hover {
+    cursor: pointer;
+}
+
+.divLeft .divSubMenu .divSub {
+    margin-left: 9px;
+    margin-top: 15px;
+    width:92%;
+    height: auto;
+    font-weight:500;
+    color: #444;
+    display:inline-block;
+    float:left;
+    border: 1px solid #fff;
+    padding-bottom:2px;
+    background-color:#FFF;
+}
+
+.divLeft .divSubMenu .divSub .divHead {
+    /*width: 98%;*/
+    width: 100%;
+    height:auto;
+    padding-left:2%;
+    padding-top: 5px;
+    padding-bottom: 3px;
+    background-color:#EEE;
+    border-bottom: 3px solid #999;
+    float:left;
+    transition: border-color 0.4s ease;
+    -o-transition: border-color 0.4s ease;
+    -webkit-transition: border-color 0.4s ease;
+    -moz-transition: border-color 0.4s ease;
+}
+
+.divLeft .divSubMenu .divSub .divHead:hover {
+    border-bottom-color: #1fa3ff;
+}
+
+.divLeft .divSubMenu .divSub .divContent {
+    width: 96%;
+    height:auto;
+    margin-left:2%;
+    margin-right:2%;
+    border-top: 1px solid #999;
+    display: inline-block;
+    float:left;
+    margin-top:-1px;
+}
+
+.divLeft .divSubMenu .divSub .divContent .aboutImg {
+    width: 11%;
+    height: 30px;
+    display:inline-block;
+    float:left;
+}
+
+.divLeft .divSubMenu .divSub .divContent .aboutImg.job {
+    background:url(../img/briefcase.png) no-repeat center;
+}
+
+.divLeft .divSubMenu .divSub .divContent .aboutImg.study {
+    background:url(../img/study.png) no-repeat center;
+}
+
+.divLeft .divSubMenu .divSub .divContent .aboutImg.relationship {
+    background:url(../img/heart.png) no-repeat center;
+}
+
+.divLeft .divSubMenu .divSub .divContent .aboutInfo {
+    width: 85%;
+    font-size:12px;
+    font-weight: 500px;
+    color: #999;
+    display:block;
+    float:left;
+    margin-left: 4%;
+    margin-top: 8px;
+    margin-bottom:5px;
+}
+
+.divLeft .divSubMenu .divSub.friend .divContent, .divLeft .divSubMenu .divSub.photo .divContent {
+    border-bottom: none;
+}
+
+.divLeft .divSubMenu .divSub .divContent .subImage {
+    margin-top: 1%;
+    margin-right:1%;
+    width:15.5%;
+    height:47px;
+    float:left;
+    background:url(../img/avatar.jpg) no-repeat;
+}
+
+.divLeft .divMenu {
+    float:left;
+    width:7.5%;
+    height:100%;
+    display:inline-block;
+    position:fixed;
+    top: 0;
+    background-color: #1fa3ff;
+}
+
+.divLeft .divMenu .menuSub {
+    width:100%;
+    height:32px;
+    color: #eee;
+    border-left: 3px solid #1fa3ff;
+    transition: border 0.5s ease;
+    -o-transition: border 0.5s ease;
+    -webkit-transition: border 0.5s ease;
+    -moz-transition: border 0.5s ease;
+    margin-bottom: 10px;
+}
+
+.divLeft .divMenu .menuSub.home {
+    margin-top: 66px;
+}
+.divLeft .divMenu .menuSub:hover {
+    width: 95%;
+    background-color: #1fa3bb;
+    border-left: 4px solid #FFF;
+    cursor: pointer;
+}
+
+.divLeft .divMenu .divMenuIcon {
+    height: 24px;
+    width:24px;
+    position:static;
+    float:left;
+    display: inline-block;
+    margin-left: 5px;
+    margin-top: 2px;
+}
+
+.divLeft .divMenu .divMenuIcon.home {
+    background:url(../img/home.png) no-repeat;
+}
+
+.divLeft .divMenu .divMenuIcon.me {
+    background:url(../img/me.png) no-repeat;
+}
+
+.divLeft .divMenu .divMenuIcon.noti {
+    background:url(../img/bell.png) no-repeat;
+}
+
+.divLeft .divMenu .divMenuIcon.friend {
+    background:url(../img/users.png) no-repeat;
+}
+
+.divLeft .divMenu .divMenuIcon.mail {
+    background:url(../img/mail.png) no-repeat;
+}
+
+.divLeft .divMenu .divMenuIcon.config {
+    background:url(../img/cog.png) no-repeat;
+}
+
+.divLeft .divMenu .divMenuName {
+    margin-left: 8px;
+    margin-top: 7px;
+    width:50%;
+    position:static;
+    float:left;
+    display: inline-block;
+}
+
+.divLeft .divUserPanel {
+    position:fixed;
+    width:15%;
+    height:100%;
+    left: 34%;
+    border-left: 1px solid #fff;
+    border-right: 1px solid #fff;
+    top:0;
+}
+
+.divLeft .divUserPanel .userAvatar {
+    width: 100%;
+    height: auto;
+    display:inline-block;
+    float:left;
+}
+
+.divLeft .divUserPanel .userAvatar img#userAvatar {
+    width: 100%;
+    height:auto;
+    max-height: 350px;
+    border-bottom: 1px solid #fff;
+}
+
+.divLeft .divUserPanel .userInfo {
+    width: 100%;
+    float:left;
+    color: #555;
+    font-size: 12px;
+}
+
+.divLeft .divUserPanel .userInfo .info {
+    width: 100%;
+    min-height: 20px;
+    margin-left: 7px;
+    display:block;
+    clear:both;
+    padding-top: 10px;
+}
+
+.divLeft .divUserPanel .userInfo .info.name {
+    width: 100%;
+    word-wrap:break-word;
+    font-size: 16px;
+}
+
+.divLeft .divUserPanel .userInfo .infoIcon {
+    width:16px;
+    height: 16px;
+    display: inline-block;
+    float:left;
+    margin-right: 5px;
+}
+
+.divLeft .divUserPanel .userInfo .infoIcon.age {
+    background-image:url(../img/calendar.png);
+}
+
+.divLeft .divUserPanel .userInfo .infoIcon.address {
+    background-image:url(../img/directions.png);
+}
+
+.divLeft .divUserPanel .userInfo .infoIcon.quote {
+    background-image:url(../img/quote.png);
+}
+
+.divLeft .divUserPanel .userInfo .infoIcon.logout {
+    background-image:url(../img/exit.png);
+}
+
+.divLeft .divUserPanel .userInfo .infoContent {
+    width: 85%;
+    float:left;
+    display: inline-block;
+    word-wrap:break-word;
+}
+
+.divLeft .divUserPanel .userInfo .logOut {
+    color: #fff;
+    /*height: 15px;*/
+    height: 26px;
+    width: 97%;
+    padding-left: 3%;
+    padding-bottom: 3%;
+    padding-top: 2%;
+    position:absolute;
+    left: 0px;
+    bottom: 0px;
+    background-color: #aaa;
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+    -o-transition: background-color 0.4s ease;
+    -webkit-transition: background-color  0.4s ease;
+    -moz-transition: background-color  0.4s ease;
+}
+
+.divLeft .divUserPanel .userInfo .logOut:hover {
+    background-color: #1fa3ff;
+}
+
+.divRight {
+    position:absolute;
+    float:left;
+    border-left: 1px solid #FFF;
+    width: 49.5%;
+    display:inline-block;
+    right: 1px;
+    top: 0px;
+}
+
+.divRight .divCover {
+    width: 100%;
+    height:350px;
+    border-bottom: 1px solid #FFF;
+    display:inline-block;
+    position: static;
+    float:left;
+}
+
+.divRight .divCover #imgCover {
+    width: 100%;
+    height: auto;
+    min-height: 351px;
+}
+
+.divRight .statusBlock {
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 70%;
+    height: 180px;
+    float: left;
+    display: inline-block;
+    position: static;
+    border: 1px solid #FFF;
+}
+
+.divRight .statusBlock .statusType {
+    width: 100%;
+    display:inline-block;
+    position:static;
+    border-bottom: 3px solid #ccc;
+}
+
+.divRight .statusBlock .statusType .type {
+    width: 24%;
+    height: 30px;
+    padding-top:8px;
+    display:inline-block;
+    position:static;
+    float:left;
+    text-align: center;
+    border-right: 4px solid #fff;
+}
+
+.divRight .statusBlock .statusType .type.video {
+    border-right: none;
+}
+
+.divRight .statusBlock .statusContent {
+    width: 100%;
+    height: 130px;
+}
+
+.divRight .statusBlock .statusContent .statusComposeArea {
+    width: 100%;
+    height: 90px;
+}
+
+.divRight .statusBlock .statusContent .statusComposeArea textarea {
+    /*width: 96.1%;*/
+    width: 100%;
+    height: 84%;
+    border: 1px solid #FFF;
+    padding-top: 2%;
+    padding-left: 3%;
+    font-family: "Roboto Slab", Tahoma;
+    font-size: 14px;
+}
+
+.divRight .statusBlock .statusContent .statusComposeArea textarea:focus {
+    outline: 0;
+}
+
+.divRight .statusBlock .statusContent .btnSubmit {
+    width: 100%;
+    height:43px;
+}
+
+.divRight .statusBlock .statusContent .btnSubmit #btnPost {
+    border: 2px solid #FFF;
+    font-family: "Roboto Slab", Tahoma;
+    font-size:13px;
+    height:30px;
+    width:60px;
+    margin-top: 7px;
+    margin-right:7px;
+    display: inline-block;
+    float: right;
+    background-color: #1fa3ff;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+    -o-transition: background-color 0.5s ease;
+    -webkit-transition: background-color  0.5s ease;
+    -moz-transition: background-color  0.5s ease;
+}
+
+.divRight .statusBlock .statusContent .btnSubmit #btnPost:hover {
+    background-color: #FFF;
+    border-color: #1fa3ff;;
+}
+
+.divRight .divAction {
+    margin-top: 10px;
+    width: 100%;
+    min-height: 150px;
+    display: inline-block;
+}
+
+.divRight .divAction .statusAvatar {
+    width: 23%;
+    height: 150px;
+    display: inline-block;
+    float:left;
+}
+
+.divRight .divAction .statusAvatar img {
+    width: 100%;
+    height: 100%;
+}
+
+.divRight .divAction .statusRightPanel {
+    width: 75.5%;
+    height: auto;
+    display: inline-block;
+    float: left;
+}
+
+.divRight .divAction .statusRightPanel .statusPosition {
+    width: 100%;
+    height: 23px;
+    padding-top: 5px;
+    padding-left: 2%;
+    display: inline-block;
+    float: left;
+    background-color:#1fa3ff;
+    font-size: 12px;
+}
+
+.divRight .divAction .statusRightPanel .statusPosition span {
+    color: #FFF;
+    font-size: 14px;
+}
+
+.divRight .divAction .statusRightPanel .statusPosition span:hover {
+    cursor: pointer;
+}
+
+.divRight .divAction .statusRightPanel .statusContent {
+    height: auto;
+    min-height:87px;
+    width: 100%;
+    padding-left: 2%;
+    padding-top: 5px;
+    display: inline-block;
+    float:left;
+    background-color: #f9f9f9;
+    word-wrap:break-word;
+}
+
+.divRight .divAction .statusRightPanel .statusFooter {
+    padding-left: 10px;
+    height:30px;
+    width: 100%;
+    display: inline-block;
+    float: left;
+    background-color: #1fa3ff;
+}
+
+.divRight .divAction .statusRightPanel .statusFooter .summary {
+    display: inline-block;
+    float: left;
+    font-size:12px;
+    margin-top: 6px;
+    margin-left: 8px;
+}
+
+.divRight .divAction .statusRightPanel .statusFooter .summary a {
+    text-decoration: none;
+    color: #000;
+    padding-right: 5px;
+}
+
+.divRight .divAction .statusRightPanel .statusFooter .icon {
+    margin-right: 8px;
+    margin-top: 5px;
+    display: inline-block;
+    float: right;
+}
+
+.divRight .divAction .statusRightPanel .statusFooter .icon a {
+    text-decoration: none;
+    color: #000;
+    width:20px;
+    height: 16px;
+    display: inline-block;
+}
+
+.divRight .divAction .statusRightPanel .statusFooter .icon span {
+    margin-right: 3px;
+}
+
+.divRight .divAction .statusRightPanel .statusFooter .icon a.like {
+    background:url(../img/star.png) no-repeat;
+}
+
+.divRight .divAction .statusRightPanel .statusFooter .icon a.comment {
+    background:url(../img/chat-3.png) no-repeat;
+}
+
+.divRight .divAction .statusRightPanel .statusFooter .icon a.share {
+    background:url(../img/share.png) no-repeat;
+}
+
+.divRight .divAction .statusRightPanel .divComment {
+    width: 100%;
+    display: inline-block;
+    height: auto;
+    float: left;
+    padding-left: 10px;
+}
+
+.divRight .divAction .statusRightPanel .divComment .commentAction {
+    width: 100%;
+    display:inline-block;
+    float: left;
+}
+
+.divRight .divAction .statusRightPanel .divComment .commentAction .commentUserAvatar {
+    margin-left: -10px;
+    height:52px;
+    width:10%;
+    border-bottom: 1px solid #1fa3ff;
+    display: inline-block;
+    float:left;
+}
+
+.divRight .divAction .statusRightPanel .divComment .commentUserAvatar img {
+    width: 50px;
+    height:50px;
+}
+
+.divRight .divAction .statusRightPanel .divComment .commentAction .commentRight {
+    width: 91.8%;
+    min-height:52px;
+    height:auto;
+    background-color:#FFF;
+    display:inline-block;
+    float:left;
+    font-size:12px;
+    border-bottom: 1px solid #1fa3ff;
+}
+
+.divRight .divAction .statusRightPanel .divComment .commentAction .commentRight .commentContent {
+    padding-top: 5px;
+    padding-left:2%;
+    width: 98%;
+    height:auto;
+    min-height: 30px;
+    word-wrap:break-word;
+}
+
+.divRight .divAction .statusRightPanel .divComment .commentAction .commentRight .commentContent .commentUserName {
+    display: inline-block;
+    float:left;
+    margin-right: 5px;
+    color: #1fa3ff;
+    font-weight: bold;
+}
+
+.divRight .divAction .statusRightPanel .divComment .commentAction .commentRight .commentFooter {
+    width: 100%;
+    height: 16px;
+}
+
+.divRight .divAction .statusRightPanel .divComment .commentAction .commentRight .commentFooter .commentTime {
+    display: inline-block;
+    float:left;
+    margin-left: 10px;
+    margin-right: 10px;
+    color: #888;
+}
+
+.divRight .divAction .statusRightPanel .divComment .commentAction .commentRight .commentFooter .commentLike {
+    display: inline-block;
+    float:left;
+}
+
+.divRight .divAction .statusRightPanel .divComment .commentAction .commentRight .commentFooter .commentLike a {
+    text-decoration: none;
+    color: #888;
+}
+
+.divRight .divAction .statusRightPanel .divComment .commentAction .commentRight .commentFooter .commentLike a.number{
+    margin-left: 5px;
+}
+
+.divRight .divAction .statusRightPanel .divComment .commentCompose {
+    width: 99.5%;
+    height: 50px;
+    display: inline-block;
+    float:left;
+    margin-left: -10px;
+    padding-left: 10px;
+    font-size: 12px;
+    border: 1px solid #FFF;
+}
+
+.divRight .divAction .statusRightPanel .divComment .commentCompose .commentUserAvatar {
+    height:47px;
+    width:10%;
+    display: inline-block;
+    float:left;
+    margin-left: -10px;
+}
+
+.divRight .divAction .statusRightPanel .divComment .commentCompose .commentUserAvatar img {
+    width:50px;
+    height: 50px;
+}
+
+.divRight .divAction .statusRightPanel .divComment .commentCompose .commentRight {
+    padding-left: 10px;
+    background-color: white;
+    width: 78%;
+    height: 50px;
+    display: inline-block;
+    float:left;
+    padding-left:10px;
+    background-color:#DDD;
+}
+
+.divRight .divAction .statusRightPanel .divComment .commentCompose .commentRight textarea {
+    width: 96%;
+    height:34px;
+    margin-top: 7px;
+    border: none;
+    font-family: "Roboto Slab", Tahoma;
+    font-size: 12px;
+}
+
+.divRight .divAction .statusRightPanel .divComment .commentCompose .commentRight textarea:focus {
+    outline: 0;
+}
+
+.divRight .divAction .statusRightPanel .divComment .commentCompose input {
+    margin-top: 7px;
+    font-size: 15px;
+    font-family: "Roboto Slab", Tahoma;
+    border: 2px solid #1fa3ff;
+    height: 38px;
+    width:50px;
+    display:inline-block;
+    float:left;
+    background-color: #1fa3ff;
+    border-color: #FFF;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+    -o-transition: background-color 0.5s ease;
+    -webkit-transition: background-color  0.5s ease;
+    -moz-transition: background-color  0.5s ease;
+}
+
+.divRight .divAction .statusRightPanel .divComment .commentCompose input:hover {
+    background-color: #FFF;
+    border-color: #1fa3ff;;
+}
+
+/***** END USER PAGE ******/
