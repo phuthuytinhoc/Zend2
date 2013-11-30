@@ -25,12 +25,6 @@ class UserpageController extends AbstractActionController
 
     public function indexAction()
     {
-        //mot cach de kiem tra session
-//        $session = new Container('user');
-//        if(!isset($session->username))
-//        {
-//            return $this->redirect()->toRoute('home');
-//        }
         if(!$this->getAuthenService()->hasIdentity())
         {
             return $this->redirect()->toRoute('home');
@@ -45,6 +39,11 @@ class UserpageController extends AbstractActionController
     {
         $this->getAuthenService()->clearIdentity();
         return $this->redirect()->toRoute('home');
+    }
+
+    public function friendAction()
+    {
+        return new ViewModel(array());
     }
 
 }

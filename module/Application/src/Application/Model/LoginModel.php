@@ -16,8 +16,8 @@ class LoginModel
     public function saveUser($data, $dm)
     {
         $user = new User();
-        $firstname = $data['firstname'];
-        $lastname = $data['lastname'];
+        $firstname = ($data['firstname']);
+        $lastname = ($data['lastname']);
         $email = $data['email'];
         $password = $data['password'];
 

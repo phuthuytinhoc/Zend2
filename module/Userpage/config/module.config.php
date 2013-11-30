@@ -22,7 +22,7 @@ return array(
             'success' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/success[/][:action][/:id]',  // <---- url format module/action/id
+                    'route'    => '/success[/][:action][[/]:id]',  // <---- url format module/action/id
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'id'     => '[0-9]+',

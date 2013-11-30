@@ -13,6 +13,8 @@
     $('html').addClass('bodyUserpage');
 </script>
 
+<?php //echo $this->url('success', array('action' => 'friend'));?>
+
 <div class="divLeft">
     <div class="divSubMenu">
         <a class="logoZess" href="<?php echo $this->basePath(); ?>"><div class="divLogo">ZESS</div></a>
@@ -69,30 +71,42 @@
     </div>
 
     <div class="divMenu">
-        <div class="menuSub home">
-            <div class="divMenuIcon home"></div>
-            <div class="divMenuName home">Home</div>
-        </div>
-        <div class="menuSub me">
-            <div class="divMenuIcon me"></div>
-            <div class="divMenuName me">Me</div>
-        </div>
-        <div class="menuSub noti">
-            <div class="divMenuIcon noti"></div>
-            <div class="divMenuName noti">Shake</div>
-        </div>
-        <div class="menuSub friend">
-            <div class="divMenuIcon friend"></div>
-            <div class="divMenuName friend">Friend</div>
-        </div>
-        <div class="menuSub mail">
-            <div class="divMenuIcon mail"></div>
-            <div class="divMenuName mail">Mail</div>
-        </div>
-        <div class="menuSub config">
-            <div class="divMenuIcon config"></div>
-            <div class="divMenuName config">Config</div>
-        </div>
+        <a>
+            <div class="menuSub home">
+                <div class="divMenuIcon home"></div>
+                <div class="divMenuName home">Home</div>
+            </div>
+        </a>
+        <a>
+            <div class="menuSub me">
+                <div class="divMenuIcon me"></div>
+                <div class="divMenuName me">Me</div>
+            </div>
+        </a>
+        <a>
+            <div class="menuSub noti">
+                <div class="divMenuIcon noti"></div>
+                <div class="divMenuName noti">Shake</div>
+            </div>
+        </a>
+        <a href="<?php echo $this->url('success', array('action' => 'friend')); ?>">
+            <div class="menuSub friend">
+                <div class="divMenuIcon friend"></div>
+                <div class="divMenuName friend">Friend</div>
+            </div>
+        </a>
+        <a>
+            <div class="menuSub mail">
+                <div class="divMenuIcon mail"></div>
+                <div class="divMenuName mail">Mail</div>
+            </div>
+        </a>
+        <a>
+            <div class="menuSub config">
+                <div class="divMenuIcon config"></div>
+                <div class="divMenuName config">Config</div>
+            </div>
+        </a>
     </div>
 
     <div class="divUserPanel">

@@ -61,7 +61,7 @@ class IndexController extends AbstractActionController
     {
 //        $dm = $this->getServiceLocator()->get('doctrine.documentmanager.odm_default');
 //        $result = new User();
-//        $result = $user = $dm->getRepository('Application\Document\User')->findOneBy(array('password' => '123456' ));
+//        $result = $user = $dm->getRepository('Application\Document\User')->findOneBy(array('email' => 'phuthuytinhoc@yahoo.com' ));
 //        $result = $dm->createQueryBuilder('Application\Document\User')
 //            ->field('password')->equals('12345')
 //            ->getQuery()
@@ -69,7 +69,7 @@ class IndexController extends AbstractActionController
 //        if($result != null)
 //            $result = "khac null";
 //        else $result = "bang null";
-//        echo 'hungnguyen' .  $result;
+//        echo 'hungnguyen' .  $result->getLastname() . $result->getFirstname();
 
         ////////////
         if($this->getAuthService()->hasIdentity())
