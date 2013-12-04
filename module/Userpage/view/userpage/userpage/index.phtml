@@ -4,8 +4,6 @@
         text-decoration: none;
     }
 
-
-
 </style>
 
 <script type="text/javascript">
@@ -17,7 +15,12 @@
 
 <div class="divLeft">
     <div class="divSubMenu">
-        <a class="logoZess" href="<?php echo $this->basePath(); ?>"><div class="divLogo">ZESS</div></a>
+        <a class="logoZess" href="<?php echo $this->basePath(); ?>/">
+<!--            <div class="divLogo">ZESS</div>-->
+            <div style="padding: 10px 0px 5px 50px;">
+                <img style="width: 155px;height: 65px;" src="<?php echo $this->basePath();?>/img/zess_logo2.png">
+            </div>
+        </a>
         <div class="divSearch">
             <form action="#">
                 <input id="txtSearch" type="text" placeholder="Search ..." />
@@ -101,7 +104,7 @@
                 <div class="divMenuName mail">Mail</div>
             </div>
         </a>
-        <a>
+        <a href="<?php echo $this->url('success', array('action' => 'update-info')); ?>">
             <div class="menuSub config">
                 <div class="divMenuIcon config"></div>
                 <div class="divMenuName config">Config</div>

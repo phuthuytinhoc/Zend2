@@ -1,149 +1,28 @@
 
-<div class="fiend-container" style=" width: 100%;">
-
-    <div class="friend-content" style="">
-        <div class="logo-zess">
-            <a href="<?php echo $this->basePath();?>"><img src="<?php echo $this->basePath();?>/img/zess_logo.png"></a>
+<div class="mainContent-Friend" style="">
+    <div style="margin: 0 auto; width: 300px; padding-top: 15px;font-size: 20px;">
+        <div style="font-family: 'Terminal Dosis';">
+            <span>156 bạn bè, 6 bạn chung.</span>
         </div>
-        <ul class="ca-menu">
-            <li>
-                <a href="#">
-                    <span class="ca-icon">F</span>
-                    <div class="ca-content">
-                        <h2 class="ca-main">Trang chủ</h2>
-                        <h3 class="ca-sub">Mạng xã hội Zess</h3>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <span class="ca-icon">Z</span>
-                    <div class="ca-content">
-                        <h2 class="ca-main">Trang cá nhân</h2>
-                        <h3 class="ca-sub">Quay về trang cá nhân</h3>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <span class="ca-icon">t</span>
-                    <div class="ca-content">
-                        <h2 class="ca-main">Chọc</h2>
-                        <h3 class="ca-sub">Chọc ghẹo bạn bè</h3>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <span class="ca-icon">U</span>
-                    <div class="ca-content">
-                        <h2 class="ca-main">Bạn bè</h2>
-                        <h3 class="ca-sub">162 bạn bè, 5 bạn chung</h3>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <span class="ca-icon">@</span>
-                    <div class="ca-content">
-                        <h2 class="ca-main">Hộp thư</h2>
-                        <h3 class="ca-sub">Hộp thư cá nhân</h3>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <span class="ca-icon">S</span>
-                    <div class="ca-content">
-                        <h2 class="ca-main">Cài đặt</h2>
-                        <h3 class="ca-sub">Chỉnh sửa cài đặt cá nhân</h3>
-                    </div>
-                </a>
-            </li>
 
-        </ul>
+    </div>
+    <hr class="hr-friend">
+    <div class="list-friend" style=" float: left;">
+        <div id="circle" class="ec-circle">
+            <a href="#" class="song-tai">Sống tại Vietnam,</a>
+            <a href="#" href="" class="ban-chung">có 3 bạn chung</a>
+            <a href="#" class="huy-ketban">Hủy kết bạn</a>
+        </div>
+        <h3 class="friend-link"><a href="#">Nguyễn Phúc Hưng<a/></h3>
+    </div>
+    <div class="list-friend" style=" float: left;">
+        <div id="circle" class="ec-circle">
+            <a href="#" class="song-tai">Sống tại Vietnam,</a>
+            <a href="#" href="" class="ban-chung">có 3 bạn chung</a>
+            <a href="#" class="huy-ketban">Hủy kết bạn</a>
+        </div>
+        <h3 class="friend-link"><a href="#">Nguyễn Phúc Hưng<a/></h3>
     </div>
 
-    <div class="rightContent-friend" style=" float: left;">
-        <div class="search-nav" style=" height: 70px; width: 100%; margin: 0 auto;">
-            <div class="webdesigntuts-workshop" style="width: 450px; margin: 0 auto;">
-                    <form action="" method="">
-                        <input type="search" placeholder="Tìm kiếm mọi thứ...">
-                        <button>Search</button>
-                    </form>
-            </div>
-
-        </div>
-        <div class="mainContent-Friend" style="">
-            <div style="margin: 0 auto; width: 300px; padding-top: 15px;font-size: 20px;">
-                <div style="font-family: 'Terminal Dosis';">
-                    <span>156 bạn bè, 6 bạn chung.</span>
-                </div>
-
-            </div>
-            <hr class="hr-friend">
-            <div class="list-friend" style=" float: left;">
-                <div id="circle" class="ec-circle">
-                    <a href="#" class="song-tai">Sống tại Vietnam,</a>
-                    <a href="#" href="" class="ban-chung">có 3 bạn chung</a>
-                    <a href="#" class="huy-ketban">Hủy kết bạn</a>
-                </div>
-                <h3 class="friend-link"><a href="#">Nguyễn Phúc Hưng<a/></h3>
-            </div>
-            <div class="list-friend" style=" float: left;">
-                <div id="circle" class="ec-circle">
-                    <a href="#" class="song-tai">Sống tại Vietnam,</a>
-                    <a href="#" href="" class="ban-chung">có 3 bạn chung</a>
-                    <a href="#" class="huy-ketban">Hủy kết bạn</a>
-                </div>
-                <h3 class="friend-link"><a href="#">Nguyễn Phúc Hưng<a/></h3>
-            </div>
-
-
-        </div>
-    </div>
 
 </div>
-
-<style type="text/css">
-
-</style>
-
-
-
-
-<script type="text/javascript">
-    $(document).ready(function(){
-       //set class for body
-        $('body').addClass('bodyFriendPage');
-
-        //set with for some div
-        function calWidthSearchDiv()
-        {
-            var winWidth = $(window).width();
-            var widthBlack = winWidth - 280;
-            $('.fiend-container').css('width', winWidth + "px");
-            $('.rightContent-friend').css('width', widthBlack + "px");
-        }
-
-        //dieu chinh div truoc khi load.
-        calWidthSearchDiv();
-
-        //on window resize
-        $(window).resize(function(){
-            calWidthSearchDiv();
-        });
-
-        //effect for each friend
-        $('.ec-circle').hover(function(){
-            $(this).children().css('color', 'white');
-        },function(){
-            $(this).children().css('color', 'transparent');
-        })
-
-    });
-
-
-
-</script>
-

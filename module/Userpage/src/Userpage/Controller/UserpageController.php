@@ -43,7 +43,27 @@ class UserpageController extends AbstractActionController
 
     public function friendAction()
     {
-        return new ViewModel(array());
+        $this->indexAction();
+//        $this->layout('layout/layout');
+        $layoutSetting = $this->layout();
+        $layoutSetting->setTemplate('layout/settingpage');
+
+        $result = new ViewModel();
+        $result->setTemplate('userpage/userpage/friend');
+
+        return $result;
+    }
+
+    public function updateinfoAction()
+    {
+        $this->indexAction();
+        $layoutSetting = $this->layout();
+        $layoutSetting->setTemplate('layout/settingpage');
+
+        $result = new ViewModel();
+        $result->setTemplate('userpage/userpage/updateinfo');
+
+        return $result;
     }
 
 }

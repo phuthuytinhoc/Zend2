@@ -17,6 +17,6 @@ return array(
 
 //    'module_layouts' => array(
 //        'Application' => 'layout/layout.phtml',
-//        'Userpage' => 'layout/userpage.phtml',
+//        'Userpage' => 'layout/settingpage.phtml',
 //    ),
 );
