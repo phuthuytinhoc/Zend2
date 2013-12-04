@@ -40,6 +40,7 @@ return array(
         'template_path_stack' => array(
             'success' => __DIR__ . '/../view',
         ),
+
     ),
     'doctrine'      => array(
         'authentication'    => array(

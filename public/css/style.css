@@ -988,3 +988,529 @@ footer {
 }
 
 /***** END USER PAGE ******/
+
+/***** Page Friend ******/
+
+.logo-zess{
+    background-color: #000000;
+    padding-top: 4px;
+    padding-left: 65px;
+    height: 70px;
+}
+.logo-zess img {
+    width: 120px;
+    height: 65px;
+}
+.logo-zess:hover{
+    cursor: pointer;
+}
+.hr-friend{
+    border: 1.6px solid #000000;
+    width: 500px;
+    margin-top: 10px !important;
+}
+.bodyFriendPage{
+    background:#e6eecc url('../img/friend_background.png') repeat top left;
+    color: #333;
+    font-family: 'Terminal Dosis', Arial, sans-serif;
+    font-size: 13px;
+}
+
+.fiend-container{
+    position: relative;
+    float: left;
+}
+
+.friend-content{
+    position: relative;
+    float: left;
+}
+
+@font-face {
+    font-family: 'Terminal Dosis';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Dosis Regular'), local('Dosis-Regular'), url(http://themes.googleusercontent.com/static/fonts/terminaldosis/v5/_IcvjW_kWHsIHjjUsLbdpFGxLvFzKVP0OsRYGzgS_zk.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'WebSymbolsRegular';
+    src: url('websymbols/websymbols-regular-webfont.eot');
+    src: url('websymbols/websymbols-regular-webfont.eot?#iefix') format('embedded-opentype'),
+    url('websymbols/websymbols-regular-webfont.woff') format('woff'),
+    url('websymbols/websymbols-regular-webfont.ttf') format('truetype'),
+    url('websymbols/websymbols-regular-webfont.svg#WebSymbolsRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.ca-menu{
+    padding:0;
+    margin:10px auto;
+    width: auto;
+}
+.ca-menu li{
+    /*width: 350px;*/
+    width: 280px;
+    /*height: 100px;*/
+    height: 70px;
+    overflow: hidden;
+    position: relative;
+    display: block;
+    background: #fff;
+    -webkit-box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    -moz-box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    margin-bottom: 4px;
+    -webkit-transition: all 300ms linear;
+    -moz-transition: all 300ms linear;
+    -o-transition: all 300ms linear;
+    -ms-transition: all 300ms linear;
+    transition: all 300ms linear;
+}
+
+
+.ca-menu li:last-child{
+    margin-bottom: 0px;
+}
+.ca-menu li a{
+    text-align: left;
+    width: 100%;
+    height: 100%;
+    display: block;
+    color: #333;
+    position: relative;
+}
+.ca-icon{
+    font-family: 'WebSymbolsRegular', cursive;
+    font-size: 20px;
+    text-shadow: 0px 0px 1px #333;
+    /*line-height: 90px;*/
+    line-height: 60px;
+    position: absolute;
+    width: 90px;
+    /*left: 20px;*/
+    text-align: center;
+    -webkit-transition: all 300ms linear;
+    -moz-transition: all 300ms linear;
+    -o-transition: all 300ms linear;
+    -ms-transition: all 300ms linear;
+    transition: all 300ms linear;
+}
+.ca-content{
+    position: absolute;
+    /*left: 120px;*/
+    left: 90px;
+    /*width: 370px;*/
+    width: auto;
+    height: 60px;
+    /*top: 20px;*/
+}
+
+.ca-content h2, h3 {
+    margin-top: 5px;
+    margin-bottom: 0px;
+    font-family: "Terminal Dosis" !important;
+}
+
+.ca-main{
+    font-size: 30px !important;
+    -webkit-transition: all 300ms linear;
+    -moz-transition: all 300ms linear;
+    -o-transition: all 300ms linear;
+    -ms-transition: all 300ms linear;
+    transition: all 300ms linear;
+    font-weight: normal;
+}
+.ca-sub{
+    font-size: 14px;
+    color: #666;
+    -webkit-transition: all 300ms linear;
+    -moz-transition: all 300ms linear;
+    -o-transition: all 300ms linear;
+    -ms-transition: all 300ms linear;
+    transition: all 300ms linear;
+}
+.ca-menu li:hover{
+    background: #e1f0fa;
+}
+.ca-menu li:hover .ca-icon{
+    font-size: 40px;
+    color: #259add;
+    opacity: 0.8;
+    text-shadow: 0px 0px 13px #fff;
+}
+.ca-menu li:hover .ca-main{
+    opacity: 1;
+    color:#2676ac;
+    -webkit-animation: moveFromTop 300ms ease-in-out;
+    -moz-animation: moveFromTop 300ms ease-in-out;
+    -ms-animation: moveFromTop 300ms ease-in-out;
+}
+.ca-menu li:hover .ca-sub{
+    opacity: 1;
+    -webkit-animation: moveFromBottom 300ms ease-in-out;
+    -moz-animation: moveFromBottom 300ms ease-in-out;
+    -ms-animation: moveFromBottom 300ms ease-in-out;
+}
+@-webkit-keyframes moveFromBottom {
+    from {
+        opacity: 0;
+        -webkit-transform: translateY(200%);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: translateY(0%);
+    }
+}
+@-moz-keyframes moveFromBottom {
+    from {
+        opacity: 0;
+        -moz-transform: translateY(200%);
+    }
+    to {
+        opacity: 1;
+        -moz-transform: translateY(0%);
+    }
+}
+@-ms-keyframes moveFromBottom {
+    from {
+        opacity: 0;
+        -ms-transform: translateY(200%);
+    }
+    to {
+        opacity: 1;
+        -ms-transform: translateY(0%);
+    }
+}
+
+@-webkit-keyframes moveFromTop {
+    from {
+        opacity: 0;
+        -webkit-transform: translateY(-200%);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: translateY(0%);
+    }
+}
+@-moz-keyframes moveFromTop {
+    from {
+        opacity: 0;
+        -moz-transform: translateY(-200%);
+    }
+    to {
+        opacity: 1;
+        -moz-transform: translateY(0%);
+    }
+}
+@-ms-keyframes moveFromTop {
+    from {
+        opacity: 0;
+        -ms-transform: translateY(-200%);
+    }
+    to {
+        opacity: 1;
+        -ms-transform: translateY(0%);
+    }
+}
+/******list-frined******/
+.list-friend{
+    margin-left: 14px;
+    margin-bottom: 15px;
+}
+.friend-link a {
+    color: #000000;
+    font-size: 20px;
+    font-family: 'Terminal Dosis';
+}
+.friend-link a:hover{
+    text-decoration: none;
+    color: #2a6496;
+}
+
+.ec-circle{
+    width: 150px;
+    height: 150px;
+    -webkit-border-radius: 210px;
+    -moz-border-radius: 210px;
+    border-radius: 50%;
+    text-align: center;
+    overflow: hidden;
+    font-family:'Kelly Slab', Georgia, serif;
+    background: #8BBAFC url('../img/1.jpg') no-repeat center center;
+    /*change with hover*/
+    /*box-shadow:*/
+        /*inset 0 0 1px 230px rgba(0,0,0,0.6),*/
+        /*inset 0 0 0 7px #333333;*/
+
+    box-shadow:
+        inset 0 0 0 0 rgba(0,0,0,0.6),
+        inset 0 0 0 4px #4AABE2,
+        0 0 4px rgba(0,0,0,0.3);
+    /**/
+    transition: box-shadow 500ms ease-in-out;
+    display: block;
+    outline: none;
+}
+
+.ec-circle a {
+    text-decoration: none;
+    display: block;
+    margin-top: 3px;
+    color: transparent;
+}
+.ec-circle a:hover{
+    /*text-decoration: underline;*/
+    cursor: pointer;
+    color: #ffffff;
+}
+.ec-circle .song-tai {
+    margin-top: 50px !important;
+    font-size: 15px;
+    font-weight: 600;
+}
+.ec-circle .ban-chung {
+    font-size: 13px;
+}
+.ec-circle .huy-ketban {
+    font-size: 11px;
+}
+.ec-circle:hover{
+    text-decoration: none;
+}
+
+.ec-circle-hover{
+    box-shadow:
+        inset 0 0 0 0 rgba(0,0,0,0.6),
+        inset 0 0 0 20px #c18167,
+        0 0 10px rgba(0,0,0,0.3);
+}
+.ec-circle:hover{
+    /*box-shadow:*/
+        /*inset 0 0 0 0 rgba(0,0,0,0.6),*/
+        /*inset 0 0 0 10px #4AABE2,*/
+        /*0 0 4px rgba(0,0,0,0.3);*/
+
+    /**/
+    box-shadow:
+        inset 0 0 1px 230px rgba(0,0,0,0.6),
+        inset 0 0 0 10px #333333;
+}
+
+.search-nav{
+    /*background-image: url("../img/friend-navigation.png");*/
+    /*background-repeat: repeat-x repeat-y;*/
+    /*background-position: 0px 0px;*/
+    background-color: #333333;
+}
+    /*css khung search flash*/
+@import url(http://fonts.googleapis.com/css?family=Cabin:400);
+
+.webdesigntuts-workshop {
+    /*background: #151515;*/
+    /*height: 100%;*/
+    /*position: absolute;*/
+    /*text-align: center;*/
+    /*width: 100%;*/
+}
+
+.webdesigntuts-workshop:before,
+.webdesigntuts-workshop:after {
+    content: '';
+    display: block;
+    height: 1px;
+    left: 50%;
+    margin: 0 0 0 -400px;
+    position: absolute;
+    width: 800px;
+}
+
+.webdesigntuts-workshop form {
+    padding-top: 15px;
+   display: block;
+}
+
+.webdesigntuts-workshop input {
+    /*background: #222;*/
+    /*background: -webkit-linear-gradient(#333, #222);*/
+    /*background: -moz-linear-gradient(#333, #222);*/
+    /*background: -o-linear-gradient(#333, #222);*/
+    /*background: -ms-linear-gradient(#333, #222);*/
+    /*background: linear-gradient(#333, #222);*/
+    border: 1px solid #444;
+    border-radius: 5px 0 0 5px;
+    box-shadow: 0 2px 0 #000;
+    color: #888;
+    display: block;
+    float: left;
+    font-family: 'Cabin', helvetica, arial, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    height: 40px;
+    margin: 0;
+    padding: 0 10px;
+    /*text-shadow: 0 -1px 0 #000;*/
+    width: 350px;
+}
+
+.ie .webdesigntuts-workshop input {
+    line-height: 40px;
+}
+
+.webdesigntuts-workshop input::-webkit-input-placeholder {
+    color: #888;
+}
+
+.webdesigntuts-workshop input:-moz-placeholder {
+    color: #888;
+}
+
+.webdesigntuts-workshop input:focus {
+    -webkit-animation: glow 800ms ease-out infinite alternate;
+    -moz-animation: glow 800ms ease-out infinite alternate;
+    -o-animation: glow 800ms ease-out infinite alternate;
+    -ms-animation: glow 800ms ease-out infinite alternate;
+    animation: glow 800ms ease-out infinite alternate;
+    /*background: #222922;*/
+    /*background: -webkit-linear-gradient(#E1E1E1, #D4D4D4);*/
+    /*background: -moz-linear-gradient(#E1E1E1, #D4D4D4);*/
+    /*background: -o-linear-gradient(#E1E1E1, #D4D4D4);*/
+    /*background: -ms-linear-gradient(#E1E1E1, #D4D4D4);*/
+    /*background: linear-gradient(#E1E1E1, #D4D4D4);*/
+    /*border-color: #393;*/
+    border-color: #ffffff;
+    box-shadow: 0 0 5px rgba(0,255,0,.2), inset 0 0 5px rgba(0,255,0,.1), 0 2px 0 #000;
+    color: #000000;
+    outline: none;
+}
+
+.webdesigntuts-workshop input:focus::-webkit-input-placeholder {
+    color: #efe;
+}
+
+.webdesigntuts-workshop input:focus:-moz-placeholder {
+    color: #efe;
+}
+
+.webdesigntuts-workshop button {
+    background: #222;
+    background: -webkit-linear-gradient(#333, #222);
+    background: -moz-linear-gradient(#333, #222);
+    background: -o-linear-gradient(#333, #222);
+    background: -ms-linear-gradient(#333, #222);
+    background: linear-gradient(#333, #222);
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -o-box-sizing: content-box;
+    -ms-box-sizing: content-box;
+    box-sizing: content-box;
+    border: 1px solid #444;
+    border-left-color: #000;
+    border-radius: 0 5px 5px 0;
+    box-shadow: 0 2px 0 #000;
+    color: #fff;
+    display: block;
+    float: left;
+    font-family: 'Cabin', helvetica, arial, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    height: 38px;
+    line-height: 40px;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    text-shadow: 0 -1px 0 #000;
+    width: 80px;
+}
+
+.webdesigntuts-workshop button:hover,
+.webdesigntuts-workshop button:focus {
+    background: #206DEB;
+    /*background: -webkit-linear-gradient(#393939, #292929);*/
+    /*background: -moz-linear-gradient(#393939, #292929);*/
+    /*background: -o-linear-gradient(#393939, #292929);*/
+    /*background: -ms-linear-gradient(#393939, #292929);*/
+    /*background: linear-gradient(#ffffff, #ffffff);*/
+    color: #ffffff;
+    outline: none;
+}
+
+.webdesigntuts-workshop button:active {
+    background: #292929;
+    background: -webkit-linear-gradient(#393939, #292929);
+    background: -moz-linear-gradient(#393939, #292929);
+    background: -o-linear-gradient(#393939, #292929);
+    background: -ms-linear-gradient(#393939, #292929);
+    background: linear-gradient(#393939, #292929);
+    box-shadow: 0 1px 0 #000, inset 1px 0 1px #222;
+    top: 1px;
+}
+
+@-webkit-keyframes glow {
+    0% {
+        border-color: #15468B;
+        box-shadow: 0 0 5px #8CC5F2, inset 0 0 5px #AFDBF8, 0 2px 0 #000;
+    }
+    100% {
+        border-color: #32CCFE;
+        box-shadow: 0 0 20px #45C8F3, inset 0 0 10px #79D1F6, 0 2px 0 #000;
+    }
+}
+
+@-moz-keyframes glow {
+    0% {
+        border-color: #15468B;
+        box-shadow: 0 0 5px #8CC5F2, inset 0 0 5px #AFDBF8, 0 2px 0 #000;
+    }
+    100% {
+        border-color: #32CCFE;
+        box-shadow: 0 0 20px #45C8F3, inset 0 0 10px #79D1F6, 0 2px 0 #000;
+    }
+}
+
+@-o-keyframes glow {
+    0% {
+        border-color: #15468B;
+        box-shadow: 0 0 5px #8CC5F2, inset 0 0 5px #AFDBF8, 0 2px 0 #000;
+    }
+    100% {
+        border-color: #32CCFE;
+        box-shadow: 0 0 20px #45C8F3, inset 0 0 10px #79D1F6, 0 2px 0 #000;
+    }
+}
+
+@-ms-keyframes glow {
+    0% {
+        border-color: #15468B;
+        box-shadow: 0 0 5px #8CC5F2, inset 0 0 5px #AFDBF8, 0 2px 0 #000;
+    }
+    100% {
+        border-color: #32CCFE;
+        box-shadow: 0 0 20px #45C8F3, inset 0 0 10px #79D1F6, 0 2px 0 #000;
+    }
+}
+
+/*0% {*/
+    /*border-color: #393;*/
+    /*box-shadow: 0 0 5px rgba(0,255,0,.2), inset 0 0 5px rgba(0,255,0,.1), 0 2px 0 #000;*/
+/*}*/
+/*100% {*/
+    /*border-color: #6f6;*/
+    /*box-shadow: 0 0 20px rgba(0,255,0,.6), inset 0 0 10px rgba(0,255,0,.4), 0 2px 0 #000;*/
+/*}*/
+
+@keyframes glow {
+    0% {
+        border-color: #15468B;
+        box-shadow: 0 0 5px #8CC5F2, inset 0 0 5px #AFDBF8, 0 2px 0 #000;
+    }
+    100% {
+        border-color: #32CCFE;
+        box-shadow: 0 0 20px #45C8F3, inset 0 0 10px #79D1F6, 0 2px 0 #000;
+    }
+}
+
+
+/***** END Page Friend ******/
+

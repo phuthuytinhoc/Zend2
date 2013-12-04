@@ -12,5 +12,11 @@
  */
 
 return array(
-    // ...
+
+    /****For multi-layout-module ***/
+
+//    'module_layouts' => array(
+//        'Application' => 'layout/layout.phtml',
+//        'Userpage' => 'layout/userpage.phtml',
+//    ),
 );
