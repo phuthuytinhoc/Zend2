@@ -1,14 +1,16 @@
 
-<noscript>
-    <style>
-        .st-accordion ul li{
-            height:auto;
-        }
-        .st-accordion ul li > a span{
-            visibility:hidden;
-        }
-    </style>
-</noscript>
+<style type="text/css">
+    img#uploadPreview{
+        border: 0;
+        border-radius: 3px;
+        -webkit-box-shadow: 0px 2px 7px 0px rgba(0, 0, 0, .27);
+        box-shadow: 0px 2px 7px 0px rgba(0, 0, 0, .27);
+        margin-bottom: 30px;
+        overflow: hidden;
+    }
+
+</style>
+
 
 <div class="container bg-update">
     <div class="wrapper">
@@ -20,12 +22,16 @@
                         <span class="st-arrow">Open or Close</span>
                     </a>
                     <div class="st-content">
-                       <div>
-                           <div>
-                               <label>Hình đại diện</label>
-                               <img src="<?php echo $this->basePath();?>/img/1.jpg">
-                               <input type="file" name="file" id="files">
-                           </div>
+
+                       <div class="divAboutme">
+                           <label style="display: inline-block;">Ảnh đại diện hiện tại | </label>
+                           <a class="test2" href="../img/123.png" rel="lightbox">Thay đổi ảnh đại diện</a>
+                           <img id="avatarClick" src="<?php echo $this->basePath();?>/img/1.jpg" style="width: 200px !important; height: 150px; display: block;" alt="" />
+
+                           <label style="display: inline-block;">Ảnh bìa trang chủ hiện tại | </label>
+                           <a class="test" href="../img/123.png" rel="lightbox">Thay đổi ảnh bìa trang chủ</a>
+                           <img id="coverClick" src="<?php echo $this->basePath();?>/img/cover.jpg" style="width: 668px !important; height: 350px;" alt="" />
+
                        </div>
                     </div>
                 </li>
@@ -71,20 +77,54 @@
                         <span class="st-arrow">Open or Close</span>
                     </a>
                     <div class="st-content">
-                        <p>O my friend - but it is too much for my strength - I sink under the weight of the splendour of these visions!</p>
-                        <p>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart.</p>
-                        <p>I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine.</p>
+                        <form>
+                            <div class="divAboutme">
+                                <label>Họ: </label>
+                                <input type="text" placeholder="Nhập họ của bạn...">
+                            </div>
+                            <div class="divAboutme">
+                                <label>Tên: </label>
+                                <input type="text" placeholder="Nhập tên của bạn...">
+                            </div>
+                            <div class="divAboutme">
+                                <label>Ngày sinh: </label>
+                                <input type="date" placeholder="Nhập tên của bạn...">
+                            </div>
+                            <div class="divAboutme">
+                                <label>Nơi ở hiện tại: </label>
+                                <input type="text" placeholder="Nhập nơi ở hiện tại của bạn...">
+                            </div>
+                            <div class="divAboutme">
+                                <label>Câu nói tâm đắc: </label>
+                                <input type="text" placeholder="Nhập câu nói tâm đắc của bạn...">
+                            </div>
+                            <div class="divAboutme">
+                                <label></label>
+                                <button>Cập nhật</button>
+                            </div>
+                        </form>
                     </div>
                 </li>
                 <li>
                     <a class="iconInfo" href="#"> S
-                        <label style="margin-left: 15px;">Cài đặt tài khoản</label>
+                        <label style="margin-left: 18px;">Cài đặt tài khoản</label>
                         <span class="st-arrow">Open or Close</span>
                     </a>
                     <div class="st-content">
-                        <p>O my friend - but it is too much for my strength - I sink under the weight of the splendour of these visions!</p>
-                        <p>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart.</p>
-                        <p>I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine.</p>
+                        <form>
+                            <div class="divAboutme">
+                                <label>Nhập mật khẩu cũ: </label>
+                                <input type="password">
+                            </div>
+                            <div class="divAboutme">
+                                <label>Nhập mật khẩu mới: </label>
+                                <input type="password">
+                            </div>
+                            <div class="divAboutme">
+                                <label></label>
+                                <button>Cập nhật</button>
+                            </div>
+                        </form>
                     </div>
                 </li>
 
@@ -93,10 +133,60 @@
     </div>
 </div>
 
+<div id="formUpload" style="display: none; clear: both">
+   <div class="divAboutme">
+       <label style="margin-top: 15px; margin-bottom: 20px; display: block;">Thay đổi Hình đại diện</label>
+       <img id="uploadPreview" style="display:none; max-width: 600px; max-height: 450px; margin: 0 auto;"/>
+       <form method="post" action="" enctype="multipart/form-data" style="margin-top: 20px;">
+           <input type="file" accept="image/*" name="image" id="uploadImage" style="display: inline-block;">
+           <input type="submit" value="Upload" style="margin-left: 10px; width: 200px;">
 
-<script type="text/javascript">
-    $(document).ready(function(){
-        $('#st-accordion').accordion();
+           <!--                                   hidden inputs-->
+           <input type="hidden" id="x" name="x" />
+           <input type="hidden" id="y" name="y" />
+           <input type="hidden" id="w" name="w" />
+           <input type="hidden" id="h" name="h" />
+       </form>
+   </div>
+</div>
+
+<div id="testDiv">
+
+</div>
+
+ <script type="text/javascript">
+    jQuery(document).ready(function(){
+        jQuery('#st-accordion').accordion();
+
+        var called = false;
+
+        jQuery('.test').click(function(){
+            var formUpload = jQuery('#formUpload');
+            formUpload.css('display', 'block');
+            jQuery('.imgareaselect-selection').parent().css('z-index', 300);
+            jQuery('.imgareaselect-outer').css('z-index' , 200);
+            jQuery('#lightboxImage').remove();
+            jQuery('#hoverNav').remove();
+            jQuery('#imageContainer').prepend(formUpload);
+            jQuery('#bottomNavClose').css('margin-top', '30px');
+
+            addScriptHideArea();
+
+        });
+
+        function addScriptHideArea()
+        {
+            if(called ==  false)
+            {
+                var script= document.createElement('script');
+                script.type= 'text/javascript';
+                script.src= '<?php echo $this->basePath().'/js/process.hideImageAreaSelected.js';?>';
+                script.async = true;
+                document.body.appendChild(script);
+                called = true;
+            }
+        }
+
     });
 
 </script>

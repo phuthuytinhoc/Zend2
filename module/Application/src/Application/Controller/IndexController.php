@@ -11,6 +11,7 @@ namespace Application\Controller;
 
 
 use Doctrine\ORM\Query\Parser;
+use Zend\Form\Element\DateTime;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Helper\Json;
 use Zend\View\Model\ViewModel;
@@ -71,6 +72,9 @@ class IndexController extends AbstractActionController
 //        else $result = "bang null";
 //        echo 'hungnguyen' .  $result->getLastname() . $result->getFirstname();
 
+        //////////
+
+
         ////////////
         if($this->getAuthService()->hasIdentity())
             return $this->redirect()->toRoute('success');
@@ -103,12 +107,15 @@ class IndexController extends AbstractActionController
         $response = $this->getResponse();
         if($authResult->isValid())
         {
-            $this->getAuthService()->getStorage()->write($email);
+            $identity = $authResult->getIdentity();
+            $this->getAuthService()->getStorage()->write($identity);
+//            $this->getAuthService()->getStorage()->write($email); // chi chua email
 
-            $success = '/success';
+            $success = $this->url()->fromRoute('home').'success';
             return $response->setContent(\Zend\Json\Json::encode(array(
                 'success' => 1,
-                'path' => $success, )));
+                'path' => $success,))
+            );
         }
         else
         {
@@ -131,8 +138,19 @@ class IndexController extends AbstractActionController
         if($rs ==true )
         {
             $email = $data['email'];
-            $this->getAuthService()->getStorage()->write($email);
-            $success = '/success';
+            $password = $data['password'];
+
+            $authService = $this->getAuthService();
+
+            $adapter = $authService->getAdapter();
+            $adapter->setIdentityValue($email);
+            $adapter->setCredentialValue($password);
+
+            $result = $authService->authenticate($adapter);
+
+            $authService->getStorage()->write($result->getIdentity());
+
+            $success = $this->url()->fromRoute('home').'success';
             return $response->setContent(\Zend\Json\Json::encode(array('success' => 1, 'path' => $success, )));
         }
         else

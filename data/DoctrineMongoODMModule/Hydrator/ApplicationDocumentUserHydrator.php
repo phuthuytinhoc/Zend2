@@ -66,6 +66,22 @@ class ApplicationDocumentUserHydrator implements HydratorInterface
             $this->class->reflFields['password']->setValue($document, $return);
             $hydratedData['password'] = $return;
         }
+
+        /** @Field(type="string") */
+        if (isset($data['createdtime'])) {
+            $value = $data['createdtime'];
+            $return = (string) $value;
+            $this->class->reflFields['createdtime']->setValue($document, $return);
+            $hydratedData['createdtime'] = $return;
+        }
+
+        /** @Field(type="string") */
+        if (isset($data['userid'])) {
+            $value = $data['userid'];
+            $return = (string) $value;
+            $this->class->reflFields['userid']->setValue($document, $return);
+            $hydratedData['userid'] = $return;
+        }
         return $hydratedData;
     }
 }

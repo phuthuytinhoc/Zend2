@@ -29,6 +29,12 @@ class User
     /** @ODM\Field(type="string") */
     private $password="";
 
+    /** @ODM\Field(type="string") */
+    private $createdtime="";
+
+    /** @ODM\Field(type="string") */
+    private $userid="";
+
 
     //******* GET METHOD *******//
 
@@ -75,6 +81,22 @@ class User
         return $val;
     }
 
+    /**
+     * @return the $createdtime
+     */
+    public function getCreatedtime()
+    {
+        return $this->createdtime;
+    }
+
+    /**
+     * @return the $userid
+     */
+    public function getUserid()
+    {
+        return $this->userid;
+    }
+
 
     //*****SET METHOD*****//
 
@@ -85,6 +107,8 @@ class User
     {
         $this->id = $id;
     }
+
+
 
     /**
      * @param field_type $firstname
@@ -116,6 +140,22 @@ class User
     public function setPassword($password)
     {
         $this->password = $password;
+    }
+
+    /**
+     * @param field_type $createdtime
+     */
+    public function setCreatedtime($createdtime)
+    {
+        $this->createdtime = $createdtime;
+    }
+
+    /**
+     * @param field_type $userid
+     */
+    public function setUserid($userid)
+    {
+        $this->userid = $userid;
     }
 
 }

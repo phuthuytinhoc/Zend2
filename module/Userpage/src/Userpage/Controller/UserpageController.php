@@ -13,6 +13,10 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Session\Container;
 use Zend\Session\SessionManager;
 use Zend\View\Model\ViewModel;
+use Zend\Form\Annotation\AnnotationBuilder;
+
+use Application\Document\User;
+use Userpage\Model\SuccessModel;
 
 class UserpageController extends AbstractActionController
 {
@@ -25,12 +29,16 @@ class UserpageController extends AbstractActionController
 
     public function indexAction()
     {
-        if(!$this->getAuthenService()->hasIdentity())
+        $result = $this->getAuthenService();
+        if(!$result->hasIdentity())
         {
             return $this->redirect()->toRoute('home');
         }
         else
         {
+            $identity = $result->getIdentity();
+            var_dump($identity);
+
             return new ViewModel(array());
         }
     }
