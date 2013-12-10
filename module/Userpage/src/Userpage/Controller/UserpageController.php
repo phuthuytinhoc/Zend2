@@ -14,6 +14,7 @@ use Zend\Session\Container;
 use Zend\Session\SessionManager;
 use Zend\View\Model\ViewModel;
 use Zend\Form\Annotation\AnnotationBuilder;
+use Zend\View\Helper\Json;
 
 use Application\Document\User;
 use Userpage\Model\SuccessModel;
@@ -27,6 +28,22 @@ class UserpageController extends AbstractActionController
         return $authen;
     }
 
+    public function getDocumentService()
+    {
+        $dm = $this->getServiceLocator()->get('doctrine.documentmanager.odm_default');
+        return $dm;
+    }
+
+    public function getUserIdentity()
+    {
+        $result = $this->getAuthenService();
+        if($result->hasIdentity())
+            return $result->getIdentity();
+
+        return null;
+    }
+
+
     public function indexAction()
     {
         $result = $this->getAuthenService();
@@ -37,9 +54,11 @@ class UserpageController extends AbstractActionController
         else
         {
             $identity = $result->getIdentity();
-            var_dump($identity);
+//            echo $identity->getFirstname();
 
-            return new ViewModel(array());
+            return new ViewModel(array(
+                'datauser' => $identity,
+            ));
         }
     }
 
@@ -70,8 +89,116 @@ class UserpageController extends AbstractActionController
 
         $result = new ViewModel();
         $result->setTemplate('userpage/userpage/updateinfo');
-
         return $result;
     }
+
+
+
+    public function doChangePassword()
+    {
+        return array();
+    }
+
+    public function changepassAction()
+    {
+        $doWhat = $this->params()->fromPost('mode');
+        $oldPass = $this->params()->fromPost('oldpass');
+        $newPass = $this->params()->fromPost('newpass');
+        $userid = $this->getUserIdentity()->getUserid();
+
+        $response = $this->getResponse();
+
+        $successModel = new SuccessModel();
+        $authService = $this->getAuthenService();
+
+        if($doWhat == 'changepass')
+        {
+            $result = $successModel->checkOldPassword($oldPass, $authService);
+            if($result)
+            {
+                $documentService = $this->getDocumentService();
+                $resultSavePass = $successModel->saveNewPassword($newPass, $userid, $documentService);
+                if($resultSavePass)
+                {
+                    return $response->setContent(\Zend\Json\Json::encode(array(
+                        'success' => 1,
+                        'message' => 'Cập nhật mật khẩu mới thành công!.')));
+                }
+                else
+                {
+                    return $response->setContent(\Zend\Json\Json::encode(array(
+                        'success' => 0,
+                        'error' => 'Lỗi xảy ra. Lưu mật khẩu không thành công.')));
+                }
+            }
+            else
+            {
+                return $response->setContent(\Zend\Json\Json::encode(array(
+                    'success' => 0,
+                    'error' => 'Mật khẩu cũ nhập vào chưa chính xác.')));
+            }
+
+
+        }
+        else
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 1111 )));
+        }
+    }
+
+    public function changeinfoAction()
+    {
+        $response = $this->getResponse();
+
+        $allData = $this->params()->fromPost();
+        $userid = $this->getUserIdentity()->getUserid();
+
+        $documentService = $this->getDocumentService();
+
+        $successModel = new SuccessModel();
+
+        $result = $successModel->updateNewInfo($allData,$userid,$documentService);
+
+        if($result)
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 1,
+                'message' => 'Cập nhật thông tin thành công!')));
+        }
+        else
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0,
+                'error' => 'Cập nhật thông tin thất bại.')));
+        }
+    }
+
+    public function changeaboutmeAction()
+    {
+        $response = $this->getResponse();
+
+        $allData = $this->params()->fromPost();
+        $userid = $this->getUserIdentity()->getUserid();
+
+        $documentService = $this->getDocumentService();
+
+        $successModel = new SuccessModel();
+        $result = $successModel->updateNewAboutme($allData, $userid, $documentService);
+        if($result)
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 1,
+                'message' => 'Cập nhật thông tin thành công!')));
+        }
+        else
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0,
+                'error' => 'Cập nhập thông tin thất bại.')));
+        }
+
+    }
+
 
 }

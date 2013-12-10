@@ -30,10 +30,10 @@
                 <div class="errorRegister"></div>
                 <div class="divHoTen" style="width: 100%;">
                     <div style="width: 50%; float: left;">
-                        <input style="float:left;" name="firstname" id="regFirstname" class="percent" type="text" placeholder="Họ" />
+                        <input style="float:left;"  name="lastname" id="regLastname"  class="percent" type="text" placeholder="Họ" />
                     </div>
                     <div style="width: 50%; float: right;">
-                        <input style="float:right;" name="lastname" id="regLastname" class="percent" type="text" placeholder="Tên" />
+                        <input style="float:right;" name="firstname" id="regFirstname"  class="percent" type="text" placeholder="Tên" />
                     </div>
                 </div>
                 <input type="text" name="email" id="regEmail" placeholder="Email" />
@@ -152,6 +152,7 @@
             var lastname = $('#regLastname').val();
             var email = $('#regEmail').val();
             var password = $('#regPassword').val();
+
             var data = "firstname="+firstname+"&lastname="+lastname+"&email="+email+"&password="+password;
 
             $.ajax({

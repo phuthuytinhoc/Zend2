@@ -4,6 +4,7 @@
 //
 // script.aculo.us is freely distributable under the terms of an MIT-style license.
 // For details, see the script.aculo.us web site: http://script.aculo.us/
+jQuery.noConflict();
 
 var Builder = {
   NODEMAP: {

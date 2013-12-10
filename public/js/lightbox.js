@@ -45,9 +45,12 @@
 //
 //  Configurationl
 //
+
+
+jQuery.noConflict();
 LightboxOptions = Object.extend({
-    fileLoadingImage:        '../img/loading.gif',
-    fileBottomNavCloseImage: '../img/closelabel.gif',
+    fileLoadingImage:        '../../img/loading.gif',
+    fileBottomNavCloseImage: '../../img/closelabel.gif',
 
     overlayOpacity: 0.8,   // controls transparency of shadow overlay
 
