@@ -82,6 +82,54 @@ class ApplicationDocumentUserHydrator implements HydratorInterface
             $this->class->reflFields['userid']->setValue($document, $return);
             $hydratedData['userid'] = $return;
         }
+
+        /** @Field(type="string") */
+        if (isset($data['dob'])) {
+            $value = $data['dob'];
+            $return = (string) $value;
+            $this->class->reflFields['dob']->setValue($document, $return);
+            $hydratedData['dob'] = $return;
+        }
+
+        /** @Field(type="string") */
+        if (isset($data['address'])) {
+            $value = $data['address'];
+            $return = (string) $value;
+            $this->class->reflFields['address']->setValue($document, $return);
+            $hydratedData['address'] = $return;
+        }
+
+        /** @Field(type="string") */
+        if (isset($data['quote'])) {
+            $value = $data['quote'];
+            $return = (string) $value;
+            $this->class->reflFields['quote']->setValue($document, $return);
+            $hydratedData['quote'] = $return;
+        }
+
+        /** @Field(type="string") */
+        if (isset($data['relationship'])) {
+            $value = $data['relationship'];
+            $return = (string) $value;
+            $this->class->reflFields['relationship']->setValue($document, $return);
+            $hydratedData['relationship'] = $return;
+        }
+
+        /** @Field(type="string") */
+        if (isset($data['school'])) {
+            $value = $data['school'];
+            $return = (string) $value;
+            $this->class->reflFields['school']->setValue($document, $return);
+            $hydratedData['school'] = $return;
+        }
+
+        /** @Field(type="string") */
+        if (isset($data['work'])) {
+            $value = $data['work'];
+            $return = (string) $value;
+            $this->class->reflFields['work']->setValue($document, $return);
+            $hydratedData['work'] = $return;
+        }
         return $hydratedData;
     }
 }

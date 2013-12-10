@@ -11,6 +11,8 @@
     $('html').addClass('bodyUserpage');
 </script>
 
+<?php //var_dump($datauser);die(); ?>
+
 <input type="hidden" id="userID" value="<?php echo $datauser->getUserid(); ?>">
 
 <div class="divLeft">
@@ -33,21 +35,48 @@
                 <div class="aboutImg job">
                 </div>
                 <div class="aboutInfo">
-                    Consultant/Web Developer at Trobz
+                    <?php
+                        if($datauser->getSchool() != null)
+                        {
+                            echo $datauser->getSchool();
+                        }
+                        else
+                        {
+                            echo "Chưa cập nhật.";
+                        }
+                    ?>
                 </div>
             </div>
             <div class="divContent">
                 <div class="aboutImg study">
                 </div>
                 <div class="aboutInfo">
-                    Studies Hệ thống thông tin at Đại học Công Nghệ Thông Tin
+                    <?php
+                    if($datauser->getWork() != null)
+                    {
+                        echo $datauser->getWork();
+                    }
+                    else
+                    {
+                        echo "Chưa cập nhật";
+                    }
+                    ?>
                 </div>
             </div>
             <div class="divContent">
                 <div class="aboutImg relationship">
                 </div>
                 <div class="aboutInfo">
-                    Single
+                    <?php
+                    if($datauser->getRelationship() != null)
+                    {
+                        echo $datauser->getRelationship();
+                    }
+                    else
+                    {
+                        echo "Chưa cập nhật.";
+                    }
+                    ?>
                 </div>
             </div>
         </div>
@@ -120,15 +149,49 @@
             <div class="info name"><?php echo $datauser->getLastname() .' '. $datauser->getFirstname(); ?></div>
             <div class="info age">
                 <div class="infoIcon age"></div>
-                <div class="infoContent age">08 Dec 1991</div>
+                <div class="infoContent age">
+                    <?php
+                        if($datauser->getDOB() != null)
+                        {
+                            $date = new DateTime($datauser->getDOB());
+                            echo date_format($date, 'd-m-Y');
+                        }
+                        else
+                        {
+                            echo "Chưa cập nhật.";
+                        }
+                    ?>
+                </div>
             </div>
             <div class="info address">
                 <div class="infoIcon address"></div>
-                <div class="infoContent address">Kí túc xá Đại học Quốc gia, Ho Chi Minh, Viet Nam</div>
+                <div class="infoContent address">
+                    <?php
+                        if($datauser->getAddress() != null)
+                        {
+                            echo $datauser->getAddress();
+                        }
+                        else
+                        {
+                            echo "Chưa cập nhât.";
+                        }
+                    ?>
+                </div>
             </div>
             <div class="info quote">
                 <div class="infoIcon quote"></div>
-                <div class="infoContent quote">Đôi khi không đạt được một điều gì đó lại là một điều may mắn</div>
+                <div class="infoContent quote">
+                    <?php
+                        if($datauser->getQuote() != null)
+                        {
+                            echo $datauser->getQuote();
+                        }
+                        else
+                        {
+                            echo "Chưa cập nhật";
+                        }
+                    ?>
+                </div>
             </div>
             <div class="logOut">
                 <div class="infoIcon logout"></div>
@@ -213,7 +276,7 @@
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function(){
+    jQuery(document).ready(function(){
 
 
     });

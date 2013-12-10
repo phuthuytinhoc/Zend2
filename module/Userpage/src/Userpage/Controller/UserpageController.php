@@ -43,7 +43,6 @@ class UserpageController extends AbstractActionController
         return null;
     }
 
-
     public function indexAction()
     {
         $result = $this->getAuthenService();
@@ -54,10 +53,10 @@ class UserpageController extends AbstractActionController
         else
         {
             $identity = $result->getIdentity();
-//            echo $identity->getFirstname();
 
             return new ViewModel(array(
                 'datauser' => $identity,
+
             ));
         }
     }
@@ -91,8 +90,6 @@ class UserpageController extends AbstractActionController
         $result->setTemplate('userpage/userpage/updateinfo');
         return $result;
     }
-
-
 
     public function doChangePassword()
     {
@@ -137,8 +134,6 @@ class UserpageController extends AbstractActionController
                     'success' => 0,
                     'error' => 'Mật khẩu cũ nhập vào chưa chính xác.')));
             }
-
-
         }
         else
         {

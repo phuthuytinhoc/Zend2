@@ -35,6 +35,23 @@ class User
     /** @ODM\Field(type="string") */
     private $userid="";
 
+    /** @ODM\Field(type="string") */
+    private $dob="";
+
+    /** @ODM\Field(type="string") */
+    private $address="";
+
+    /** @ODM\Field(type="string") */
+    private $quote="";
+
+    /** @ODM\Field(type="string") */
+    private $relationship="";
+
+    /** @ODM\Field(type="string") */
+    private $school="";
+
+    /** @ODM\Field(type="string") */
+    private $work="";
 
     //******* GET METHOD *******//
 
@@ -97,6 +114,54 @@ class User
         return $this->userid;
     }
 
+    /**
+     * @return the $dob
+     */
+    public function getDOB()
+    {
+        return $this->dob;
+    }
+
+    /**
+     * @return the $address
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * @return the $quote
+     */
+    public function getQuote()
+    {
+        return $this->quote;
+    }
+
+    /**
+     * @return the $relationship
+     */
+    public function getRelationship()
+    {
+        return $this->relationship;
+    }
+
+    /**
+     * @return the $school
+     */
+    public function getSchool()
+    {
+        return $this->school;
+    }
+
+    /**
+     * @return the $work
+     */
+    public function getWork()
+    {
+        return $this->work;
+    }
+
 
     //*****SET METHOD*****//
 
@@ -107,8 +172,6 @@ class User
     {
         $this->id = $id;
     }
-
-
 
     /**
      * @param field_type $firstname
@@ -156,6 +219,54 @@ class User
     public function setUserid($userid)
     {
         $this->userid = $userid;
+    }
+
+    /**
+     * @param field_type $dob
+     */
+    public function setDOB($dob)
+    {
+        $this->dob = $dob;
+    }
+
+    /**
+     * @param field_type $address
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+    }
+
+    /**
+     * @param field_type $quote
+     */
+    public function setQuote($quote)
+    {
+        $this->quote = $quote;
+    }
+
+    /**
+     * @param field_type $relationship
+     */
+    public function setRelationship($relationship)
+    {
+        $this->relationship = $relationship;
+    }
+
+    /**
+     * @param field_type $school
+     */
+    public function setSchool($school)
+    {
+        $this->school = $school;
+    }
+
+    /**
+     * @param field_type $work
+     */
+    public function setWork($work)
+    {
+        $this->work = $work;
     }
 
 }
