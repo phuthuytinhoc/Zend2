@@ -76,5 +76,33 @@ class SuccessModel
     public function saveNewStatus($statusContent, $userid, $documentService )
     {
         $createdTime = $this->getTimestampNow();
+
+        //collection('status')
+        $statusID = 'STT'. $createdTime;
+
+        //collection('action')
+        $actionID = 'ACT'. $createdTime;
+        $actionUser = $actionLocation = $userid;
+        $actionType = $statusID;
+
+        //THem mot bang moi vao Sttus
+        $documentService->createQueryBuilder('Application\Document\Status')
+            ->insert()
+            ->field('statusid')->set($statusID)
+            ->field('statuscontent')->set($statusContent)
+            ->getQuery()
+            ->execute();
+        //Them mot truong moi vao bang Action
+        $documentService->createQueryBuilder('Application\Document\Action')
+            ->insert()
+            ->field('actionid')->set($statusID)
+            ->field('actionuser')->set($actionUser)
+            ->field('actionlocation')->set($actionLocation)
+            ->field('actiontype')->set($actionType)
+            ->field('createdtime')->set($createdTime)
+            ->getQuery()
+            ->execute();
+
+        return true;
     }
 }

@@ -25,22 +25,62 @@
         <div id="st-accordion" class="st-accordion">
             <ul>
                 <li>
-                    <a class="iconInfo" href="#"> I
-                        <label>Thay đổi hình đại diện</label>
+                    <a class="iconInfo" href="#"> a
+                        <label  style="margin-left: 25px;">Thay đổi hình đại diện</label>
                         <span class="st-arrow">Open or Close</span>
                     </a>
                     <div class="st-content">
 
-                       <div class="divAboutme">
-                           <label style="display: inline-block;">Ảnh đại diện hiện tại | </label>
-                           <a class="test2" href="<?php echo $this->basePath() ?>/img/123.png" rel="lightbox">Thay đổi ảnh đại diện</a>
-                           <img id="avatarClick" src="<?php echo $this->basePath();?>/img/1.jpg" style="width: 200px !important; height: 150px; display: block;" alt="" />
+                        <div class="divAboutme">
+                            <label style="display: block;">Chọn file bên dưới để thay đổi ảnh đại diện</label>
+                            <img id="uploadPreview" style="width: auto;"/>
+                            <form method="post" action="" id="form-upload-image" enctype="multipart/form-data">
+                                <input type="file" accept="image/*" name="image" id="uploadImage" placeholder="Chọn ảnh bạn muốn thay đổi..." style="display: inline-block;">
+                                <input type="submit" id="subUpdateCover" value="Lưu Hình" style="margin-left: 10px; width: 200px;">
 
-                           <label style="display: inline-block;">Ảnh bìa trang chủ hiện tại | </label>
-                           <a class="test" href="<?php echo $this->basePath() ?>/img/123.png" rel="lightbox">Thay đổi ảnh bìa trang chủ</a>
-                           <img id="coverClick" src="<?php echo $this->basePath();?>/img/cover.jpg" style="width: 668px !important; height: 350px;" alt="" />
+                                <!-- hidden inputs-->
+                                <input type="hidden" id="x" name="x" />
+                                <input type="hidden" id="y" name="y" />
+                                <input type="hidden" id="w" name="w" />
+                                <input type="hidden" id="h" name="h" />
+                            </form>
 
-                       </div>
+                        </div>
+
+                        <div class="divAboutme">
+                            <label style="display: inline-block;">Ảnh đại diện hiện tại</label>
+                            <img id="avatarClick" src="<?php echo $this->basePath();?>/img/1.jpg"
+                                 style="width: 200px !important; height: 150px; display: block;" alt="" />
+                        </div>
+
+                    </div>
+                </li>
+                <li>
+                    <a class="iconInfo" href="#"> I
+                        <label>Thay đổi ảnh nền trang cá nhân</label>
+                        <span class="st-arrow">Open or Close</span>
+                    </a>
+                    <div class="st-content">
+
+                        <div class="divAboutme">
+                            <img id="uploadPreview" style="width: auto;"/>
+                            <form method="post" action="" id="form-upload-image" enctype="multipart/form-data" style="margin-top: 20px;">
+                                <input type="file" accept="image/*" name="image" id="uploadImage" style="display: inline-block;">
+                                <input type="submit" id="subUpdateCover" value="Lưu Hình" style="margin-left: 10px; width: 200px;">
+
+                                <!-- hidden inputs-->
+                                <input type="hidden" id="x" name="x" />
+                                <input type="hidden" id="y" name="y" />
+                                <input type="hidden" id="w" name="w" />
+                                <input type="hidden" id="h" name="h" />
+                            </form>
+                        </div>
+
+                        <div class="divAboutme">
+                            <label style="display: inline-block;">Ảnh bìa trang chủ hiện tại | </label>
+                            <img id="coverClick" src="<?php echo $this->basePath();?>/img/cover.jpg"
+                                 style="width: 668px !important; height: 350px;" alt="" />
+                        </div>
                     </div>
                 </li>
                 <li>
@@ -149,31 +189,50 @@
     </div>
 </div>
 
-<div id="formUpload" style="display: none; clear: both">
-   <div class="divAboutme">
-       <label style="margin-top: 15px; margin-bottom: 20px; display: block;">Thay đổi Hình đại diện</label>
-       <img id="uploadPreview" style="display:none; max-width: 600px; max-height: 450px; margin: 0 auto;"/>
-       <form method="post" action="" enctype="multipart/form-data" style="margin-top: 20px;">
-           <input type="file" accept="image/*" name="image" id="uploadImage" style="display: inline-block;">
-           <input type="submit" value="Upload" style="margin-left: 10px; width: 200px;">
-
-           <!--                                   hidden inputs-->
-           <input type="hidden" id="x" name="x" />
-           <input type="hidden" id="y" name="y" />
-           <input type="hidden" id="w" name="w" />
-           <input type="hidden" id="h" name="h" />
-       </form>
-   </div>
-</div>
-
 <div id="testDiv" style="display: none;">
-<?php if(isset($success)) echo $success; ?>
+    <span class="userid"></span>
 </div>
 
 
  <script type="text/javascript">
+
+     //doi anh dai dien
     jQuery(document).ready(function(){
+        function getTimestampNow()
+        {
+            var datenow = new Date();
+            datenow = parseInt(datenow.setFullYear(datenow.getFullYear(), datenow.getMonth(), datenow.getDate())/1000);
+            return datenow;
+        }
+        //auto fetch userid
+        autogetUserid();
+        function autogetUserid()
+        {
+            var data = "";
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('success', array('action' => 'autogetuserid')); ?>",
+                data: data,
+                async:false,
+                success: function(data) {
+                    data = JSON.parse(data);
+                    var success = data['success'];
+                    if(success == "1")
+                    {
+                        jQuery('.userid').html(data['userid']);
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+
         jQuery('#st-accordion').accordion();
+        jQuery('#uploadImage').change(function(){
+            jQuery('.st-accordion ul li').css('height', 'auto');
+        });
 
         var called = false;
 
@@ -203,6 +262,45 @@
                 called = true;
             }
         }
+
+        //ajax crop anh cover
+        jQuery('#subUpdateCover').click(function(){
+
+            var userid = jQuery('.userid').html();
+            var timeStamp = getTimestampNow();
+            var data = "userid="+userid+"&createdtime="+ timeStamp;
+
+            var formdata  = new FormData(jQuery('#form-upload-image')[0]);
+            var reader = new FileReader();
+            var value = reader.readAsDataURL(document.getElementById("uploadImage").files[0]);
+            formdata.append('image', value);
+            formdata.append('userid', userid);
+            formdata.append('createdtime', timeStamp);
+
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->basePath().'/plugin/upload.php' ;?>",
+                data: formdata,
+                cache: false,
+                contentType: false,
+                processData: false,
+                async:false,
+                success: function(data) {
+//                    alert(data);
+                    jQuery('img#uploadPreview').imgAreaSelect({
+                        hide:true
+                    });
+                    var pic = jQuery('#uploadPreview');
+                    pic.attr('src',data).hide();
+                    pic.fadeIn(500);
+
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        });
     });
 </script>
 

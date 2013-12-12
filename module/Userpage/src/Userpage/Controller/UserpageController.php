@@ -12,12 +12,16 @@ namespace Userpage\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Session\Container;
 use Zend\Session\SessionManager;
+use Zend\Validator\File\Upload;
 use Zend\View\Model\ViewModel;
 use Zend\Form\Annotation\AnnotationBuilder;
 use Zend\View\Helper\Json;
+use Zend\Form\Form;
 
 use Application\Document\User;
 use Application\Document\Action;
+
+use Userpage\Form\UploadForm;
 use Userpage\Model\SuccessModel;
 
 class UserpageController extends AbstractActionController
@@ -64,14 +68,18 @@ class UserpageController extends AbstractActionController
 
             /////////
 
+            $form = new UploadForm();
+
             $identity = $result->getIdentity();
 
-            return new ViewModel(array(
+            return array(
                 'datauser' => $identity,
-
-            ));
+                'form' => $form
+            );
         }
     }
+
+    //FUNCTION FOR STATUS
 
     public function savestatusAction()
     {
@@ -99,6 +107,7 @@ class UserpageController extends AbstractActionController
         }
     }
 
+    //FUNCTION FOR LOG OUT
     public function logoutAction()
     {
         $this->getAuthenService()->clearIdentity();
@@ -119,6 +128,7 @@ class UserpageController extends AbstractActionController
 
     }
 
+    //FUNCTION of Update info
     public function updateinfoAction()
     {
         $this->indexAction();
@@ -130,6 +140,17 @@ class UserpageController extends AbstractActionController
         return $result;
     }
 
+    public function autogetuseridAction()
+    {
+        $response = $this->getResponse();
+        $userid = $this->getUserIdentity()->getUserid();
+
+        return $response->setContent(\Zend\Json\Json::encode(array(
+            'success' => 1,
+            'userid' => $userid)));
+    }
+
+    //AJAX UPDATE INFO
     public function doChangePassword()
     {
         return array();
@@ -233,6 +254,20 @@ class UserpageController extends AbstractActionController
         }
 
     }
+
+    //FUNCTION FOR UPLOAD IMAGE
+    public function uploadimageAction()
+    {
+        $response = $this->getResponse();
+
+
+
+        return $response->setContent(\Zend\Json\Json::encode(array(
+            'success' => 1,
+
+           )));
+    }
+
 
 
 }
