@@ -155,7 +155,8 @@ return array(
                 'class' => 'Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver',
                 'cache' => 'array',
                 'paths' => array(
-                    __DIR__ . '/../src/Application/Document/User'
+                    __DIR__ . '/../src/Application/Document/User',
+//                    __DIR__ . '/../src/Application/Document/Action'
                 ),
             ),
             'odm_default'   => array(

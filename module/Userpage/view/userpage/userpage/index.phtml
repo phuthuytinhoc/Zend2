@@ -3,6 +3,9 @@
     .logoZess:hover{
         text-decoration: none;
     }
+    .statusType > div {
+        cursor: pointer;
+    }
 
 </style>
 
@@ -17,10 +20,10 @@
 
 <div class="divLeft">
     <div class="divSubMenu">
-        <a class="logoZess" href="<?php echo $this->basePath(); ?>/">
+        <a class="logoZess" style="width: 100%;" href="<?php echo $this->basePath(); ?>/">
 <!--            <div class="divLogo">ZESS</div>-->
-            <div style="padding: 10px 0px 5px 50px;">
-                <img style="width: 155px;height: 65px;" src="<?php echo $this->basePath();?>/img/zess_logo2.png">
+            <div style="padding: 10px 0px 5px 50px; width: 100%;">
+                <img style="width: 60%;height: 60%;" src="<?php echo $this->basePath();?>/img/zess_logo2.png">
             </div>
         </a>
         <div class="divSearch">
@@ -143,7 +146,7 @@
 
     <div class="divUserPanel">
         <div class="userAvatar">
-            <img src="<?php echo $this->basePath(); ?>/img/avatar2.jpg" id="userAvatar" />
+            <img src="<?php echo $this->basePath(); ?>/img/faker.png" id="userAvatar" />
         </div>
         <div class="userInfo">
             <div class="info name"><?php echo $datauser->getLastname() .' '. $datauser->getFirstname(); ?></div>
@@ -201,30 +204,66 @@
     </div>
 </div>
 
+
 <div class="divRight">
     <div class="divCover">
-        <img id="imgCover" src="<?php echo $this->basePath(); ?>/img/cover.jpg" />
+        <img id="imgCover" src="<?php echo $this->basePath(); ?>/img/cover-faker.jpg" />
     </div>
     <div class="statusBlock">
         <div class="statusType">
-            <div class="type normal">Status</div>
-            <div class="type share">Share</div>
-            <div class="type image">Image</div>
-            <div class="type video">Video</div>
+            <div id="clickStatus" style="cursor: pointer;" class="type normal">Trạng thái</div>
+            <div id="clickShare" class="type share">Chia sẻ</div>
+            <div id="clickImage" class="type image">Đăng Ảnh</div>
+            <div id="clickVideo" class="type video">Đăng Video</div>
         </div>
         <div class="statusContent">
-            <div class="statusComposeArea">
-                <textarea></textarea>
+
+            <div class="clickStatus" style="display: block;">
+                <form action="" method="post" id="formSubStatus">
+                    <div class="statusComposeArea">
+                        <textarea name="contentStatus" id="statusPostContent" placeholder="Nhập vào trạng thái của bạn... "></textarea>
+                    </div>
+                    <div class="btnSubmit">
+                        <input id="btnPost" class="postStatus" type="submit" value="Feel" />
+                    </div>
+                </form>
             </div>
-            <div class="btnSubmit">
-                <input id="btnPost" type="button" value="Feel" />
+
+            <div class="clickShare" style="display: none;">
+                <div class="statusComposeArea">
+                    <textarea>Day la Share</textarea>
+                </div>
+                <div class="btnSubmit">
+                    <input id="btnPost" type="button" value="Feel" />
+                </div>
             </div>
+
+            <div class="clickImage" style="display: none;">
+                <div class="statusComposeArea">
+                    <textarea>Day la Image</textarea>
+                </div>
+                <div class="btnSubmit">
+                    <input id="btnPost" type="button" value="Feel" />
+                </div>
+            </div>
+
+            <div class="clickVideo" style="display: none;">
+                <div class="statusComposeArea">
+                    <textarea>Day la Video</textarea>
+                </div>
+                <div class="btnSubmit">
+                    <input id="btnPost" type="button" value="Feel" />
+                </div>
+            </div>
+
         </div>
+
     </div>
+
     <div class="divAction">
         <div class="divStatus">
             <div class="statusAvatar">
-                <img src="<?php echo $this->basePath(); ?>/img/avatar2.jpg" />
+                <img src="<?php echo $this->basePath(); ?>/img/faker.png" />
             </div>
             <div class="statusRightPanel">
                 <div class="statusPosition"><span>Nguyễn Xuân Bình</span> &curren; 5 minutes ago at Ho Chi Minh</div>
@@ -262,7 +301,7 @@
                     </div>
                     <div class="commentCompose">
                         <div class="commentUserAvatar">
-                            <img src="<?php echo $this->basePath(); ?>/img/avatar2.jpg" />
+                            <img src="<?php echo $this->basePath(); ?>/img/faker.png" />
                         </div>
                         <div class="commentRight">
                             <textarea></textarea>
@@ -277,6 +316,95 @@
 
 <script type="text/javascript">
     jQuery(document).ready(function(){
+
+        var oldDiv =jQuery('.clickStatus');
+
+        jQuery('.statusType div').each(function(){
+            jQuery(this).click(function(){
+                var newDiv = jQuery(this).attr('id');
+                newDiv = jQuery('.'+newDiv);
+                var t = 500;
+                if(newDiv.text() != oldDiv.text())
+                {
+                    oldDiv.animate({
+                        opacity: 0,
+                        marginBottom:"-=200",
+                        marginTop: "+=200px"
+                    }, t, function(){
+                        jQuery(this).css({'margin-top' : '0px', 'margin-bottom': '0px', 'display' : 'none', 'opacity' : 1});
+                    });
+//                    newDiv.delay(300).slideDown(600);
+                    newDiv.delay(300).slideDown(1000, 'easeOutBounce');
+                    oldDiv = newDiv;
+                }
+            });
+        });
+
+    });
+</script>
+
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+
+        jQuery('.postStatus').click(function(){
+            checkFormpostStatus();
+        });
+
+        function checkFormpostStatus()
+        {
+            jQuery('#formSubStatus').validate({
+                errorElement: "span",
+                rules: {
+                    contentStatus : {
+                        required:true
+                    }
+                },
+                messages:{
+                    contentStatus:{
+                        required: "*.Cảm xúc của bạn là trống rỗng ?"
+                    }
+                },
+                submitHandler : function(){
+                    ajaxSubtmitPostStatus();
+                }
+            });
+        }
+
+        function ajaxSubtmitPostStatus()
+        {
+            var status = jQuery('#statusPostContent').val();
+            alert(status);
+            var data = "status="+status;
+
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('success', array('action' => 'savestatus')); ?>",
+                data: data,
+                async:false,
+                success: function(data) {
+                    alert(data);
+                    data = JSON.parse(data);
+                    var success = data['success'];
+                    var divError = jQuery('#statusPostContent span');
+                    if(success == "1")
+                    {
+//                        alert('thanh cong');
+                        divError.html(data['message']);
+                        divError.show().delay(4000).fadeOut();
+                    }
+                    else
+                    {
+//                        alert('that bai');
+                        divError.html(data['error']);
+                        divError.fadeIn(600).delay(4000).fadeOut();
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
 
 
     });

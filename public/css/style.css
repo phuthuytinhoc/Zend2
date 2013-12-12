@@ -252,7 +252,7 @@ footer {
 /*}*/
 
 .bodyUserpage {
-    background-image:url("../img/friend_background.png");
+    /*background-image:url("../img/friend_background.png");*/
     background-color: #e5e5e5;
     font-family: "Roboto Slab", Tahoma;
 }
@@ -355,9 +355,12 @@ footer {
     color: #444;
     display:inline-block;
     float:left;
-    border: 1px solid #fff;
     padding-bottom:2px;
-    background-color:#FFF;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+    background-color: #FFF;
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+    border: 1px solid #999;
 }
 
 .divLeft .divSubMenu .divSub .divHead {
@@ -374,6 +377,8 @@ footer {
     -o-transition: border-color 0.4s ease;
     -webkit-transition: border-color 0.4s ease;
     -moz-transition: border-color 0.4s ease;
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
 }
 
 .divLeft .divSubMenu .divSub .divHead:hover {
@@ -521,15 +526,13 @@ footer {
 }
 
 .divLeft .divUserPanel .userAvatar {
-    width: 100%;
-    height: auto;
     display:inline-block;
     float:left;
 }
 
 .divLeft .divUserPanel .userAvatar img#userAvatar {
     width: 100%;
-    height:auto;
+    height: 100%;
     max-height: 350px;
     border-bottom: 1px solid #fff;
 }
@@ -622,7 +625,6 @@ footer {
 
 .divRight .divCover {
     width: 100%;
-    height:350px;
     border-bottom: 1px solid #FFF;
     display:inline-block;
     position: static;
@@ -631,19 +633,22 @@ footer {
 
 .divRight .divCover #imgCover {
     width: 100%;
-    height: auto;
-    min-height: 351px;
+    height: 100%;
 }
 
 .divRight .statusBlock {
     margin-top: 10px;
     margin-left: 10px;
-    width: 70%;
+    width: 97%;
     height: 180px;
     float: left;
     display: inline-block;
     position: static;
     border: 1px solid #FFF;
+    background-image: url("../img/friend_background.png");
+    background-repeat: repeat-x repeat-y;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
 }
 
 .divRight .statusBlock .statusType {
@@ -651,17 +656,34 @@ footer {
     display:inline-block;
     position:static;
     border-bottom: 3px solid #ccc;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
 }
 
 .divRight .statusBlock .statusType .type {
-    width: 24%;
-    height: 30px;
+    width: 25%;
     padding-top:8px;
-    display:inline-block;
-    position:static;
+    padding-bottom: 8px;
     float:left;
     text-align: center;
-    border-right: 4px solid #fff;
+    border-right: 1px solid #fff;
+    box-shadow:inset 0px -3px 7px 0px #29bbff;
+    background:linear-gradient(to bottom, #2dabf9 5%, #0688fa 100%);
+    background-color:#2dabf9;
+    -webkit-border-radius:3px;
+    border-radius:3px;
+    color:#ffffff;
+    font-size:14px;
+    text-shadow:0px 1px 0px #263666;
+}
+
+.divRight .statusBlock .statusType .type:hover{
+    background:linear-gradient(to bottom, #0688fa 5%, #2dabf9 100%);
+    background-color:#0688fa;
+}
+.divRight .statusBlock .statusType .type:active{
+    position:relative;
+    top:1px;
 }
 
 .divRight .statusBlock .statusType .type.video {
@@ -678,19 +700,46 @@ footer {
     height: 90px;
 }
 
-.divRight .statusBlock .statusContent .statusComposeArea textarea {
-    /*width: 96.1%;*/
-    width: 100%;
-    height: 84%;
-    border: 1px solid #FFF;
-    padding-top: 2%;
-    padding-left: 3%;
-    font-family: "Roboto Slab", Tahoma;
-    font-size: 14px;
+.divRight .statusBlock .statusContent .statusComposeArea span {
+    font-size: 12px;
+    font-style: italic;
+    margin-left: 20px;
 }
 
+.divRight .statusBlock .statusContent .statusComposeArea textarea {
+    width: 96%;
+    height: 84%;
+    border: 1px solid #ccc;
+    padding: 2% 3% 2% 3%;
+    font-family: "Roboto Slab", Tahoma;
+    font-size: 14px;
+    margin-left: 2%;
+    margin-right: 2%;
+    border-radius: 15px;
+    font-size: 13px;
+    background-color: transparent;
+    transition: all 0.4s ease-in-out;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.5)
+
+}
+
+.divRight .statusBlock .statusContent .statusComposeArea textarea::-webkit-input-placeholder { /* WebKit browsers */
+    color:#0077cc;
+}
+
+
+
 .divRight .statusBlock .statusContent .statusComposeArea textarea:focus {
-    outline: 0;
+    outline: none;
+    border: 1px solid #7fbbf9;
+    -moz-box-shadow:    inset 0 0 1px rgba(0, 0, 0, 0.5), 0 0 3px #7fbbf9;
+    -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), 0 0 3px #7fbbf9;
+    box-shadow:         inset 0 0 1px rgba(0, 0, 0, 0.5), 0 0 3px #7fbbf9;
+    background-color: #ffffff !important;
+}
+
+.divRight .statusBlock .statusContent .statusComposeArea textarea:focus::-webkit-input-placeholder{
+    color: #cccccc;
 }
 
 .divRight .statusBlock .statusContent .btnSubmit {
@@ -730,7 +779,7 @@ footer {
 
 .divRight .divAction .statusAvatar {
     width: 23%;
-    height: 150px;
+    /*height: 150px;*/
     display: inline-block;
     float:left;
 }
@@ -749,9 +798,8 @@ footer {
 
 .divRight .divAction .statusRightPanel .statusPosition {
     width: 100%;
-    height: 23px;
-    padding-top: 5px;
-    padding-left: 2%;
+    height: auto;
+    padding: 5px;
     display: inline-block;
     float: left;
     background-color:#1fa3ff;
@@ -838,7 +886,6 @@ footer {
     display: inline-block;
     height: auto;
     float: left;
-    padding-left: 10px;
 }
 
 .divRight .divAction .statusRightPanel .divComment .commentAction {
@@ -848,22 +895,20 @@ footer {
 }
 
 .divRight .divAction .statusRightPanel .divComment .commentAction .commentUserAvatar {
-    margin-left: -10px;
-    height:52px;
-    width:10%;
+    width: 50px;
     border-bottom: 1px solid #1fa3ff;
     display: inline-block;
     float:left;
 }
 
 .divRight .divAction .statusRightPanel .divComment .commentUserAvatar img {
-    width: 50px;
-    height:50px;
+    width: 100%;
+    height: 100%;
 }
 
 .divRight .divAction .statusRightPanel .divComment .commentAction .commentRight {
-    width: 91.8%;
-    min-height:52px;
+    width: 90%;
+    min-height:53px;
     height:auto;
     background-color:#FFF;
     display:inline-block;
@@ -917,38 +962,32 @@ footer {
 }
 
 .divRight .divAction .statusRightPanel .divComment .commentCompose {
-    width: 99.5%;
-    height: 50px;
+    width: 100%;
+    height: auto;
     display: inline-block;
     float:left;
-    margin-left: -10px;
-    padding-left: 10px;
     font-size: 12px;
     border: 1px solid #FFF;
 }
 
 .divRight .divAction .statusRightPanel .divComment .commentCompose .commentUserAvatar {
-    height:47px;
-    width:10%;
+    width: 50px;
     display: inline-block;
     float:left;
-    margin-left: -10px;
 }
 
 .divRight .divAction .statusRightPanel .divComment .commentCompose .commentUserAvatar img {
-    width:50px;
-    height: 50px;
+    width: 100%;
+    height: 100%;
 }
 
 .divRight .divAction .statusRightPanel .divComment .commentCompose .commentRight {
-    padding-left: 10px;
-    background-color: white;
-    width: 78%;
+    width: 75%;
     height: 50px;
     display: inline-block;
     float:left;
     padding-left:10px;
-    background-color:#DDD;
+    background-color:transparent;
 }
 
 .divRight .divAction .statusRightPanel .divComment .commentCompose .commentRight textarea {
@@ -958,10 +997,20 @@ footer {
     border: none;
     font-family: "Roboto Slab", Tahoma;
     font-size: 12px;
+    padding: 8px;
+    transition: all 0.4s ease-in-out;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+    overflow: hidden;
 }
 
 .divRight .divAction .statusRightPanel .divComment .commentCompose .commentRight textarea:focus {
     outline: 0;
+    border: 1px solid #7fbbf9;
+    -moz-box-shadow:    inset 0 0 1px rgba(0, 0, 0, 0.5), 0 0 3px #7fbbf9;
+    -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), 0 0 3px #7fbbf9;
+    box-shadow:         inset 0 0 1px rgba(0, 0, 0, 0.5), 0 0 3px #7fbbf9;
+    background-color: #ffffff !important;
 }
 
 .divRight .divAction .statusRightPanel .divComment .commentCompose input {
@@ -969,7 +1018,7 @@ footer {
     font-size: 15px;
     font-family: "Roboto Slab", Tahoma;
     border: 2px solid #1fa3ff;
-    height: 38px;
+    height: 35px;
     width:50px;
     display:inline-block;
     float:left;
@@ -1665,7 +1714,7 @@ footer {
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.5);
 }
 
-.divAboutme input:focus{
+.divAboutme input:focus, .focusCSS3{
     border: 1px solid #7fbbf9;
     -moz-box-shadow:    inset 0 0 1px rgba(0, 0, 0, 0.5), 0 0 3px #7fbbf9;
     -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), 0 0 3px #7fbbf9;

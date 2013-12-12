@@ -13,7 +13,13 @@ use Application\Document\User;
 
 class SuccessModel
 {
+    public function getTimestampNow()
+    {
+        $date = new \DateTime(null, new \DateTimeZone('Asia/Ho_Chi_Minh'));
+        return $date->getTimestamp();
+    }
 
+    //FUNCTON FOR UPDATE-INFO
     public function checkOldPassword($oldPass, $authService)
     {
         $infoUser = $authService->getIdentity();
@@ -66,4 +72,9 @@ class SuccessModel
         return true;
     }
 
+    //FUNCTION FOR TRANG CA NHAN
+    public function saveNewStatus($statusContent, $userid, $documentService )
+    {
+        $createdTime = $this->getTimestampNow();
+    }
 }

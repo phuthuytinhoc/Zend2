@@ -13,8 +13,6 @@ use Application\Document\User;
 
 class LoginModel
 {
-
-
     public function getTimestampNow()
     {
         $date = new \DateTime(null, new \DateTimeZone('Asia/Ho_Chi_Minh'));

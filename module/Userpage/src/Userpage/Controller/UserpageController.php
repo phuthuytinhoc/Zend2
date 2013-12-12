@@ -17,6 +17,7 @@ use Zend\Form\Annotation\AnnotationBuilder;
 use Zend\View\Helper\Json;
 
 use Application\Document\User;
+use Application\Document\Action;
 use Userpage\Model\SuccessModel;
 
 class UserpageController extends AbstractActionController
@@ -52,12 +53,49 @@ class UserpageController extends AbstractActionController
         }
         else
         {
+//
+//            $dm = $this->getServiceLocator()->get('doctrine.documentmanager.odm_default');
+//            $ketqua = new Action();
+//            $ketqua = $dm->getRepository('Application\Document\Action')->findOneBy(array('actionid' => 'ACT123456' ));
+//            echo $ketqua->getActionid();
+
+//            $date = new \DateTime(null, new \DateTimeZone('Asia/Ho_Chi_Minh'));
+//            echo $date->getTimestamp(); die();
+
+            /////////
+
             $identity = $result->getIdentity();
 
             return new ViewModel(array(
                 'datauser' => $identity,
 
             ));
+        }
+    }
+
+    public function savestatusAction()
+    {
+        $response = $this->getResponse();
+        $status = $this->params()->fromPost('status');
+        $userid = $this->getUserIdentity()->getUserid();
+
+        $documentService = $this->getDocumentService();
+
+        $successModel = new SuccessModel();
+
+        $result = $successModel->saveNewStatus($status, $userid, $documentService);
+
+        if($result)
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 1,
+                'messages' => 'Đăng trạng thái thành công')));
+        }
+        else
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0,
+                'error' => 'Đăng trạng thái thất bại.')));
         }
     }
 
@@ -78,6 +116,7 @@ class UserpageController extends AbstractActionController
         $result->setTemplate('userpage/userpage/friend');
 
         return $result;
+
     }
 
     public function updateinfoAction()
