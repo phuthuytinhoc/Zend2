@@ -9,6 +9,7 @@
 
 namespace Userpage\Controller;
 
+use Symfony\Component\Console\Application;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Session\Container;
 use Zend\Session\SessionManager;
@@ -20,6 +21,9 @@ use Zend\Form\Form;
 
 use Application\Document\User;
 use Application\Document\Action;
+use Application\Document\Album;
+use Application\Document\Status;
+use Application\Document\Image;
 
 use Userpage\Form\UploadForm;
 use Userpage\Model\SuccessModel;
@@ -59,22 +63,18 @@ class UserpageController extends AbstractActionController
         {
 //
 //            $dm = $this->getServiceLocator()->get('doctrine.documentmanager.odm_default');
-//            $ketqua = new Action();
-//            $ketqua = $dm->getRepository('Application\Document\Action')->findOneBy(array('actionid' => 'ACT123456' ));
-//            echo $ketqua->getActionid();
-
-//            $date = new \DateTime(null, new \DateTimeZone('Asia/Ho_Chi_Minh'));
-//            echo $date->getTimestamp(); die();
+//            $document = new Image();
+//            $document = $dm->getRepository('Application\Document\Image')->findOneBy(array('imageid' => '123456' ));
+//            echo $document->getImageid();
 
             /////////
 
-            $form = new UploadForm();
-
             $identity = $result->getIdentity();
+
 
             return array(
                 'datauser' => $identity,
-                'form' => $form
+
             );
         }
     }
@@ -145,9 +145,17 @@ class UserpageController extends AbstractActionController
         $response = $this->getResponse();
         $userid = $this->getUserIdentity()->getUserid();
 
+        $successModel = new SuccessModel();
+        $userid = $this->getUserIdentity()->getUserid();
+        $documentService = $this->getDocumentService();
+
+        $pathAva = $successModel->getPathImageAvatarUser($userid, $documentService);
+
+
         return $response->setContent(\Zend\Json\Json::encode(array(
             'success' => 1,
-            'userid' => $userid)));
+            'userid' => $userid,
+            'pathavatar' => $pathAva['pathAvaUser'],)));
     }
 
     //AJAX UPDATE INFO
@@ -256,16 +264,32 @@ class UserpageController extends AbstractActionController
     }
 
     //FUNCTION FOR UPLOAD IMAGE
-    public function uploadimageAction()
+    public function saveimageAction()
     {
         $response = $this->getResponse();
 
+        $userid= $this->params()->fromPost('userid');
+        $createdTime= $this->params()->fromPost('createdtime');
+        $imageType = $this->params()->fromPost('imagetype');
+        $imageType = substr($imageType, -3, 3);
 
+        $documentService = $this->getDocumentService();
 
-        return $response->setContent(\Zend\Json\Json::encode(array(
-            'success' => 1,
+        $successModel = new SuccessModel();
+        $result = $successModel->saveNewImageAvatar($userid, $createdTime,$documentService, $imageType );
 
-           )));
+        if($result)
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 1,
+            )));
+        }
+        else
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0,
+            )));
+        }
     }
 
 

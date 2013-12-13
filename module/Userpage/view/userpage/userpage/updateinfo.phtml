@@ -34,6 +34,7 @@
                         <div class="divAboutme">
                             <label style="display: block;">Chọn file bên dưới để thay đổi ảnh đại diện</label>
                             <img id="uploadPreview" style="width: auto;"/>
+                            <label id="changeAvaSuccess" style="display: block; color: red;"></label>
                             <form method="post" action="" id="form-upload-image" enctype="multipart/form-data">
                                 <input type="file" accept="image/*" name="image" id="uploadImage" placeholder="Chọn ảnh bạn muốn thay đổi..." style="display: inline-block;">
                                 <input type="submit" id="subUpdateCover" value="Lưu Hình" style="margin-left: 10px; width: 200px;">
@@ -49,8 +50,8 @@
 
                         <div class="divAboutme">
                             <label style="display: inline-block;">Ảnh đại diện hiện tại</label>
-                            <img id="avatarClick" src="<?php echo $this->basePath();?>/img/1.jpg"
-                                 style="width: 200px !important; height: 150px; display: block;" alt="" />
+                            <img id="avatarClick" src="<?php echo $this->basePath().'/uploads/';?>"
+                                 style="width: 200px !important; height: 200px; display: block;" alt="" />
                         </div>
 
                     </div>
@@ -220,6 +221,9 @@
                     if(success == "1")
                     {
                         jQuery('.userid').html(data['userid']);
+                        var srcAvatar =  jQuery('#avatarClick').attr('src');
+                        srcAvatar += data['pathavatar'];
+                        jQuery('#avatarClick').attr('src', srcAvatar);
                     }
                 },
                 error: function() {
@@ -264,6 +268,26 @@
         }
 
         //ajax crop anh cover
+
+        function ajaxSaveActionUploadImage(userid,timeStamp, path)
+        {
+            var data = "userid="+userid+"&createdtime="+timeStamp + "&imagetype=" +path;
+
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('success', array('action' => 'saveimage')); ?>",
+                data: data,
+                async:false,
+                success: function(data) {
+                    jQuery('#changeAvaSuccess').html('Thay đổi ảnh đại diện thành công').hide().delay(2000).fadeIn(400).delay(4000).fadeOut(400);
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+
         jQuery('#subUpdateCover').click(function(){
 
             var userid = jQuery('.userid').html();
@@ -286,14 +310,25 @@
                 processData: false,
                 async:false,
                 success: function(data) {
-//                    alert(data);
+
                     jQuery('img#uploadPreview').imgAreaSelect({
                         hide:true
                     });
-                    var pic = jQuery('#uploadPreview');
-                    pic.attr('src',data).hide();
-                    pic.fadeIn(500);
 
+                    if(data.error != "error")
+                    {
+                        var pic = jQuery('#uploadPreview');
+                        var pathPicloading = '<?php echo $this->basePath();?>' + '/img/loading.gif';
+                        pic.attr('src',pathPicloading).show();
+                        ajaxSaveActionUploadImage(userid, timeStamp, data);
+                        data = '<?php echo $this->basePath(); ?>' + '/uploads/' + data;
+                        pic.attr('src',data).hide();
+                        pic.delay(1500).fadeIn(600);
+                    }
+                    else
+                    {
+                        alert('Lỗi xảy ra: Bạn chưa chọn hình hoặc hình quá lớn, quá nhỏ so với quy định!');
+                    }
                 },
                 error: function() {
                     alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");

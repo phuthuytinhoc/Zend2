@@ -33,6 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $userid =  "";
     }
 
+    $eror = "";
+
     if ( isset($_FILES['image']) ) {
         if (! $_FILES['image']['error'] && $_FILES['image']['size'] < $max_file_size) {
             # get file extension
@@ -40,7 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             # file type validity
             if (in_array($ext, $valid_exts)) {
 //                $path = '../uploads/' . uniqid()  . '.' . $ext;
-                $path = '../uploads/' . 'AVA'. $userid . '_'.$createtime. '.' . $ext;
+                $picname = 'IMG'. $userid .$createtime.'AVA'. '.' . $ext;
+                $path = '../uploads/' . $picname;
                 $size = getimagesize($_FILES['image']['tmp_name']);
                 # grab data form post request
                 $x = (int) $_POST['x'];
@@ -61,14 +64,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo $path;
 
             } else {
-                echo 'Lỗi không xác định!';
+//                echo 'Lỗi không xác định!';
+                echo 'error';
             }
         } else {
-            echo 'File quá nhỏ hoặc quá lớn so với quy định.';
+//            echo 'File quá nhỏ hoặc quá lớn so với quy định.';
+            echo 'error';
         }
     } else {
-        echo 'Chưa chọn file để upload!';
+//        echo 'Chưa chọn file để upload!';
+        echo 'error';
     }
 } else {
-    echo 'bad request!';
+//    echo 'bad request!';
+    echo 'error';
 }

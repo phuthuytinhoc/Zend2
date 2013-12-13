@@ -10,6 +10,7 @@
 namespace Userpage\Model;
 
 use Application\Document\User;
+use Application\Document\Image;
 
 class SuccessModel
 {
@@ -72,6 +73,56 @@ class SuccessModel
         return true;
     }
 
+    public function getPathImageAvatarUser($userid, $dm)
+    {
+        $albumidIfAvailable = $this->checkIsHaveUserAlbumAvatar($userid, $dm);
+
+        if(isset($albumidIfAvailable))
+        {
+            $result = $dm->createQueryBuilder('Application\Document\Image')
+                ->field('albumid')->equals($albumidIfAvailable)
+                ->field('userid')->equals($userid)
+                ->field('imagestatus')->equals('AVA_NOW')
+                ->getQuery()
+                ->getSingleResult();
+
+            $path = $result->getImageid().'.'.$result->getImagetype();;
+            return array('pathAvaUser' => $path);
+
+        }
+        else
+        {
+            return array('pathAvaUser' => 'ava-temp.png');
+        }
+    }
+
+    public function resetImageAvatar($userid, $dm)
+    {
+        $dm->createQueryBuilder('Application\Document\Image')
+            ->update()
+            ->multiple(true)
+            ->field('imagestatus')->set('')
+            ->field('userid')->equals($userid)
+            ->getQuery()
+            ->execute();
+        return true;
+    }
+
+    public function checkIsHaveUserAlbumAvatar($userid, $dm)
+    {
+        $albumid = 'ALB'.$userid.'AVA';
+        $result = $dm->getRepository('Application\Document\Album')->findOneBy(array('albumid' => $albumid));
+        if(isset($result))
+        {
+            $value = $result->getAlbumid();
+            return $value;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     //FUNCTION FOR TRANG CA NHAN
     public function saveNewStatus($statusContent, $userid, $documentService )
     {
@@ -95,7 +146,7 @@ class SuccessModel
         //Them mot truong moi vao bang Action
         $documentService->createQueryBuilder('Application\Document\Action')
             ->insert()
-            ->field('actionid')->set($statusID)
+            ->field('actionid')->set($actionID)
             ->field('actionuser')->set($actionUser)
             ->field('actionlocation')->set($actionLocation)
             ->field('actiontype')->set($actionType)
@@ -105,4 +156,76 @@ class SuccessModel
 
         return true;
     }
+
+    public function saveNewImageAvatar($userid, $createdTime, $documentService, $imageType)
+    {
+        $timeNow = $this->getTimestampNow();
+
+        $albumidAvai = $this->checkIsHaveUserAlbumAvatar($userid, $documentService);
+
+        //Bang Image
+        $imageID = "IMG".$userid.$createdTime.'AVA';
+        $imageAlbumID = "";
+        $imageStatus = "AVA_NOW";
+
+        //Bang action
+        $actionID = "ACT".$timeNow;
+        $actionType = $imageID;
+        $actionCreatedTime = $timeNow;
+
+        if($albumidAvai != null)
+        {
+            //Truong hop da co AlbumAva san trong bang Album
+            $imageAlbumID = $albumidAvai;
+
+            //reset hinh dang la hinh avatar
+            $this->resetImageAvatar($userid, $documentService);
+        }
+        else
+        {
+            //Truong hop chua co album Avatar trong bang Album
+            //Bat dau tao moi albumid cho album avatar cua user
+
+            //bat dau luu vao  Bang Album
+            $albumID = 'ALB'.$userid.'AVA';
+            $albumUserid = $userid;
+
+            //sua lai image album id
+            $imageAlbumID = $albumID;
+
+            $documentService->createQueryBuilder('Application\Document\Album')
+                ->insert()
+                ->field('albumid')->set($albumID)
+                ->field('userid')->set($albumUserid)
+                ->getQuery()
+                ->execute();
+        }
+
+        //bat dau luu vao bang Image
+        $documentService->createQueryBuilder('Application\Document\Image')
+            ->insert()
+            ->field('imageid')->set($imageID)
+            ->field('albumid')->set($imageAlbumID)
+            ->field('imagestatus')->set($imageStatus)
+            ->field('imagetype')->set($imageType)
+            ->field('userid')->set($userid)
+            ->getQuery()
+            ->execute();
+
+        //bat dau luu vao bang Action
+        $documentService->createQueryBuilder('Application\Document\Action')
+            ->insert()
+            ->field('actionid')->set($actionID)
+            ->field('actionuser')->set($userid)
+            ->field('actionlocation')->set($userid)
+            ->field('actiontype')->set($actionType)
+            ->field('createdtime')->set($actionCreatedTime)
+            ->getQuery()
+            ->execute();
+
+            return true;
+    }
+
+
+
 }

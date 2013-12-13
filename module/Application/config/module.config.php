@@ -156,7 +156,7 @@ return array(
                 'cache' => 'array',
                 'paths' => array(
                     __DIR__ . '/../src/Application/Document/User',
-//                    __DIR__ . '/../src/Application/Document/Action'
+//                    __DIR__ . '/../src/Application/Document/Album'
                 ),
             ),
             'odm_default'   => array(
