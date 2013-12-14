@@ -25,7 +25,7 @@
         <div id="st-accordion" class="st-accordion">
             <ul>
                 <li>
-                    <a class="iconInfo" href="#"> a
+                    <a class="iconInfo" name="uploadPreview" href="#"> a
                         <label  style="margin-left: 25px;">Thay đổi hình đại diện</label>
                         <span class="st-arrow">Open or Close</span>
                     </a>
@@ -57,29 +57,32 @@
                     </div>
                 </li>
                 <li>
-                    <a class="iconInfo" href="#"> I
+                    <a class="iconInfo" name="uploadPreview_cover" href="#"> I
                         <label>Thay đổi ảnh nền trang cá nhân</label>
                         <span class="st-arrow">Open or Close</span>
                     </a>
                     <div class="st-content">
 
                         <div class="divAboutme">
-                            <img id="uploadPreview" style="width: auto;"/>
-                            <form method="post" action="" id="form-upload-image" enctype="multipart/form-data" style="margin-top: 20px;">
-                                <input type="file" accept="image/*" name="image" id="uploadImage" style="display: inline-block;">
-                                <input type="submit" id="subUpdateCover" value="Lưu Hình" style="margin-left: 10px; width: 200px;">
+                            <label style="display: block;">Chọn file bên dưới để thay đổi ảnh nền trang cá nhân</label>
+
+                            <img id="uploadPreview_cover" src="" style="width: auto;"/>
+                            <label id="changeAvaSuccess_cover" style="display: block; color: red;"></label>
+                            <form method="post" action="" id="form-upload-image_cover" enctype="multipart/form-data" style="margin-top: 20px;">
+                                <input type="file" accept="image/*" name="image" id="uploadImage_cover" style="display: inline-block;">
+                                <input type="submit" id="subUpdateCover_cover" value="Lưu Hình" style="margin-left: 10px; width: 200px;">
 
                                 <!-- hidden inputs-->
-                                <input type="hidden" id="x" name="x" />
-                                <input type="hidden" id="y" name="y" />
-                                <input type="hidden" id="w" name="w" />
-                                <input type="hidden" id="h" name="h" />
+                                <input type="hidden" id="a" name="a" />
+                                <input type="hidden" id="b" name="b" />
+                                <input type="hidden" id="c" name="c" />
+                                <input type="hidden" id="d" name="d" />
                             </form>
                         </div>
 
                         <div class="divAboutme">
-                            <label style="display: inline-block;">Ảnh bìa trang chủ hiện tại | </label>
-                            <img id="coverClick" src="<?php echo $this->basePath();?>/img/cover.jpg"
+                            <label style="display:block;">Ảnh bìa trang chủ hiện tại </label>
+                            <img id="coverClick_cover" src="<?php echo $this->basePath().'/uploads/';?>"
                                  style="width: 668px !important; height: 350px;" alt="" />
                         </div>
                     </div>
@@ -199,21 +202,32 @@
 
      //doi anh dai dien
     jQuery(document).ready(function(){
-        function getTimestampNow()
-        {
-            var datenow = new Date();
-            datenow = parseInt(datenow.setFullYear(datenow.getFullYear(), datenow.getMonth(), datenow.getDate())/1000);
-            return datenow;
-        }
+
+        jQuery('#st-accordion').accordion();
+
+        jQuery('.iconInfo').click(function(){
+            var divLable =jQuery(this).attr('name');
+            var divImageSelect = jQuery("#"+divLable)
+            divImageSelect.attr('src', '');
+            divImageSelect.imgAreaSelect({hide: true});
+        });
+
+        jQuery('#uploadImage').change(function(){
+            jQuery('.st-accordion ul li').css('height', 'auto');
+        });
+        jQuery('#uploadImage_cover').change(function(){
+            jQuery('.st-accordion ul li').css('height', 'auto');
+        });
+
         //auto fetch userid
         autogetUserid();
+
         function autogetUserid()
         {
-            var data = "";
             jQuery.ajax({
                 type: "POST",
                 url: "<?php echo $this->url('success', array('action' => 'autogetuserid')); ?>",
-                data: data,
+                data: '',
                 async:false,
                 success: function(data) {
                     data = JSON.parse(data);
@@ -221,9 +235,16 @@
                     if(success == "1")
                     {
                         jQuery('.userid').html(data['userid']);
-                        var srcAvatar =  jQuery('#avatarClick').attr('src');
+                        var divAvatar = jQuery('#avatarClick');
+                        var srcAvatar =  divAvatar.attr('src');
                         srcAvatar += data['pathavatar'];
-                        jQuery('#avatarClick').attr('src', srcAvatar);
+                        divAvatar.attr('src', srcAvatar);
+
+
+                        var divCover = jQuery('#coverClick_cover');
+                        var srcCover = divCover.attr('src');
+                        srcCover += data['pathCover'];
+                        divCover.attr('src', srcCover);
                     }
                 },
                 error: function() {
@@ -233,45 +254,26 @@
             return false;
         }
 
-        jQuery('#st-accordion').accordion();
-        jQuery('#uploadImage').change(function(){
-            jQuery('.st-accordion ul li').css('height', 'auto');
-        });
 
-        var called = false;
 
-        jQuery('.test').click(function(){
-            var formUpload = jQuery('#formUpload');
-            formUpload.css('display', 'block');
-            jQuery('.imgareaselect-selection').parent().css('z-index', 300);
-            jQuery('.imgareaselect-outer').css('z-index' , 200);
-            jQuery('#lightboxImage').remove();
-            jQuery('#hoverNav').remove();
-            jQuery('#imageContainer').prepend(formUpload);
-            jQuery('#bottomNavClose').css('margin-top', '30px');
 
-            addScriptHideArea();
+    });
+</script>
 
-        });
 
-        function addScriptHideArea()
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+
+        function getTimestampNow()
         {
-            if(called ==  false)
-            {
-                var script= document.createElement('script');
-                script.type= 'text/javascript';
-                script.src= '<?php echo $this->basePath().'/js/process.hideImageAreaSelected.js';?>';
-                script.async = true;
-                document.body.appendChild(script);
-                called = true;
-            }
+            var datenow = new Date();
+            datenow = parseInt(datenow.setFullYear(datenow.getFullYear(), datenow.getMonth(), datenow.getDate())/1000);
+            return datenow;
         }
-
-        //ajax crop anh cover
 
         function ajaxSaveActionUploadImage(userid,timeStamp, path)
         {
-            var data = "userid="+userid+"&createdtime="+timeStamp + "&imagetype=" +path;
+            var data = "userid="+userid+"&createdtime="+timeStamp + "&imagetype=" +path + "&albumtype=AVA";
 
             jQuery.ajax({
                 type: "POST",
@@ -336,8 +338,86 @@
             });
             return false;
         });
+
+        //FOR CHANGE COVER
+        function ajaxSaveActionUploadImage_Cover(userid,timeStamp, path)
+        {
+            var data = "userid="+userid+"&createdtime="+timeStamp + "&imagetype=" +path + "&albumtype=COV";
+
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('success', array('action' => 'saveimage')); ?>",
+                data: data,
+                async:false,
+                success: function(data) {
+                    jQuery('#changeAvaSuccess_cover').html('Thay đổi ảnh nền trang cá nhân thành công!').hide().delay(2000).fadeIn(400).delay(4000).fadeOut(400);
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+
+        jQuery('#subUpdateCover_cover').click(function(){
+
+            var userid = jQuery('.userid').html();
+            var timeStamp = getTimestampNow();
+            var imageWidth = 665;
+            var imageHeight = 350;
+            var imageStatus = 'COV';
+//            var data = "userid="+userid+"&createdtime="+ timeStamp + "&imageWidth=" + imageWidth + "&imageHeight=" + imageHeight ;
+
+            var formdata  = new FormData(jQuery('#form-upload-image_cover')[0]);
+            var reader = new FileReader();
+            var value = reader.readAsDataURL(document.getElementById("uploadImage_cover").files[0]);
+            formdata.append('image', value);
+            formdata.append('userid', userid);
+            formdata.append('createdtime', timeStamp);
+            formdata.append('imageWidth', imageWidth);
+            formdata.append('imageHeight', imageHeight);
+            formdata.append('imageStatus', imageStatus);
+
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->basePath().'/plugin/upload.php' ;?>",
+                data: formdata,
+                cache: false,
+                contentType: false,
+                processData: false,
+                async:false,
+                success: function(data) {
+
+                    jQuery('img#uploadPreview_cover').imgAreaSelect({
+                        hide:true
+                    });
+
+                    if(data.error != "error")
+                    {
+                        var pic = jQuery('#uploadPreview_cover');
+                        var pathPicloading = "<?php echo $this->basePath();?>" + "/img/loading.gif";
+                        pic.attr('src',pathPicloading).show();
+                        ajaxSaveActionUploadImage_Cover(userid, timeStamp, data);
+                        data = "<?php echo $this->basePath(); ?>" + "/uploads/" + data;
+                        pic.attr('src',data).hide();
+                        pic.delay(1500).fadeIn(600);
+                    }
+                    else
+                    {
+                        alert('Lỗi xảy ra: Bạn chưa chọn hình hoặc hình quá lớn, quá nhỏ so với quy định!');
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        });
+
     });
+
 </script>
+
 
 <script type="text/javascript">
     jQuery(document).ready(function(){

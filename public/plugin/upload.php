@@ -14,6 +14,8 @@ $valid_exts = array('jpeg', 'jpg', 'png', 'gif');
 $max_file_size = 20000 * 1024; #200kb
 $nw = $nh = 200; # image with & height
 
+$imageType = 'AVA';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if(isset($_POST['createdtime']))
@@ -33,6 +35,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $userid =  "";
     }
 
+    if(isset($_POST['imageWidth']))
+    {
+        $nw = $_POST['imageWidth'];
+    }
+
+    if(isset($_POST['imageHeight']))
+    {
+        $nh = $_POST['imageHeight'];
+    }
+
+    if(isset($_POST['imageStatus']))
+    {
+        $imageType = $_POST['imageStatus'];
+    }
+
     $eror = "";
 
     if ( isset($_FILES['image']) ) {
@@ -42,14 +59,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             # file type validity
             if (in_array($ext, $valid_exts)) {
 //                $path = '../uploads/' . uniqid()  . '.' . $ext;
-                $picname = 'IMG'. $userid .$createtime.'AVA'. '.' . $ext;
+                $picname = 'IMG'. $userid .$createtime.$imageType. '.' . $ext;
                 $path = '../uploads/' . $picname;
                 $size = getimagesize($_FILES['image']['tmp_name']);
                 # grab data form post request
-                $x = (int) $_POST['x'];
-                $y = (int) $_POST['y'];
-                $w = (int) $_POST['w'] ? $_POST['w'] : $size[0];
-                $h = (int) $_POST['h'] ? $_POST['h'] : $size[1];
+                if($imageType == "AVA")
+                {
+                    $x = (int) $_POST['x'];
+                    $y = (int) $_POST['y'];
+                    $w = (int) $_POST['w'] ? $_POST['w'] : $size[0];
+                    $h = (int) $_POST['h'] ? $_POST['h'] : $size[1];
+                }
+                else
+                {
+                    $x = (int) $_POST['a'];
+                    $y = (int) $_POST['b'];
+                    $w = (int) $_POST['c'] ? $_POST['c'] : $size[0];
+                    $h = (int) $_POST['d'] ? $_POST['d'] : $size[1];
+                }
+
                 # read image binary data
                 $data = file_get_contents($_FILES['image']['tmp_name']);
                 # create v image form binary data

@@ -70,11 +70,17 @@ class UserpageController extends AbstractActionController
             /////////
 
             $identity = $result->getIdentity();
+            $userid = $identity->getUserid();
+            $dm = $this->getDocumentService();
 
+            $successModel = new SuccessModel();
+            $path = $successModel->getPathImageAvatarUser($userid, $dm, 'AVA');
+            $pathCover = $successModel->getPathImageAvatarUser($userid, $dm, 'COV');
 
             return array(
                 'datauser' => $identity,
-
+                'pathUserAvatar' => $path['pathAvaUser'],
+                'pathCover' => $pathCover['pathAvaUser'],
             );
         }
     }
@@ -144,18 +150,19 @@ class UserpageController extends AbstractActionController
     {
         $response = $this->getResponse();
         $userid = $this->getUserIdentity()->getUserid();
-
         $successModel = new SuccessModel();
-        $userid = $this->getUserIdentity()->getUserid();
+
         $documentService = $this->getDocumentService();
 
-        $pathAva = $successModel->getPathImageAvatarUser($userid, $documentService);
+        $pathAva = $successModel->getPathImageAvatarUser($userid, $documentService, 'AVA');
+        $pathCover = $successModel->getPathImageAvatarUser($userid, $documentService, 'COV');
 
 
         return $response->setContent(\Zend\Json\Json::encode(array(
             'success' => 1,
             'userid' => $userid,
-            'pathavatar' => $pathAva['pathAvaUser'],)));
+            'pathavatar' => $pathAva['pathAvaUser'],
+            'pathCover' => $pathCover['pathAvaUser'],)));
     }
 
     //AJAX UPDATE INFO
@@ -263,7 +270,7 @@ class UserpageController extends AbstractActionController
 
     }
 
-    //FUNCTION FOR UPLOAD IMAGE
+    //FUNCTION FOR UPLOAD IMAGE AVATAR & COVER
     public function saveimageAction()
     {
         $response = $this->getResponse();
@@ -272,11 +279,12 @@ class UserpageController extends AbstractActionController
         $createdTime= $this->params()->fromPost('createdtime');
         $imageType = $this->params()->fromPost('imagetype');
         $imageType = substr($imageType, -3, 3);
+        $AVAorCOV = $this->params()->fromPost('albumtype');
 
         $documentService = $this->getDocumentService();
 
         $successModel = new SuccessModel();
-        $result = $successModel->saveNewImageAvatar($userid, $createdTime,$documentService, $imageType );
+        $result = $successModel->saveNewImageAvatar($userid, $createdTime,$documentService, $imageType, $AVAorCOV );
 
         if($result)
         {
@@ -291,7 +299,6 @@ class UserpageController extends AbstractActionController
             )));
         }
     }
-
 
 
 }

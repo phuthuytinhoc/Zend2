@@ -73,44 +73,67 @@ class SuccessModel
         return true;
     }
 
-    public function getPathImageAvatarUser($userid, $dm)
+    public function getPathImageAvatarUser($userid, $dm, $albumType)
     {
-        $albumidIfAvailable = $this->checkIsHaveUserAlbumAvatar($userid, $dm);
+        $albumidIfAvailable = $this->checkIsHaveUserAlbumAvatar($userid, $dm, $albumType);
+
+        if($albumType=="AVA")
+        {
+            $tempPath = 'ava-temp.png';
+            $imageStatus="AVA_NOW";
+        }
+        else
+        {
+            $tempPath = 'cover-temp.jpg';
+            $imageStatus="COV_NOW";
+        }
+
 
         if(isset($albumidIfAvailable))
         {
             $result = $dm->createQueryBuilder('Application\Document\Image')
                 ->field('albumid')->equals($albumidIfAvailable)
                 ->field('userid')->equals($userid)
-                ->field('imagestatus')->equals('AVA_NOW')
+                ->field('imagestatus')->equals($imageStatus)
                 ->getQuery()
                 ->getSingleResult();
 
             $path = $result->getImageid().'.'.$result->getImagetype();;
             return array('pathAvaUser' => $path);
-
         }
         else
         {
-            return array('pathAvaUser' => 'ava-temp.png');
+            return array('pathAvaUser' => $tempPath);
         }
     }
 
-    public function resetImageAvatar($userid, $dm)
+    public function resetImageAvatar($userid, $dm, $albumType)
     {
+        if($albumType == "AVA")
+        {
+            $resetAVAorCOV = "AVA_NOW";
+            $resetValue = "AVA_OLD";
+        }
+        else
+        {
+            $resetAVAorCOV = "COV_NOW";
+            $resetValue = "COV_OLD";
+        }
+
         $dm->createQueryBuilder('Application\Document\Image')
             ->update()
             ->multiple(true)
-            ->field('imagestatus')->set('')
+            ->field('imagestatus')->set($resetValue)
             ->field('userid')->equals($userid)
+            ->field('imagestatus')->equals($resetAVAorCOV)
             ->getQuery()
             ->execute();
         return true;
     }
 
-    public function checkIsHaveUserAlbumAvatar($userid, $dm)
+    public function checkIsHaveUserAlbumAvatar($userid, $dm, $albumType)
     {
-        $albumid = 'ALB'.$userid.'AVA';
+        $albumid = 'ALB'.$userid.$albumType;
         $result = $dm->getRepository('Application\Document\Album')->findOneBy(array('albumid' => $albumid));
         if(isset($result))
         {
@@ -157,16 +180,24 @@ class SuccessModel
         return true;
     }
 
-    public function saveNewImageAvatar($userid, $createdTime, $documentService, $imageType)
+    //FOR UPDATE AVATAR
+    public function saveNewImageAvatar($userid, $createdTime, $documentService, $imageType, $albumType)
     {
         $timeNow = $this->getTimestampNow();
 
-        $albumidAvai = $this->checkIsHaveUserAlbumAvatar($userid, $documentService);
+        $albumidAvai = $this->checkIsHaveUserAlbumAvatar($userid, $documentService, $albumType);
 
         //Bang Image
-        $imageID = "IMG".$userid.$createdTime.'AVA';
+        $imageID = "IMG".$userid.$createdTime.$albumType;
         $imageAlbumID = "";
-        $imageStatus = "AVA_NOW";
+        if($albumType == "AVA")
+        {
+            $imageStatus = "AVA_NOW";
+        }
+        else
+        {
+            $imageStatus = "COV_NOW";
+        }
 
         //Bang action
         $actionID = "ACT".$timeNow;
@@ -179,7 +210,7 @@ class SuccessModel
             $imageAlbumID = $albumidAvai;
 
             //reset hinh dang la hinh avatar
-            $this->resetImageAvatar($userid, $documentService);
+            $this->resetImageAvatar($userid, $documentService, $albumType);
         }
         else
         {
@@ -187,7 +218,7 @@ class SuccessModel
             //Bat dau tao moi albumid cho album avatar cua user
 
             //bat dau luu vao  Bang Album
-            $albumID = 'ALB'.$userid.'AVA';
+            $albumID = 'ALB'.$userid.$albumType;
             $albumUserid = $userid;
 
             //sua lai image album id
