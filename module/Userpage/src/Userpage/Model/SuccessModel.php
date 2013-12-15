@@ -147,12 +147,102 @@ class SuccessModel
     }
 
     //FUNCTION FOR TRANG CA NHAN
-    public function saveNewStatus($statusContent, $userid, $documentService )
+    public function getAllContentPrivatePage($userid, $dm)
     {
-        $createdTime = $this->getTimestampNow();
+        $arrayStatusID = array(); //mang nay chua cac ID cua Status IMAGE
+        $arrayACTIDhaveCMTID = array(); //mang chua cac actionID trong bang
+        $listCMTID = array();
+
+        $arrayCommentContent = array();
+        $arrayStatusContent = array();
+        $createdtime = array();
+        $imageContent = array();
+        $actionID = array();
+
+        //get array for statusid
+        $temp = $dm->createQueryBuilder('Application\Document\Action')
+            ->field('actionuser')->equals($userid)
+            ->field('actionlocation')->equals($userid)
+            ->sort('createdtime', 'desc')
+            ->getQuery()
+            ->execute();
+        //vong lap co IMG CMT va STT
+        foreach($temp as $sttid )
+        {
+
+            $statusID = $sttid->getActionType();
+            $checkCMT = substr($statusID, 0, 3);
+            if($checkCMT != "CMT")
+            {
+                $arrayStatusID[] = $statusID;
+                $createdtime[$statusID] = $sttid->getCreatedTime();
+                $actionID[$statusID] = $sttid->getActionid();
+            }
+            else
+            {
+                $arrayACTIDhaveCMTID[] = $sttid->getActionid();
+            }
+        }
+        //get status content from array statusid
+        foreach($arrayStatusID as $staID)
+        {
+            $typeofAction = substr($staID, 0, 3);
+
+            if($typeofAction == "STT")
+            {
+                $temp_status = $dm->createQueryBuilder('Application\Document\Status')
+                    ->field('statusid')->equals($staID)
+                    ->getQuery()
+                    ->getSingleResult();
+                $arrayStatusContent[$staID] = $temp_status->getStatusContent();
+            }
+            elseif($typeofAction == "IMG")
+            {
+
+                $doc = $dm->createQueryBuilder('Application\Document\Image')
+                    ->field('imageid')->equals($staID)
+                    ->getQuery()
+                    ->getSingleResult();
+                $imageContent[$staID] = $doc->getImageid() .'.'.$doc->getImagetype()."'/>";
+            }
+        }
+
+        foreach($arrayACTIDhaveCMTID as $actid)
+        {
+            $temp_cmt = $dm->createQueryBuilder('Application\Document\Comment')
+                ->field('actionid')->equals($actid)
+                ->getQuery()
+                ->getSingleResult();
+            $listCMTID[] = $temp_cmt->getCommentid();
+        }
+
+        foreach($listCMTID as $CMTID)
+        {
+            $doc = $dm->createQueryBuilder('Application\Document\Comment')
+                ->field('commentid')->equals($CMTID)
+                ->getQuery()
+                ->getSingleResult();
+            $arrayCommentContent[$CMTID] = $doc->getCommentcontent();
+        }
+
+        return array(
+            'arrStatusID' => $arrayStatusID,
+            'arrStatusContent' => $arrayStatusContent,
+            'actionTime' => $createdtime,
+            'imageContent' =>$imageContent,
+            'actionID'   => $actionID,
+            'commentContent' => $arrayCommentContent,
+            'listCommentID' => $listCMTID,
+        );
+
+    }
+
+    public function saveNewStatus($statusContent, $userid, $timeStamp , $documentService )
+    {
+        $createdTime = $timeStamp;
 
         //collection('status')
-        $statusID = 'STT'. $createdTime;
+        $statusID = 'STT'.$userid. $createdTime;
 
         //collection('action')
         $actionID = 'ACT'. $createdTime;
@@ -177,7 +267,50 @@ class SuccessModel
             ->getQuery()
             ->execute();
 
-        return true;
+       if(isset($documentService))
+           return true;
+        else
+            return false;
+    }
+
+    public function saveNewComment($data, $userid, $documentService)
+    {
+        $createdTime = $data['timestamp'];
+        //value for comment
+        $commentID = 'CMT'.$userid.$createdTime;
+        $actionID = $data['actionID'];
+        $commentContent = $data['cmtContent'];
+
+        //value for action
+        $newActionID = 'ACT'.$this->getTimestampNow();
+        $actionUser = $actionLocation = $userid;
+        $actionType = $commentID;
+
+        //them vao bang action
+        $documentService->createQueryBuilder('Application\Document\Comment')
+            ->insert()
+            ->field('commentid')->set($commentID)
+            ->field('actionid')->set($actionID)
+            ->field('commentcontent')->set($commentContent)
+            ->getQuery()
+            ->execute();
+
+        //them vao bang comment
+        $documentService->createQueryBuilder('Application\Document\Action')
+            ->insert()
+            ->field('actionid')->set($actionID)
+            ->field('actionuser')->set($actionUser)
+            ->field('actionlocation')->set($actionLocation)
+            ->field('actiontype')->set($actionType)
+            ->field('createdtime')->set($createdTime)
+            ->getQuery()
+            ->execute();
+
+        if(isset($documentService))
+            return true;
+        else
+            return false;
+
     }
 
     //FOR UPDATE AVATAR

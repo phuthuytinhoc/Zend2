@@ -61,26 +61,36 @@ class UserpageController extends AbstractActionController
         }
         else
         {
-//
-//            $dm = $this->getServiceLocator()->get('doctrine.documentmanager.odm_default');
-//            $document = new Image();
-//            $document = $dm->getRepository('Application\Document\Image')->findOneBy(array('imageid' => '123456' ));
-//            echo $document->getImageid();
-
-            /////////
+            date_default_timezone_set('Asia/Ho_Chi_Minh');
 
             $identity = $result->getIdentity();
             $userid = $identity->getUserid();
             $dm = $this->getDocumentService();
-
+            //get model
             $successModel = new SuccessModel();
+            //get Service
+            $dm = $this->getDocumentService();
+
+            //get path for avatar and cover picture
             $path = $successModel->getPathImageAvatarUser($userid, $dm, 'AVA');
             $pathCover = $successModel->getPathImageAvatarUser($userid, $dm, 'COV');
+
+            //get content page: status, post image, change image.
+            $allContent = $successModel->getAllContentPrivatePage($userid, $dm);
+
+//var_dump($allContent['commentContent']); die();
 
             return array(
                 'datauser' => $identity,
                 'pathUserAvatar' => $path['pathAvaUser'],
                 'pathCover' => $pathCover['pathAvaUser'],
+                'idAllContent' => $allContent['arrStatusID'],
+                'allContentbyID' => $allContent['arrStatusContent'],
+                'actionTime'  => $allContent['actionTime'],
+                'imageContent' => $allContent['imageContent'],
+                'actionID' => $allContent['actionID'],
+                'commentContent' => $allContent['commentContent'],
+                'listCommentID' => $allContent['listCommentID'],
             );
         }
     }
@@ -92,12 +102,13 @@ class UserpageController extends AbstractActionController
         $response = $this->getResponse();
         $status = $this->params()->fromPost('status');
         $userid = $this->getUserIdentity()->getUserid();
+        $createdTime = $this->params()->fromPost('timestamp');
 
         $documentService = $this->getDocumentService();
 
         $successModel = new SuccessModel();
 
-        $result = $successModel->saveNewStatus($status, $userid, $documentService);
+        $result = $successModel->saveNewStatus($status, $userid, $createdTime,$documentService);
 
         if($result)
         {
@@ -110,6 +121,35 @@ class UserpageController extends AbstractActionController
             return $response->setContent(\Zend\Json\Json::encode(array(
                 'success' => 0,
                 'error' => 'Đăng trạng thái thất bại.')));
+        }
+    }
+
+    public function getlatestAction()
+    {
+
+    }
+
+    //FUNCTION FOR COMMENT
+    public function savecommentAction()
+    {
+        $response = $this->getResponse();
+
+        $dm = $this->getDocumentService();
+        $successModel = new SuccessModel();
+
+        $data = $this->params()->fromPost();
+        $userid = $this->getUserIdentity()->getUserid();
+        $result = $successModel->saveNewComment($data, $userid, $dm);
+
+        if($result)
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 1,)));
+        }
+        else
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0,)));
         }
     }
 

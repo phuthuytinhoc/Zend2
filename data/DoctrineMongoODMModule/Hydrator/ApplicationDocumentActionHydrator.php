@@ -42,6 +42,78 @@ class ApplicationDocumentActionHydrator implements HydratorInterface
             $this->class->reflFields['actionid']->setValue($document, $return);
             $hydratedData['actionid'] = $return;
         }
+
+        /** @Field(type="string") */
+        if (isset($data['actionuser'])) {
+            $value = $data['actionuser'];
+            $return = (string) $value;
+            $this->class->reflFields['actionuser']->setValue($document, $return);
+            $hydratedData['actionuser'] = $return;
+        }
+
+        /** @Field(type="string") */
+        if (isset($data['actionlocation'])) {
+            $value = $data['actionlocation'];
+            $return = (string) $value;
+            $this->class->reflFields['actionlocation']->setValue($document, $return);
+            $hydratedData['actionlocation'] = $return;
+        }
+
+        /** @Field(type="string") */
+        if (isset($data['actiontype'])) {
+            $value = $data['actiontype'];
+            $return = (string) $value;
+            $this->class->reflFields['actiontype']->setValue($document, $return);
+            $hydratedData['actiontype'] = $return;
+        }
+
+        /** @Field(type="string") */
+        if (isset($data['actionLocate'])) {
+            $value = $data['actionLocate'];
+            $return = (string) $value;
+            $this->class->reflFields['actionLocate']->setValue($document, $return);
+            $hydratedData['actionLocate'] = $return;
+        }
+
+        /** @Field(type="string") */
+        if (isset($data['actionlongtitude'])) {
+            $value = $data['actionlongtitude'];
+            $return = (string) $value;
+            $this->class->reflFields['actionlongtitude']->setValue($document, $return);
+            $hydratedData['actionlongtitude'] = $return;
+        }
+
+        /** @Field(type="string") */
+        if (isset($data['actionlatitude'])) {
+            $value = $data['actionlatitude'];
+            $return = (string) $value;
+            $this->class->reflFields['actionlatitude']->setValue($document, $return);
+            $hydratedData['actionlatitude'] = $return;
+        }
+
+        /** @Field(type="string") */
+        if (isset($data['createdtime'])) {
+            $value = $data['createdtime'];
+            $return = (string) $value;
+            $this->class->reflFields['createdtime']->setValue($document, $return);
+            $hydratedData['createdtime'] = $return;
+        }
+
+        /** @Field(type="string") */
+        if (isset($data['updatetime'])) {
+            $value = $data['updatetime'];
+            $return = (string) $value;
+            $this->class->reflFields['updatetime']->setValue($document, $return);
+            $hydratedData['updatetime'] = $return;
+        }
+
+        /** @Field(type="string") */
+        if (isset($data['allowID'])) {
+            $value = $data['allowID'];
+            $return = (string) $value;
+            $this->class->reflFields['allowID']->setValue($document, $return);
+            $hydratedData['allowID'] = $return;
+        }
         return $hydratedData;
     }
 }

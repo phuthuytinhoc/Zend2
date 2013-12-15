@@ -260,15 +260,45 @@
 
     </div>
 
+    <?php
+    $stt = 0;
+    foreach($idAllContent as $id)
+    {
+
+    ?>
+
     <div class="divAction">
         <div class="divStatus">
             <div class="statusAvatar">
                 <img src="<?php echo $this->basePath().'/uploads/'.$pathUserAvatar; ?>" />
             </div>
             <div class="statusRightPanel">
-                <div class="statusPosition"><span>Nguyễn Xuân Bình</span> &curren; 5 minutes ago at Ho Chi Minh</div>
+                <div class="statusPosition">
+                    <span>
+                        <?php echo $datauser->getLastname() .' '. $datauser->getFirstname(); ?>
+                    </span> &curren;
+                    <?php
+                    echo ' lúc '.date('H', $actionTime[$id]). ' giờ ' ;
+                    echo date('i', $actionTime[$id]) . ' phút';
+                    echo ' ngày '.date('d/m/Y', $actionTime[$id]);
+                    ?>
+                </div>
                 <div class="statusContent">
-                    Hôm nay trời đẹp quá :)
+                    <?php
+                    if(isset($allContentbyID[$id]))
+                    {
+                        echo $allContentbyID[$id];
+                    }
+                    elseif(isset($imageContent[$id]))
+                    {
+                        echo "<img src='" . $this->basePath()."/uploads/".$imageContent[$id];
+                    }
+                    else
+                    {
+                        echo "Lỗi xảy ra.";
+                    }
+
+                    ?>
                 </div>
                 <div class="statusFooter">
                     <div class="summary">
@@ -280,16 +310,27 @@
                         <a class="like" href="#"></a><span>30</span>
                         <a class="comment" href="#"></a><span>30</span>
                         <a class="share" href="#"></a><span>30</span>
-
                     </div>
                 </div>
+
                 <div class="divComment">
+
+                <?php
+                if(isset($listCommentID))
+                {
+                    foreach($listCommentID as $listID)
+                    {
+                ?>
                     <div class="commentAction">
                         <div class="commentUserAvatar">
                             <img src="<?php echo $this->basePath(); ?>/img/avatar.jpg" />
                         </div>
                         <div class="commentRight">
-                            <div class="commentContent"><div class="commentUserName">Fu Hu</div>Thằng này bị điên rồi =.="</div>
+                            <div class="commentContent"><div class="commentUserName">Fu Hu</div>
+                                <?php
+                                    echo $commentContent[$listID];
+                                ?>
+                            </div>
                             <div class="commentFooter">
                                 <div class="commentTime">5 minites ago</div>
                                 <div class="commentLike">
@@ -299,23 +340,57 @@
                             </div>
                         </div>
                     </div>
+                <?php } } ?>
+
                     <div class="commentCompose">
                         <div class="commentUserAvatar">
                             <img src="<?php echo $this->basePath().'/uploads/'. $pathUserAvatar;?>"/>
                         </div>
-                        <div class="commentRight">
-                            <textarea></textarea>
-                        </div>
-                        <input type="button" value="Post" />
+                        <form class="form-subPostCmt" name="<?php echo $actionID[$id]; ?>" id="fCmt<?php echo $actionID[$id]; ?>">
+                            <div class="commentRight">
+                                <textarea name="cmtContentArea" class="contentPostComment"></textarea>
+                            </div>
+                            <input type="submit" class="postComment" value="Post" />
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <?php
+        $stt++;
+        }
+    ?>
+
 </div>
 
 <script type="text/javascript">
+    function getTimestampNow()
+    {
+        var datenow = new Date();
+        datenow = parseInt(datenow.setFullYear(datenow.getFullYear(), datenow.getMonth(), datenow.getDate())/1000);
+        return datenow;
+    }
+</script>
+
+<script type="text/javascript">
     jQuery(document).ready(function(){
+//        var scrollInAction = false;
+//        jQuery(window).scroll(function(){
+//            if  (jQuery(window).scrollTop() >= (jQuery(document).height() - jQuery(window).height() - 200))
+//            {
+//                if (scrollInAction)
+//                {
+//                    return false;
+//                }else
+//                {
+//                    scrollInAction=true;
+//                    alert('da toi luc phai load content moi');
+//                }
+//            }
+//        });
+
 
         var oldDiv =jQuery('.clickStatus');
 
@@ -344,11 +419,122 @@
 </script>
 
 <script type="text/javascript">
+    //Phan comment cua user
+
     jQuery(document).ready(function(){
+        jQuery('.form-subPostCmt input.postComment').each(function(){
+            jQuery(this).on('click',function(){
+                var form = jQuery(this).parent().attr('id');
+                var actionid = jQuery('#' + form).attr('name');
+                var valueComment = jQuery('form#'+form + ' textarea.contentPostComment').val();
+
+                alert(valueComment);
+
+                checkFormCommentArea(jQuery('#' + form), valueComment, actionid);
+
+            });
+        });
+
+        function checkFormCommentArea(form, cmtContent, actionID)
+        {
+            form.validate({
+                errorElement: "p",
+                rules: {
+                    cmtContentArea : {
+                        required:true
+                    }
+                },
+                messages:{
+                    cmtContentArea:{
+                        required: '*Nhập bình luận của bạn vào đây.'
+                    }
+                },
+                submitHandler : function(){
+                    ajaxsaveCommentfromAction(cmtContent, actionID);
+                }
+            });
+        }
+
+        function ajaxsaveCommentfromAction(cmtContent, actionID)
+        {
+            var timeNow = getTimestampNow();
+            var data = "cmtContent="+ cmtContent +"&actionID="+actionID+"&timestamp="+ timeNow;
+
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('success', array('action' => 'savecomment')); ?>",
+                data: data,
+                async:false,
+                success: function(data) {
+                    alert(data);
+                    data = JSON.parse(data);
+                    var success = data['success'];
+                    if(success == "1")
+                    {
+                        alert('thanh cong');
+                    }
+                    else
+                    {
+                        alert('that bai');
+
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+
+        //phan post comment
 
         jQuery('.postStatus').click(function(){
             checkFormpostStatus();
         });
+
+
+        function ajaxSubtmitPostStatus()
+        {
+            var status = jQuery('#statusPostContent').val();
+            var timeNow = getTimestampNow();
+//            alert(status);
+            var data = "status="+status+"&timestamp="+timeNow;
+
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('success', array('action' => 'savestatus')); ?>",
+                data: data,
+                async:false,
+                success: function(data) {
+//                    alert(data);
+                    data = JSON.parse(data);
+                    var success = data['success'];
+                    var divError = jQuery('#statusPostContent span');
+                    if(success == "1")
+                    {
+                        divError.html(data['message']);
+                        divError.show().delay(4000).fadeOut();
+
+                        instancePostStatus(status, timeNow);
+                        var divFirstAction =  jQuery('.statusBlock').next();
+                        divFirstAction.css("opacity", 0);
+                        divFirstAction.animate({
+                            opacity:1
+                        },3000, "linear");
+                    }
+                    else
+                    {
+//                        alert('that bai');
+                        divError.html(data['error']);
+                        divError.fadeIn(600).delay(4000).fadeOut();
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
 
         function checkFormpostStatus()
         {
@@ -370,42 +556,152 @@
             });
         }
 
-        function ajaxSubtmitPostStatus()
+        function instancePostStatus(statusContent, timeStamp)
         {
-            var status = jQuery('#statusPostContent').val();
-            alert(status);
-            var data = "status="+status;
+            var showdate = new Date();
+            var hour = showdate.getHours();
+            var minute = showdate.getMinutes();
+            var date = showdate.getDate();
+            var month = showdate.getMonth();
+            var year = showdate.getFullYear();
 
-            jQuery.ajax({
-                type: "POST",
-                url: "<?php echo $this->url('success', array('action' => 'savestatus')); ?>",
-                data: data,
-                async:false,
-                success: function(data) {
-                    alert(data);
-                    data = JSON.parse(data);
-                    var success = data['success'];
-                    var divError = jQuery('#statusPostContent span');
-                    if(success == "1")
-                    {
-//                        alert('thanh cong');
-                        divError.html(data['message']);
-                        divError.show().delay(4000).fadeOut();
-                    }
-                    else
-                    {
-//                        alert('that bai');
-                        divError.html(data['error']);
-                        divError.fadeIn(600).delay(4000).fadeOut();
-                    }
-                },
-                error: function() {
-                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
-                }
+            showdate = ' lúc '+hour+' giờ '+minute+' phút ngày '+date+'/'+month+'/'+year;
+
+            var divAction = document.createElement('div');
+            divAction.className = 'divAction';
+
+            var divStatus = document.createElement('div');
+            divStatus.className='divStatus';
+
+            var divStatusAvatar = document.createElement('div');
+            divStatusAvatar.className='statusAvatar';
+
+            var imgDivStatusAvatar = document.createElement('img');
+            imgDivStatusAvatar.src='<?php echo $this->basePath().'/uploads/'.$pathUserAvatar; ?>';
+
+            var divStatusRightPanel = document.createElement('div');
+            divStatusRightPanel.className='statusRightPanel';
+
+            var divstatusPosition = document.createElement('div');
+            divstatusPosition.className='statusPosition';
+
+            var spandivstatusPosition = document.createElement('span');
+            spandivstatusPosition.innerHTML='<?php echo $datauser->getLastname() .' '. $datauser->getFirstname(); ?>';
+            jQuery(spandivstatusPosition).append("<p style='display: inline-block;color: #333; font-size: 12px;'>&curren; "+showdate+"</p>");
+
+            var divstatusContent = document.createElement('div');
+            divstatusContent.className= 'statusContent';
+            divstatusContent.innerHTML=statusContent;
+
+            var divstatusFooter = document.createElement('div');
+            divstatusFooter.className='statusFooter';
+
+            var divsummary = document.createElement('div');
+            divsummary.className='summary';
+
+            var tagaLike = document.createElement('a');
+            tagaLike.className='like';
+            tagaLike.innerHTML='Like';
+
+            var tagsComment = document.createElement('a');
+            tagsComment.className='comment';
+            tagsComment.innerHTML='Comment';
+
+            var tagaShare = document.createElement('a');
+            tagaShare.className='share';
+            tagaShare.innerHTML='Share';
+
+            var divIcon = document.createElement('div');
+            divIcon.className='icon';
+
+            var tagaLikeCount = document.createElement('a');
+            tagaLikeCount.className='like';
+            jQuery(tagaLikeCount).attr('href', '#');
+
+            var spanLikeCount = document.createElement('span');
+            jQuery(spanLikeCount).text('30');
+
+            var tagaCommentCount = document.createElement('a');
+            tagaCommentCount.className='comment';
+            jQuery(tagaCommentCount).attr('href', '#');
+
+            var spanCommentCount = document.createElement('span');
+            jQuery(spanCommentCount).text('30');
+
+            var tagaShareCount = document.createElement('a');
+            tagaShareCount.className = 'share';
+            jQuery(tagaShareCount).attr('href', '#');
+
+            var spanShareCount = document.createElement('span');
+            jQuery(spanShareCount).text('30');
+
+            var divComment = document.createElement('div');
+            divComment.className='divComment';
+
+            var divcommentCompose = document.createElement('div');
+            divcommentCompose.className='commentCompose';
+
+            var divcommentUserAvatar = document.createElement('div');
+            divcommentUserAvatar.className='commentUserAvatar';
+
+            var imgcommentUserAvatar = document.createElement('img');
+            imgcommentUserAvatar.src='<?php echo $this->basePath().'/uploads/'. $pathUserAvatar;?>';
+
+            var formSubtmit = document.createElement('form');
+            formSubtmit.className='form-subPostCmt';
+            formSubtmit.id='fCmtACT' + timeStamp;
+            jQuery(formSubtmit).attr('name','ACT'+timeStamp );
+
+            var divcommentRight = document.createElement('div');
+            divcommentRight.className='commentRight';
+
+            var textareaComment = document.createElement('textarea');
+            textareaComment.className='contentPostComment';
+            jQuery(textareaComment).attr('name', 'cmtContentArea');
+
+            var postComment = document.createElement('input');
+            postComment.className = 'postComment';
+            jQuery(postComment).attr('type', 'submit');
+            jQuery(postComment).attr('value', 'Post');
+
+            divAction.appendChild(divStatus);
+                divStatus.appendChild(divStatusAvatar);
+                    divStatusAvatar.appendChild(imgDivStatusAvatar);
+                divStatus.appendChild(divStatusRightPanel);
+                    divStatusRightPanel.appendChild(divstatusPosition);
+                        divstatusPosition.appendChild(spandivstatusPosition);
+                    divStatusRightPanel.appendChild(divstatusContent);
+                    divStatusRightPanel.appendChild(divstatusFooter);
+                        divstatusFooter.appendChild(divsummary);
+                            divsummary.appendChild(tagaLike);
+                            divsummary.appendChild(tagsComment);
+                            divsummary.appendChild(tagaShare);
+                        divstatusFooter.appendChild(divIcon);
+                            divIcon.appendChild(tagaLikeCount);
+                            divIcon.appendChild(spanLikeCount);
+                            divIcon.appendChild(tagaCommentCount);
+                            divIcon.appendChild(spanCommentCount);
+                            divIcon.appendChild(tagaShareCount);
+                            divIcon.appendChild(spanShareCount);
+
+            divStatusRightPanel.appendChild(divComment);
+            divComment.appendChild(divcommentCompose);
+            divcommentCompose.appendChild(divcommentUserAvatar);
+                divcommentUserAvatar.appendChild(imgcommentUserAvatar);
+            divcommentCompose.appendChild(formSubtmit);
+            formSubtmit.appendChild(divcommentRight);
+            divcommentRight.appendChild(textareaComment);
+            formSubtmit.appendChild(postComment);
+
+            jQuery(postComment).on('click', function(){
+                var value = jQuery(textareaComment).val();
+                var timeStamp= getTimestampNow();
+                checkFormCommentArea(jQuery(formSubtmit), value, timeStamp);
             });
-            return false;
-        }
 
+            jQuery('.statusBlock').after(divAction);
+        }
 
     });
 </script>
+
