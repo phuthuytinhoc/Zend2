@@ -76,21 +76,29 @@ class UserpageController extends AbstractActionController
             $pathCover = $successModel->getPathImageAvatarUser($userid, $dm, 'COV');
 
             //get content page: status, post image, change image.
-            $allContent = $successModel->getAllContentPrivatePage($userid, $dm);
+            $allContent = $successModel->getAllContentPrivatePage($userid, $userid, $dm);
 
-//var_dump($allContent['commentContent']); die();
+
+
 
             return array(
                 'datauser' => $identity,
-                'pathUserAvatar' => $path['pathAvaUser'],
-                'pathCover' => $pathCover['pathAvaUser'],
-                'idAllContent' => $allContent['arrStatusID'],
-                'allContentbyID' => $allContent['arrStatusContent'],
-                'actionTime'  => $allContent['actionTime'],
-                'imageContent' => $allContent['imageContent'],
-                'actionID' => $allContent['actionID'],
-                'commentContent' => $allContent['commentContent'],
-                'listCommentID' => $allContent['listCommentID'],
+                'pathUserAvatar'        => $path['pathAvaUser'],
+                'pathCover'             => $pathCover['pathAvaUser'],
+
+                'arrayTrueActionID'       => $allContent['arrayTrueActionID'],
+                //Bang Action
+                'arrayActionUser'       => $allContent['arrayActionUser'],
+                'arrayActionLocation'   => $allContent['arrayActionLocation'],
+                'arrayActionType'       => $allContent['arrayActionType'],
+                'arrayActionCreatedTime'=> $allContent['arrayActionCreatedTime'],
+                //Bang Status
+                'arrayStatusContent'    => $allContent['arrayStatusContent'],
+                //Bang Comment
+                'arrayCommentContent'    => $allContent['arrayCommentContent'],
+                'allCommentID' => $allContent['allCommentID'],
+                //bang Image
+                'arrayPathALLIMAGE'     => $allContent['arrayPathALLIMAGE'],
             );
         }
     }

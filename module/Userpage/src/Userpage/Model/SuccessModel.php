@@ -147,93 +147,182 @@ class SuccessModel
     }
 
     //FUNCTION FOR TRANG CA NHAN
-    public function getAllContentPrivatePage($userid, $dm)
+    public function getAllContentPrivatePage($actionUser, $actionLocation, $dm)
     {
-        $arrayStatusID = array(); //mang nay chua cac ID cua Status IMAGE
-        $arrayACTIDhaveCMTID = array(); //mang chua cac actionID trong bang
-        $listCMTID = array();
+        //danh sach cac action cua user
+        $listAllActionID = array();
 
-        $arrayCommentContent = array();
+        $arrayTrueActionID = array();
+
+        //bang Action
+        $arrayActionUser = array();
+        $arrayActionLocation = array();
+        $arrayActionCreatedTime = array();
+        $arrayActionType = array(); //chi GOM CO STATUS va IMAGE
+
+        //BangStatus
         $arrayStatusContent = array();
-        $createdtime = array();
-        $imageContent = array();
-        $actionID = array();
 
-        //get array for statusid
-        $temp = $dm->createQueryBuilder('Application\Document\Action')
-            ->field('actionuser')->equals($userid)
-            ->field('actionlocation')->equals($userid)
+        //BangComment
+        $arrayCommentID = array();
+        $arrayCommentContent = array();
+
+        $arrayTrueCommentID = array();
+
+        $arrayImagesID = array();
+
+        $cucbo = "";
+
+        $document = $dm->createQueryBuilder('Application\Document\Action')
+            ->field('actionuser')->equals($actionUser)
+            ->field('actionlocation')->equals($actionLocation)
             ->sort('createdtime', 'desc')
             ->getQuery()
             ->execute();
-        //vong lap co IMG CMT va STT
-        foreach($temp as $sttid )
+        if(isset($document))
         {
-
-            $statusID = $sttid->getActionType();
-            $checkCMT = substr($statusID, 0, 3);
-            if($checkCMT != "CMT")
+            foreach($document as $actionid)
             {
-                $arrayStatusID[] = $statusID;
-                $createdtime[$statusID] = $sttid->getCreatedTime();
-                $actionID[$statusID] = $sttid->getActionid();
-            }
-            else
-            {
-                $arrayACTIDhaveCMTID[] = $sttid->getActionid();
+                $listAllActionID[] = $actionid->getActionid();
             }
         }
-        //get status content from array statusid
-        foreach($arrayStatusID as $staID)
+        //lay toan bo thong tin bang action dua vao ACTIONID
+        foreach($listAllActionID as $actID)
         {
-            $typeofAction = substr($staID, 0, 3);
-
-            if($typeofAction == "STT")
-            {
-                $temp_status = $dm->createQueryBuilder('Application\Document\Status')
-                    ->field('statusid')->equals($staID)
-                    ->getQuery()
-                    ->getSingleResult();
-                $arrayStatusContent[$staID] = $temp_status->getStatusContent();
-            }
-            elseif($typeofAction == "IMG")
-            {
-
-                $doc = $dm->createQueryBuilder('Application\Document\Image')
-                    ->field('imageid')->equals($staID)
-                    ->getQuery()
-                    ->getSingleResult();
-                $imageContent[$staID] = $doc->getImageid() .'.'.$doc->getImagetype()."'/>";
-            }
-        }
-
-        foreach($arrayACTIDhaveCMTID as $actid)
-        {
-            $temp_cmt = $dm->createQueryBuilder('Application\Document\Comment')
-                ->field('actionid')->equals($actid)
+            $document = $dm->createQueryBuilder('Application\Document\Action')
+                ->field('actionid')->equals($actID)
+                ->sort('createdtime', 'desc')
                 ->getQuery()
                 ->getSingleResult();
-            $listCMTID[] = $temp_cmt->getCommentid();
+
+            if(isset($document))
+            {
+                $arrayActionUser[$actID] = $document->getActionUser();
+                $arrayActionLocation[$actID] = $document->getActionLocation();
+                $arrayActionCreatedTime[$actID] = $document->getCreatedTime();
+                $actionIDNow = $document->getActionid();
+                $check = substr($document->getActionType(), 0, 3);
+                if($check == "CMT")
+                {
+                    $commentID = $document->getActionType();
+                    $cucbo = $commentID;
+                    $arrayCommentID[] = $commentID;
+                }
+                else
+                {
+                    if($check == "IMG")
+                    {
+                        $arrayActionType[$actionIDNow] = $document->getActionType();
+                        $arrayImagesID[] = $document->getActionType();
+                    }
+                    else
+                    {
+                        $arrayActionType[$actionIDNow] = $document->getActionType();
+//                        $arrayTrueActionID[] = $document->getActionid();
+                    }
+
+                    $arrayTrueActionID[] = $document->getActionid();
+                }
+
+
+                $document = $dm->createQueryBuilder('Application\Document\Comment')
+                    ->field('actionid')->equals($actID)
+                    ->field('commentid')->equals($cucbo)
+                    ->getQuery()
+                    ->getSingleResult();
+
+                if(isset($document))
+                {
+                    $actionIDChange = $document->getActionid();
+                    $arrayCommentContent[$actionIDChange][$cucbo] = $document->getCommentContent();
+                }
+            }
         }
 
-        foreach($listCMTID as $CMTID)
+        foreach($arrayTrueActionID as $actionID)
         {
-            $doc = $dm->createQueryBuilder('Application\Document\Comment')
-                ->field('commentid')->equals($CMTID)
+            foreach($arrayCommentID as $commentID)
+            {
+                $document = $dm->createQueryBuilder('Application\Document\Comment')
+                    ->field('actionid')->equals($actionID)
+                    ->field('commentid')->equals($commentID)
+                    ->getQuery()
+                    ->getSingleResult();
+
+                if(isset($document))
+                {
+                    $arrayTrueCommentID[$document->getActionid()][$document->getCommentid()] = $document->getCommentContent();
+                }
+            }
+        }
+
+        //Lay toan bo thong tin bang STATUS dua vao ACTIONTYPE
+        foreach($arrayActionType as $statusID)
+        {
+            $document = $dm->createQueryBuilder('Application\Document\Status')
+                ->field('statusid')->equals($statusID)
                 ->getQuery()
                 ->getSingleResult();
-            $arrayCommentContent[$CMTID] = $doc->getCommentcontent();
+
+            if(isset($document))
+            {
+                $arrayStatusContent[$statusID] = $document->getStatusContent();
+            }
         }
+
+//        $arrayCommentContent SAI
+        $allCommentID = array();
+
+        foreach($listAllActionID as $actionID)
+        {
+            $document = $dm->createQueryBuilder('Application\Document\Action')
+                ->field('actionid')->equals($actionID)
+                ->field('actionuser')->equals($actionUser)
+                ->field('actionlocation')->equals($actionLocation)
+                ->sort('createdtime', 'asc')
+                ->getQuery()
+                ->getSingleResult();
+            if(isset($document))
+            {
+                $value = $document->getActionType();
+                if(substr($value, 0, 3) == "CMT")
+                {
+                    $allCommentID[$value] = $value;
+                }
+            }
+        }
+
+        $arrayPathALLIMAGE = array();
+        foreach($arrayImagesID as $imageid)
+        {
+            $document = $dm->createQueryBuilder('Application\Document\Image')
+                ->field('imageid')->equals($imageid)
+                ->getQuery()
+                ->getSingleResult();
+            if(isset($document))
+            {
+                $arrayPathALLIMAGE[$imageid] = $document->getImageid().'.'.$document->getImagetype();
+            }
+        }
+
+//var_dump($arrayPathALLIMAGE);die();
+
 
         return array(
-            'arrStatusID' => $arrayStatusID,
-            'arrStatusContent' => $arrayStatusContent,
-            'actionTime' => $createdtime,
-            'imageContent' =>$imageContent,
-            'actionID'   => $actionID,
-            'commentContent' => $arrayCommentContent,
-            'listCommentID' => $listCMTID,
+            'arrayTrueActionID'        => $arrayTrueActionID,
+            //Action
+            'arrayActionUser'        => $arrayActionUser,
+            'arrayActionLocation'    => $arrayActionLocation,
+            'arrayActionType'        => $arrayActionType,
+            'arrayActionCreatedTime' => $arrayActionCreatedTime,
+            //Status
+            'arrayStatusContent'     => $arrayStatusContent,
+            //Bang Comment
+            'arrayCommentContent'    => $arrayTrueCommentID,
+            'allCommentID'           => $allCommentID,
+            'arrayPathALLIMAGE'     => $arrayPathALLIMAGE,
         );
+
 
     }
 
@@ -298,7 +387,7 @@ class SuccessModel
         //them vao bang comment
         $documentService->createQueryBuilder('Application\Document\Action')
             ->insert()
-            ->field('actionid')->set($actionID)
+            ->field('actionid')->set($newActionID)
             ->field('actionuser')->set($actionUser)
             ->field('actionlocation')->set($actionLocation)
             ->field('actiontype')->set($actionType)

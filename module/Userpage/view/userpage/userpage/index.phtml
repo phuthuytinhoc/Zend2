@@ -10,11 +10,57 @@
 </style>
 
 <script type="text/javascript">
-    $('body').addClass('bodyUserpage');
-    $('html').addClass('bodyUserpage');
+    jQuery('body').addClass('bodyUserpage');
+    jQuery('html').addClass('bodyUserpage');
 </script>
 
-<?php //var_dump($datauser);die(); ?>
+
+<?php
+
+// Time Difference
+function time_difference($date)
+{
+ if(empty($date)) {
+ return "unidentifed";
+ }
+ $periods = array("giây", "phút", "giờ", "ngày", "tuần", "tháng", "năm", "thập kỷ");
+ $lengths = array("60","60","24","7","4.35","12","10");
+ $now = time();
+// $unix_date = strtotime($date);
+ $unix_date = $date;
+ // Check validity of date
+
+ if(empty($unix_date)) {
+ return "Bad date";
+
+ }
+ // Determine tense of date
+
+ if($now > $unix_date) {
+ $difference = $now - $unix_date;
+ $tense = "trước"; } else {
+ $difference = $unix_date - $now;
+ $tense = "vừa mới";
+ }
+ for($j = 0; $difference >= $lengths[$j] && $j < count($lengths)-1; $j++) {
+ $difference /= $lengths[$j];
+ }
+
+ $difference = round($difference);
+
+ if($difference != 1) {
+   $periods[$j].= " ";
+   }
+  return "$difference $periods[$j] {$tense}";
+}
+
+//$date = 1387114483;
+//$result = time_difference($date);
+//echo $result;
+//die();
+
+?>
+
 
 <input type="hidden" id="userID" value="<?php echo $datauser->getUserid(); ?>">
 
@@ -261,10 +307,10 @@
     </div>
 
     <?php
-    $stt = 0;
-    foreach($idAllContent as $id)
-    {
 
+    arsort($arrayTrueActionID);
+    foreach($arrayTrueActionID as $actionID)
+    {
     ?>
 
     <div class="divAction">
@@ -278,26 +324,25 @@
                         <?php echo $datauser->getLastname() .' '. $datauser->getFirstname(); ?>
                     </span> &curren;
                     <?php
-                    echo ' lúc '.date('H', $actionTime[$id]). ' giờ ' ;
-                    echo date('i', $actionTime[$id]) . ' phút';
-                    echo ' ngày '.date('d/m/Y', $actionTime[$id]);
+                    echo ' lúc '.date('H', $arrayActionCreatedTime[$actionID]). ' giờ ' ;
+                    echo date('i', $arrayActionCreatedTime[$actionID]) . ' phút';
+                    echo ' ngày '.date('d/m/Y', $arrayActionCreatedTime[$actionID]);
                     ?>
                 </div>
                 <div class="statusContent">
                     <?php
-                    if(isset($allContentbyID[$id]))
+
+//                    var_dump($arrayTrueActionID);die();
+                    $statusID = $arrayActionType[$actionID];
+                    if(substr($statusID,0,3) != "IMG")
+//                    if(isset($arrayStatusContent[$statusID]))
                     {
-                        echo $allContentbyID[$id];
-                    }
-                    elseif(isset($imageContent[$id]))
-                    {
-                        echo "<img src='" . $this->basePath()."/uploads/".$imageContent[$id];
+                        echo $arrayStatusContent[$statusID];
                     }
                     else
                     {
-                        echo "Lỗi xảy ra.";
+                        echo "<img src='".$this->basePath()."/uploads/". $arrayPathALLIMAGE[$statusID]."'/>";
                     }
-
                     ?>
                 </div>
                 <div class="statusFooter">
@@ -313,40 +358,55 @@
                     </div>
                 </div>
 
-                <div class="divComment">
+                <div class="divComment" >
 
                 <?php
-                if(isset($listCommentID))
+
+                asort($allCommentID);
+                foreach($allCommentID as $comentid)
                 {
-                    foreach($listCommentID as $listID)
+                    if(isset($arrayCommentContent[$actionID][$comentid]))
                     {
+
+//                        var_dump($allCommentID);die();
+
                 ?>
                     <div class="commentAction">
                         <div class="commentUserAvatar">
-                            <img src="<?php echo $this->basePath(); ?>/img/avatar.jpg" />
+                            <img src="<?php echo $this->basePath().'/uploads/'.$pathUserAvatar.'"' ?>">
                         </div>
                         <div class="commentRight">
-                            <div class="commentContent"><div class="commentUserName">Fu Hu</div>
+                            <div class="commentContent"><div class="commentUserName">
+                                    <?php echo $datauser->getLastname() .' '. $datauser->getFirstname(); ?>
+                                </div>
                                 <?php
-                                    echo $commentContent[$listID];
+                                    echo $arrayCommentContent[$actionID][$comentid];
                                 ?>
                             </div>
                             <div class="commentFooter">
-                                <div class="commentTime">5 minites ago</div>
                                 <div class="commentLike">
                                     <a href="#"> Like</a>
                                     <a href="#" class="number">10</a>
                                 </div>
+                                <div class="commentTime">
+                                <?php
+                                    $dateComment =  substr($comentid, -10,10);
+                                    echo time_difference($dateComment);
+                                ?>
+                                </div>
                             </div>
                         </div>
                     </div>
-                <?php } } ?>
+                <?php
+                    }
+                }
+                ?>
 
-                    <div class="commentCompose">
+                    <div class="commentCompose" id="placeNewCMT_<?php echo $actionID; ?>">
                         <div class="commentUserAvatar">
                             <img src="<?php echo $this->basePath().'/uploads/'. $pathUserAvatar;?>"/>
                         </div>
-                        <form class="form-subPostCmt" name="<?php echo $actionID[$id]; ?>" id="fCmt<?php echo $actionID[$id]; ?>">
+                        <form class="form-subPostCmt" name="<?php echo $actionID; ?>" id="fCmt<?php echo $actionID; ?>">
                             <div class="commentRight">
                                 <textarea name="cmtContentArea" class="contentPostComment"></textarea>
                             </div>
@@ -359,7 +419,7 @@
     </div>
 
     <?php
-        $stt++;
+
         }
     ?>
 
@@ -421,6 +481,7 @@
 <script type="text/javascript">
     //Phan comment cua user
 
+
     jQuery(document).ready(function(){
         jQuery('.form-subPostCmt input.postComment').each(function(){
             jQuery(this).on('click',function(){
@@ -428,7 +489,8 @@
                 var actionid = jQuery('#' + form).attr('name');
                 var valueComment = jQuery('form#'+form + ' textarea.contentPostComment').val();
 
-                alert(valueComment);
+//                alert(valueComment);
+
 
                 checkFormCommentArea(jQuery('#' + form), valueComment, actionid);
 
@@ -466,16 +528,16 @@
                 data: data,
                 async:false,
                 success: function(data) {
-                    alert(data);
+//                    alert(data);
                     data = JSON.parse(data);
                     var success = data['success'];
                     if(success == "1")
                     {
-                        alert('thanh cong');
+                        instanceShowComment(cmtContent, actionID);
                     }
                     else
                     {
-                        alert('that bai');
+                        alert('Đăng bình luận thất bại. Hãy thử lại sau một ít phút nữa.');
 
                     }
                 },
@@ -484,6 +546,62 @@
                 }
             });
             return false;
+        }
+
+        function instanceShowComment(commentContent, actionID)
+        {
+            var time = " vài giây trước ";
+
+            var divCommentAction = document.createElement('div');
+            divCommentAction.className = "commentAction";
+
+            var divCommentUserAvatar = document.createElement('div');
+            divCommentUserAvatar.className = "commentUserAvatar";
+
+            var imgCommentUserAvatar = document.createElement('img');
+            jQuery(imgCommentUserAvatar).attr('src', '<?php echo $this->basePath()."/uploads/". $pathUserAvatar;?>');
+
+            var divCommentRight = document.createElement('div');
+            divCommentRight.className='commentRight';
+
+            var divcommentContent = document.createElement('div');
+            divcommentContent.className='commentContent';
+
+            var divcommentUserName = document.createElement('div');
+            divcommentUserName.className='commentUserName';
+            jQuery(divcommentUserName).text('<?php  echo $datauser->getLastname() ." ". $datauser->getFirstname(); ?>');
+            jQuery(divcommentContent).append(commentContent);
+
+            var divcommentFooter = document.createElement('div');
+            divcommentFooter.className='commentFooter';
+
+            var divcommentLike = document.createElement('div');
+            divcommentLike.className='commentLike';
+
+            var tagaLike = document.createElement('a');
+            jQuery(tagaLike).text('Like');
+
+            var tagaCountLike = document.createElement('a');
+            tagaCountLike.className="number";
+            jQuery(tagaCountLike).text('10');
+
+            var divcommentTime = document.createElement('div');
+            divcommentTime.className='commentTime';
+            jQuery(divcommentTime).text(time);
+
+            divCommentAction.appendChild(divCommentUserAvatar);
+                divCommentUserAvatar.appendChild(imgCommentUserAvatar);
+
+            divCommentAction.appendChild(divCommentRight);
+                divCommentRight.appendChild(divcommentContent);
+                    divcommentContent.appendChild(divcommentUserName);
+                divCommentRight.appendChild(divcommentFooter);
+                    divcommentFooter.appendChild(divcommentLike);
+                        divcommentLike.appendChild(tagaLike);
+                        divcommentLike.appendChild(tagaCountLike);
+                    divcommentFooter.appendChild(divcommentTime);
+
+            jQuery('#placeNewCMT_'+actionID).before(divCommentAction);
         }
 
         //phan post comment

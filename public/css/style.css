@@ -960,6 +960,7 @@ footer {
 .divRight .divAction .statusRightPanel .divComment .commentAction .commentRight .commentFooter .commentLike {
     display: inline-block;
     float:left;
+    margin-left: 10px;
 }
 
 .divRight .divAction .statusRightPanel .divComment .commentAction .commentRight .commentFooter .commentLike a {
