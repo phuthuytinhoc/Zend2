@@ -93,7 +93,7 @@ class SuccessModel
         {
             $result = $dm->createQueryBuilder('Application\Document\Image')
                 ->field('albumid')->equals($albumidIfAvailable)
-                ->field('userid')->equals($userid)
+//                ->field('userid')->equals($userid)
                 ->field('imagestatus')->equals($imageStatus)
                 ->getQuery()
                 ->getSingleResult();
@@ -461,12 +461,12 @@ class SuccessModel
             ->field('albumid')->set($imageAlbumID)
             ->field('imagestatus')->set($imageStatus)
             ->field('imagetype')->set($imageType)
-            ->field('userid')->set($userid)
+//            ->field('userid')->set($userid)
             ->getQuery()
             ->execute();
 
         //bat dau luu vao bang Action
-        $documentService->createQueryBuilder('Application\Document\Action')
+        $doc = $documentService->createQueryBuilder('Application\Document\Action')
             ->insert()
             ->field('actionid')->set($actionID)
             ->field('actionuser')->set($userid)
@@ -476,9 +476,100 @@ class SuccessModel
             ->getQuery()
             ->execute();
 
+        if(isset($doc))
+        {
             return true;
+        }
+        else
+            return false;
     }
 
+    //FOR POST NEW IMAGE
+    public function saveNewImageNormal($userid, $createdTime, $descript, $imageType, $dm)
+    {
+        $checkAlbumNOR = $this->checkIsHaveUserAlbumAvatar($userid,$dm,'NOR');
 
+        //bang Image
+        $imageid = "IMG".$userid.$createdTime."NOR";
+        $imageStatus = "NOR";
+        $fullImage = $imageid.'.'.$imageType;
+
+        //bang action
+        $actionid = 'ACT'.$createdTime;
+        $actionUser = $actionLocation = $userid;
+        $actionType = $imageid;
+
+        if($checkAlbumNOR != null)
+        {
+            $albumID = $checkAlbumNOR;
+
+            $document = $dm->createQueryBuilder('Application\Document\Image')
+                ->insert()
+                ->field('imageid')->set($imageid)
+                ->field('albumid')->set($albumID)
+                ->field('imagestatus')->set($imageStatus)
+                ->field('imagetype')->set($imageType)
+                ->getQuery()
+                ->execute();
+
+            if(isset($document))
+            {
+                $document=$dm->createQueryBuilder('Application\Document\Action')
+                    ->insert()
+                    ->field('actionid')->set($actionid)
+                    ->field('actionuser')->set($actionUser)
+                    ->field('actionlocation')->set($actionLocation)
+                    ->field('actiontype')->set($actionType)
+                    ->field('createdtime')->set($createdTime)
+                    ->getQuery()
+                    ->execute();
+
+                if(isset($document))
+                    return $fullImage;
+                else
+                    return null;
+            }
+            else
+                return null;
+
+        }
+        else
+        {
+            //bang Album
+            $albumID = "ALB".$userid."NOR";
+
+            $document = $dm->createQueryBuilder('Application\Document\Album')
+                ->insert()
+                ->field('albumid')->set($albumID)
+                ->field('userid')->set($userid)
+                ->getQuery()
+                ->execute();
+
+
+            $document = $dm->createQueryBuilder('Application\Document\Image')
+                ->insert()
+                ->field('imageid')->set($imageid)
+                ->field('albumid')->set($albumID)
+                ->field('imagestatus')->set($imageStatus)
+                ->field('imagetype')->set($imageType)
+                ->getQuery()
+                ->execute();
+
+            $document=$dm->createQueryBuilder('Application\Document\Action')
+                ->insert()
+                ->field('actionid')->set($actionid)
+                ->field('actionuser')->set($actionUser)
+                ->field('actionlocation')->set($actionLocation)
+                ->field('actiontype')->set($actionType)
+                ->field('createdtime')->set($createdTime)
+                ->getQuery()
+                ->execute();
+            if(isset($document))
+                return $fullImage;
+            else
+                return null;
+
+        }
+    }
 
 }

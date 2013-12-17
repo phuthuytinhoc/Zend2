@@ -84,21 +84,23 @@
 </footer>
 
 <script type="text/javascript">
-    $(document).ready(function(){
-        $('body').addClass('bodyLoginPage');
 
-        $('#submitbutton').click( function() {
-            $('#errorContent').html('');
+    jQuery(document).ready(function(){
+
+        jQuery('body').addClass('bodyLoginPage');
+
+        jQuery('#submitbutton').click( function() {
+            jQuery('#errorContent').html('');
             formValidate();
         });
 
-        $('#regSubmit').click(function(){
+        jQuery('#regSubmit').click(function(){
             regFormValidate();
         });
 
         function regFormValidate()
         {
-            $('#reg-form').validate({
+            jQuery('#reg-form').validate({
                 errorElement : "div",
                 rules : {
                     firstname: {
@@ -148,14 +150,14 @@
 
         function doAjaxRegisterAction()
         {
-            var firstname = $('#regFirstname').val();
-            var lastname = $('#regLastname').val();
-            var email = $('#regEmail').val();
-            var password = $('#regPassword').val();
+            var firstname = jQuery('#regFirstname').val();
+            var lastname = jQuery('#regLastname').val();
+            var email = jQuery('#regEmail').val();
+            var password = jQuery('#regPassword').val();
 
             var data = "firstname="+firstname+"&lastname="+lastname+"&email="+email+"&password="+password;
 
-            $.ajax({
+            jQuery.ajax({
                 type: "POST",
                 url: "<?php echo $this->url('register'); ?>",
                 data: data,
@@ -166,7 +168,7 @@
                     var success = data['success'];
                     if(success == "0")
                     {
-                        $('.errorRegister').html(data.error);
+                        jQuery('.errorRegister').html(data.error);
                     }
                     else
                     {
@@ -183,7 +185,7 @@
 
         function formValidate()
         {
-            $('#login-form').validate({
+            jQuery('#login-form').validate({
 
                 errorElement : "div",
                 rules: {
@@ -214,11 +216,11 @@
         function doAjaxLoginAction()
         {
 
-            var email = $('.ajax-email').val();
-            var password = $('.ajax-password').val();
+            var email = jQuery('.ajax-email').val();
+            var password = jQuery('.ajax-password').val();
             var data = "email=" + email + "&password=" + password;
 
-            $.ajax({
+            jQuery.ajax({
                 type: "POST",
                 url: "<?php echo $this->url('test'); ?>",
                 data: data,
@@ -231,7 +233,7 @@
                     if(success == "0")
                     {
                         var error = data['error'];
-                        $('#errorContent').html(error);
+                        jQuery('#errorContent').html(error);
                     }
                     else
                     {

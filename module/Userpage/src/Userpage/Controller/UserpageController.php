@@ -348,5 +348,52 @@ class UserpageController extends AbstractActionController
         }
     }
 
+    public function getBasePath()
+    {
+        $uri = $this->getRequest()->getUri();
+        $scheme = $uri->getScheme();
+        $host = $uri->getHost();
+        $base = sprintf('%s://%s', $scheme, $host);
+        return $base;
+    }
+
+    //FUNCTION FOR UPLOAD NORMAL IMAGE
+    public function savenormalimageAction()
+    {
+        $response = $this->getResponse();
+        $data = $this->params()->fromPost();
+
+        $dm = $this->getDocumentService();
+        $userid = $data['userid'];
+        if(substr($data['imageType'],-4, 1) == ".")
+        {
+            $imageType = substr($data['imageType'], -3,3);
+        }
+        else
+        {
+            $imageType = substr($data['imageType'], -4,4);
+        }
+        $createdTime = $data['createdTime'];
+        $descript = $data['descript'];
+
+        $successModel = new SuccessModel();
+        $result = $successModel->saveNewImageNormal($userid,$createdTime, $descript, $imageType, $dm);
+
+        if($result!=null)
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => $result,
+            )));
+        }
+        else
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0,
+            )));
+        }
+
+
+    }
+
 
 }

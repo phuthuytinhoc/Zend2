@@ -19,6 +19,7 @@
 
     <!-- Scripts -->
     <?php echo $this->headScript()
+        ->prependFile($this->basePath() . '/js/jquery.jscroll.js')
         ->prependFile($this->basePath() . '/js/script.cropImage_cover.private.js')
         ->prependFile($this->basePath() . '/js/script.cropImage.private.js')
         ->prependFile($this->basePath() . '/js/jquery.imgareaselect.pack.js')

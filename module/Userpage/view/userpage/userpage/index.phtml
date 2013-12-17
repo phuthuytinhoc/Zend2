@@ -195,7 +195,9 @@ function time_difference($date)
             <img src="<?php echo $this->basePath().'/uploads/'.$pathUserAvatar; ?>" id="userAvatar" />
         </div>
         <div class="userInfo">
-            <div class="info name"><?php echo $datauser->getLastname() .' '. $datauser->getFirstname(); ?></div>
+            <div class="info name" id="avai-userid" name="<?php echo $datauser->getUserid(); ?>">
+                <?php echo $datauser->getLastname() .' '. $datauser->getFirstname(); ?>
+            </div>
             <div class="info age">
                 <div class="infoIcon age"></div>
                 <div class="infoContent age">
@@ -276,21 +278,20 @@ function time_difference($date)
             </div>
 
             <div class="clickShare" style="display: none;">
-                <div class="statusComposeArea">
-                    <textarea>Day la Share</textarea>
-                </div>
-                <div class="btnSubmit">
-                    <input id="btnPost" type="button" value="Feel" />
-                </div>
+               Đay là phần chia sẻ
             </div>
 
             <div class="clickImage" style="display: none;">
-                <div class="statusComposeArea">
-                    <textarea>Day la Image</textarea>
-                </div>
-                <div class="btnSubmit">
-                    <input id="btnPost" type="button" value="Feel" />
-                </div>
+                <form method="post" action=""
+                      id="form-postImage" name="form-postImage" enctype="multipart/form-data">
+                    <div class="statusComposeArea">
+                        <input type="text" class="descriptImage" name="descriptImage" placeholder="Nhập bình luận của bạn về ảnh này..."/>
+                        <input type="file" class="btnLoadImage" id="btnLoadImage" name="image" accept="image/*"/>
+                    </div>
+                    <div class="btnSubmit">
+                        <input id="btnPost" class="postImage" type="submit" value="Đăng Ảnh" />
+                    </div>
+                </form>
             </div>
 
             <div class="clickVideo" style="display: none;">
@@ -301,18 +302,23 @@ function time_difference($date)
                     <input id="btnPost" type="button" value="Feel" />
                 </div>
             </div>
-
         </div>
-
     </div>
 
+<!--  moi them vao  -->
+<!--    <div class="scroll-now" style="overflow: scroll; height: 800px; width: 100%;">-->
     <?php
-
+    function getFullTime($date)
+    {
+        $value  = ' lúc '.date('H', $date). ' giờ ';
+        $value .= date('i', $date) . ' phút';
+        $value .= ' ngày '.date('d/m/Y', $date);
+        return $value;
+    }
     arsort($arrayTrueActionID);
     foreach($arrayTrueActionID as $actionID)
     {
     ?>
-
     <div class="divAction">
         <div class="divStatus">
             <div class="statusAvatar">
@@ -324,18 +330,13 @@ function time_difference($date)
                         <?php echo $datauser->getLastname() .' '. $datauser->getFirstname(); ?>
                     </span> &curren;
                     <?php
-                    echo ' lúc '.date('H', $arrayActionCreatedTime[$actionID]). ' giờ ' ;
-                    echo date('i', $arrayActionCreatedTime[$actionID]) . ' phút';
-                    echo ' ngày '.date('d/m/Y', $arrayActionCreatedTime[$actionID]);
+                    echo getFullTime($arrayActionCreatedTime[$actionID]);
                     ?>
                 </div>
                 <div class="statusContent">
                     <?php
-
-//                    var_dump($arrayTrueActionID);die();
                     $statusID = $arrayActionType[$actionID];
                     if(substr($statusID,0,3) != "IMG")
-//                    if(isset($arrayStatusContent[$statusID]))
                     {
                         echo $arrayStatusContent[$statusID];
                     }
@@ -357,19 +358,13 @@ function time_difference($date)
                         <a class="share" href="#"></a><span>30</span>
                     </div>
                 </div>
-
                 <div class="divComment" >
-
                 <?php
-
                 asort($allCommentID);
                 foreach($allCommentID as $comentid)
                 {
                     if(isset($arrayCommentContent[$actionID][$comentid]))
                     {
-
-//                        var_dump($allCommentID);die();
-
                 ?>
                     <div class="commentAction">
                         <div class="commentUserAvatar">
@@ -388,9 +383,12 @@ function time_difference($date)
                                     <a href="#"> Like</a>
                                     <a href="#" class="number">10</a>
                                 </div>
-                                <div class="commentTime">
+                                <div class="commentTime" title="<?php
+                                $dateComment =  substr($comentid, -10,10);
+                                echo getFullTime($dateComment);
+
+                                ?>">
                                 <?php
-                                    $dateComment =  substr($comentid, -10,10);
                                     echo time_difference($dateComment);
                                 ?>
                                 </div>
@@ -401,7 +399,6 @@ function time_difference($date)
                     }
                 }
                 ?>
-
                     <div class="commentCompose" id="placeNewCMT_<?php echo $actionID; ?>">
                         <div class="commentUserAvatar">
                             <img src="<?php echo $this->basePath().'/uploads/'. $pathUserAvatar;?>"/>
@@ -419,9 +416,10 @@ function time_difference($date)
     </div>
 
     <?php
-
         }
     ?>
+        <!--   moi them vao     -->
+<!--        </div>-->
 
 </div>
 
@@ -436,21 +434,6 @@ function time_difference($date)
 
 <script type="text/javascript">
     jQuery(document).ready(function(){
-//        var scrollInAction = false;
-//        jQuery(window).scroll(function(){
-//            if  (jQuery(window).scrollTop() >= (jQuery(document).height() - jQuery(window).height() - 200))
-//            {
-//                if (scrollInAction)
-//                {
-//                    return false;
-//                }else
-//                {
-//                    scrollInAction=true;
-//                    alert('da toi luc phai load content moi');
-//                }
-//            }
-//        });
-
 
         var oldDiv =jQuery('.clickStatus');
 
@@ -468,37 +451,27 @@ function time_difference($date)
                     }, t, function(){
                         jQuery(this).css({'margin-top' : '0px', 'margin-bottom': '0px', 'display' : 'none', 'opacity' : 1});
                     });
-//                    newDiv.delay(300).slideDown(600);
                     newDiv.delay(300).slideDown(1000, 'easeOutBounce');
                     oldDiv = newDiv;
                 }
             });
         });
 
-    });
-</script>
 
-<script type="text/javascript">
-    //Phan comment cua user
-
-
-    jQuery(document).ready(function(){
         jQuery('.form-subPostCmt input.postComment').each(function(){
             jQuery(this).on('click',function(){
                 var form = jQuery(this).parent().attr('id');
-                var actionid = jQuery('#' + form).attr('name');
+                objForm = "#" + form;
+                var actionid = jQuery(objForm).attr('name');
                 var valueComment = jQuery('form#'+form + ' textarea.contentPostComment').val();
-
 //                alert(valueComment);
-
-
-                checkFormCommentArea(jQuery('#' + form), valueComment, actionid);
-
+                checkFormCommentArea(jQuery(objForm), valueComment, actionid);
             });
         });
 
         function checkFormCommentArea(form, cmtContent, actionID)
         {
+//            alert('da vao day');
             form.validate({
                 errorElement: "p",
                 rules: {
@@ -512,6 +485,7 @@ function time_difference($date)
                     }
                 },
                 submitHandler : function(){
+
                     ajaxsaveCommentfromAction(cmtContent, actionID);
                 }
             });
@@ -533,6 +507,7 @@ function time_difference($date)
                     var success = data['success'];
                     if(success == "1")
                     {
+//                        alert('vao ham show Comment');
                         instanceShowComment(cmtContent, actionID);
                     }
                     else
@@ -601,7 +576,9 @@ function time_difference($date)
                         divcommentLike.appendChild(tagaCountLike);
                     divcommentFooter.appendChild(divcommentTime);
 
-            jQuery('#placeNewCMT_'+actionID).before(divCommentAction);
+
+            var hung = jQuery("#placeNewCMT_" + actionID);
+            hung.before(divCommentAction);
         }
 
         //phan post comment
@@ -709,7 +686,8 @@ function time_difference($date)
 
             var divstatusContent = document.createElement('div');
             divstatusContent.className= 'statusContent';
-            divstatusContent.innerHTML=statusContent;
+//            jQuery(divstatusContent).innerHTML=statusContent;
+            jQuery(divstatusContent).append(statusContent);
 
             var divstatusFooter = document.createElement('div');
             divstatusFooter.className='statusFooter';
@@ -758,6 +736,7 @@ function time_difference($date)
 
             var divcommentCompose = document.createElement('div');
             divcommentCompose.className='commentCompose';
+            jQuery(divcommentCompose).attr('id', 'placeNewCMT_ACT'+timeStamp);
 
             var divcommentUserAvatar = document.createElement('div');
             divcommentUserAvatar.className='commentUserAvatar';
@@ -812,6 +791,7 @@ function time_difference($date)
             formSubtmit.appendChild(postComment);
 
             jQuery(postComment).on('click', function(){
+
                 var value = jQuery(textareaComment).val();
                 var timeStamp= getTimestampNow();
                 checkFormCommentArea(jQuery(formSubtmit), value, timeStamp);
@@ -819,6 +799,102 @@ function time_difference($date)
 
             jQuery('.statusBlock').after(divAction);
         }
+
+        jQuery('.postImage').click(function(){
+            checkFormPostImage();
+        });
+
+        jQuery.validator.addMethod('accept', function () { return true; });
+
+        function checkFormPostImage()
+        {
+            jQuery('#form-postImage').validate({
+                debug: true,
+                errorElement: "p",
+                rules: {
+                    image:{
+                        required:true,
+                        accept: "image/pjpeg,image/jpeg,image/png,image/gif"
+                    }
+                },
+                messages:{
+                    image:{
+                        required:"Bạn chưa chọn hình để tải lên!",
+                        accept: "jpg|jpeg|png|gif"
+                    }
+                },
+                submitHandler : function(){
+                    ajaxUploadImageFromMenu();
+                }
+            });
+        }
+
+        function ajaxUploadImageFromMenu()
+        {
+
+            var timeNow = getTimestampNow();
+            var descript = jQuery('.descriptImage').val();
+            var formdata  = new FormData(jQuery('#form-postImage')[0]);
+            var reader = new FileReader();
+            var value = reader.readAsDataURL(document.getElementById("btnLoadImage").files[0]);
+            var userid = jQuery('#avai-userid').attr('name');
+
+            formdata.append('image', value);
+            formdata.append('timestamp', timeNow);
+            formdata.append('descript', descript);
+            formdata.append('userid', userid);
+
+//            var data = "descript="+ descript +"&actionID="+actionID+"&timestamp="+ timeNow;
+
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->basePath().'/plugin/upload_normal.php' ;?>",
+                data: formdata,
+                cache: false,
+                contentType: false,
+                processData: false,
+                async:false,
+                success: function(data) {
+                    if(data!='error')
+                    {
+                        ajaxSaveImageNormal(userid, timeNow, descript, data);
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+
+        function ajaxSaveImageNormal(userid, timstamp, descript, data)
+        {
+            var data = "userid=" + userid+"&createdTime=" + timstamp+"&descript="+descript+"&imageType=" +data;
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('success', array('action' => 'savenormalimage')); ?>",
+                data: data,
+                async:false,
+                success: function(data) {
+                    data = JSON.parse(data);
+    //                    alert('Đăng ảnh thành công!.');
+                    var instanceImage = "<img src='<?php echo $this->basePath();?>" +"/uploads/"+ data["success"] + "'/>";
+//                    alert(instanceImage);
+                    instancePostStatus(instanceImage, timstamp);
+                    var divFirstAction =  jQuery('.statusBlock').next();
+                    divFirstAction.css("opacity", 0);
+                    divFirstAction.animate({
+                        opacity:1
+                    },3000, "linear");
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+
+
 
     });
 </script>

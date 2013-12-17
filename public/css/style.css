@@ -621,6 +621,9 @@ footer {
     display:inline-block;
     right: 1px;
     top: 0px;
+
+    /*overflow-y: scroll;*/
+    /*height: 800px;*/
 }
 
 .divRight .divCover {
@@ -698,6 +701,42 @@ footer {
 .divRight .statusBlock .statusContent .statusComposeArea {
     width: 100%;
     height: 90px;
+}
+
+.divRight .statusBlock .statusContent .statusComposeArea input {
+    width: 88%;
+    height: 40px;
+    background-color: transparent;
+    margin-left: 30px;
+    margin-top: 5px;
+    padding: 6px 10px;
+    font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+    color: #333333;
+    border: 1px solid #ccc;
+    outline: none;
+    border-radius: 8px;
+    background-clip: padding-box;
+    transition: all 0.4s ease-in-out;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.divRight .statusBlock .statusContent .statusComposeArea p{
+    margin-left: 40px;
+    margin-top: 10px;
+    color: red;
+}
+
+.postImage{
+    width: 85px !important;
+    margin-right: 45px !important;
+}
+
+.divRight .statusBlock .statusContent .statusComposeArea input[type=text]:focus{
+    border: 1px solid #7fbbf9;
+    -moz-box-shadow:    inset 0 0 1px rgba(0, 0, 0, 0.5), 0 0 3px #7fbbf9;
+    -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), 0 0 3px #7fbbf9;
+    box-shadow:         inset 0 0 1px rgba(0, 0, 0, 0.5), 0 0 3px #7fbbf9;
+    background-color: #ffffff;
 }
 
 .divRight .statusBlock .statusContent .statusComposeArea span {
@@ -917,7 +956,7 @@ footer {
 }
 
 .divRight .divAction .statusRightPanel .divComment .commentAction .commentRight {
-    width: 90%;
+    width: 88%;
     min-height:53px;
     height:auto;
     background-color:#FFF;
@@ -955,6 +994,11 @@ footer {
     margin-left: 10px;
     margin-right: 10px;
     color: #888;
+}
+
+.divRight .divAction .statusRightPanel .divComment .commentAction .commentRight .commentFooter .commentTime :hover{
+
+
 }
 
 .divRight .divAction .statusRightPanel .divComment .commentAction .commentRight .commentFooter .commentLike {
