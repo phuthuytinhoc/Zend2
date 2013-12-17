@@ -365,6 +365,8 @@ function time_difference($date)
                 {
                     if(isset($arrayCommentContent[$actionID][$comentid]))
                     {
+
+                        
                 ?>
                     <div class="commentAction">
                         <div class="commentUserAvatar">
@@ -461,15 +463,18 @@ function time_difference($date)
         jQuery('.form-subPostCmt input.postComment').each(function(){
             jQuery(this).on('click',function(){
                 var form = jQuery(this).parent().attr('id');
-                objForm = "#" + form;
-                var actionid = jQuery(objForm).attr('name');
+                var actionIDforCMT = jQuery(this).parent().attr('name');
+                var objForm = "#" + form;
+//                var actionIDforCMT = jQuery(objForm).attr('name');
+
                 var valueComment = jQuery('form#'+form + ' textarea.contentPostComment').val();
+//                alert(actionIDforCMT);
 //                alert(valueComment);
-                checkFormCommentArea(jQuery(objForm), valueComment, actionid);
+                checkFormCommentArea(jQuery(objForm), valueComment, actionIDforCMT);
             });
         });
 
-        function checkFormCommentArea(form, cmtContent, actionID)
+        function checkFormCommentArea(form, cmtContent, actionIDforCMT)
         {
 //            alert('da vao day');
             form.validate({
@@ -486,16 +491,17 @@ function time_difference($date)
                 },
                 submitHandler : function(){
 
-                    ajaxsaveCommentfromAction(cmtContent, actionID);
+                    ajaxsaveCommentfromAction(cmtContent,form, actionIDforCMT);
                 }
             });
         }
 
-        function ajaxsaveCommentfromAction(cmtContent, actionID)
+        function ajaxsaveCommentfromAction(cmtContent, form, actionIDforCMT)
         {
+            //timestamp là lúc colick vào postComment
             var timeNow = getTimestampNow();
-            var data = "cmtContent="+ cmtContent +"&actionID="+actionID+"&timestamp="+ timeNow;
-
+            var data = "cmtContent="+ cmtContent +"&timeCreatedComment="+timeNow + "&actionStatusSave="+actionIDforCMT;
+//            alert(data);
             jQuery.ajax({
                 type: "POST",
                 url: "<?php echo $this->url('success', array('action' => 'savecomment')); ?>",
@@ -507,8 +513,8 @@ function time_difference($date)
                     var success = data['success'];
                     if(success == "1")
                     {
-//                        alert('vao ham show Comment');
-                        instanceShowComment(cmtContent, actionID);
+//                        @TODO:
+                        instanceShowComment(cmtContent, timeNow, form);
                     }
                     else
                     {
@@ -523,7 +529,7 @@ function time_difference($date)
             return false;
         }
 
-        function instanceShowComment(commentContent, actionID)
+        function instanceShowComment(commentContent, timestamp, form)
         {
             var time = " vài giây trước ";
 
@@ -577,7 +583,13 @@ function time_difference($date)
                     divcommentFooter.appendChild(divcommentTime);
 
 
-            var hung = jQuery("#placeNewCMT_" + actionID);
+            var actID = form.attr('name');
+//            jQuery(form.parent().attr('id')).before(divCommentAction);
+
+            var hung = jQuery("#placeNewCMT_" + actID);
+//
+//            alert(hung.attr('class'));
+//
             hung.before(divCommentAction);
         }
 
@@ -793,8 +805,11 @@ function time_difference($date)
             jQuery(postComment).on('click', function(){
 
                 var value = jQuery(textareaComment).val();
-                var timeStamp= getTimestampNow();
-                checkFormCommentArea(jQuery(formSubtmit), value, timeStamp);
+//                var timeStamp= getTimestampNow();
+
+//                alert('CommentContent=' + value + 'actionID=' + timeStamp);
+                    //ko phai timestamp
+                checkFormCommentArea(jQuery(formSubtmit), value,'ACT'+ timeStamp);
             });
 
             jQuery('.statusBlock').after(divAction);
@@ -869,11 +884,11 @@ function time_difference($date)
 
         function ajaxSaveImageNormal(userid, timstamp, descript, data)
         {
-            var data = "userid=" + userid+"&createdTime=" + timstamp+"&descript="+descript+"&imageType=" +data;
+            var dataval = "userid=" + userid+"&createdTime=" + timstamp+"&descript="+descript+"&imageType=" +data;
             jQuery.ajax({
                 type: "POST",
                 url: "<?php echo $this->url('success', array('action' => 'savenormalimage')); ?>",
-                data: data,
+                data: dataval,
                 async:false,
                 success: function(data) {
                     data = JSON.parse(data);

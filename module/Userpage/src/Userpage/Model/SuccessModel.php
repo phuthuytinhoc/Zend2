@@ -364,14 +364,14 @@ class SuccessModel
 
     public function saveNewComment($data, $userid, $documentService)
     {
-        $createdTime = $data['timestamp'];
+        $createdTime = $data['timeCreatedComment'];
         //value for comment
         $commentID = 'CMT'.$userid.$createdTime;
-        $actionID = $data['actionID'];
+        $actionID =  $data['actionStatusSave'];
         $commentContent = $data['cmtContent'];
 
         //value for action
-        $newActionID = 'ACT'.$this->getTimestampNow();
+        $newActionID = 'ACT'.$createdTime;
         $actionUser = $actionLocation = $userid;
         $actionType = $commentID;
 
