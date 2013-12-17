@@ -295,12 +295,16 @@ function time_difference($date)
             </div>
 
             <div class="clickVideo" style="display: none;">
-                <div class="statusComposeArea">
-                    <textarea>Day la Video</textarea>
-                </div>
-                <div class="btnSubmit">
-                    <input id="btnPost" type="button" value="Feel" />
-                </div>
+                <form method="post" action="" id="form-postVideo" name="form-postVideo" enctype="multipart/form-data">
+                    <div class="statusComposeArea">
+                        <input type="text" class="descriptVideo" name="descriptVideo" placeholder="Nhập bình luận của bạn về video này..." />
+                        <input type="file" class="btnLoadVideo" id="btnLoadVideo" name="video" accept="video/*" />
+
+                    </div>
+                    <div class="btnSubmit">
+                        <input id="btnPost" class="postVideo" type="submit" value="Đăng Video" />
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -318,6 +322,8 @@ function time_difference($date)
     arsort($arrayTrueActionID);
     foreach($arrayTrueActionID as $actionID)
     {
+
+//        var_dump($arrayTrueActionID); die();
     ?>
     <div class="divAction">
         <div class="divStatus">
@@ -335,14 +341,41 @@ function time_difference($date)
                 </div>
                 <div class="statusContent">
                     <?php
+
+//                    var_dump($arrayActionType); die();
                     $statusID = $arrayActionType[$actionID];
-                    if(substr($statusID,0,3) != "IMG")
+
+
+
+                    if(substr($statusID,0,3) == "STT")
                     {
+
                         echo $arrayStatusContent[$statusID];
                     }
-                    else
+                    elseif(substr($statusID,0,3) == "IMG")
                     {
-                        echo "<img src='".$this->basePath()."/uploads/". $arrayPathALLIMAGE[$statusID]."'/>";
+//                        var_dump($arrayPathALLIMAGE) ; die();
+                        echo $arrayPathALLIMAGE[$statusID]['content'];
+                        echo "<img src='".$this->basePath()."/uploads/". $arrayPathALLIMAGE[$statusID]['path']."'/>";
+                    }
+                    elseif(substr($statusID,0,3) == "VID")
+                    {
+                        echo $arrayPathALLVIDEO[$statusID]['content'];
+                        $pathViddeo = $arrayPathALLVIDEO[$statusID]['path'];
+                        $typteVideo = substr($pathViddeo, -3, 3);
+
+                    ?>
+
+                    <video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="100%" height="375"
+                           poster=""
+                           data-setup="{}">
+                        <source src="<?php echo $this->basePath().'/uploads/'.$pathViddeo;?>"
+                                type='video/<?php echo $typteVideo ?>'>
+                    </video>
+
+                    <?php
+//                        var_dump($arrayPathALLVIDEO); die();
+//                        echo 'day la video';
                     }
                     ?>
                 </div>
@@ -366,7 +399,7 @@ function time_difference($date)
                     if(isset($arrayCommentContent[$actionID][$comentid]))
                     {
 
-                        
+
                 ?>
                     <div class="commentAction">
                         <div class="commentUserAvatar">
@@ -446,14 +479,8 @@ function time_difference($date)
                 var t = 500;
                 if(newDiv.text() != oldDiv.text())
                 {
-                    oldDiv.animate({
-                        opacity: 0,
-                        marginBottom:"-=200",
-                        marginTop: "+=200px"
-                    }, t, function(){
-                        jQuery(this).css({'margin-top' : '0px', 'margin-bottom': '0px', 'display' : 'none', 'opacity' : 1});
-                    });
-                    newDiv.delay(300).slideDown(1000, 'easeOutBounce');
+                    oldDiv.slideUp(1000, 'easeInBounce');
+                    newDiv.slideDown(1000, 'easeOutBounce');
                     oldDiv = newDiv;
                 }
             });
@@ -893,7 +920,7 @@ function time_difference($date)
                 success: function(data) {
                     data = JSON.parse(data);
     //                    alert('Đăng ảnh thành công!.');
-                    var instanceImage = "<img src='<?php echo $this->basePath();?>" +"/uploads/"+ data["success"] + "'/>";
+                    var instanceImage = descript + " <img src='<?php echo $this->basePath();?>" +"/uploads/"+ data["success"] + "'/>";
 //                    alert(instanceImage);
                     instancePostStatus(instanceImage, timstamp);
                     var divFirstAction =  jQuery('.statusBlock').next();
@@ -908,6 +935,97 @@ function time_difference($date)
             });
             return false;
         }
+
+        //upload video
+
+        jQuery('.postVideo').click(function(){
+            jQuery('#form-postVideo').validate({
+                errorElement: "p",
+                rules: {
+                    video:{
+                        required:true
+                    }
+                },
+                messages:{
+                    video:{
+                        required:"Bạn chưa chọn Video để tải lên!"
+                    }
+                },
+                submitHandler : function(){
+                    alert('ajjax thoi');
+                    ajaxMoveVideo();
+                }
+            });
+        });
+
+        function ajaxMoveVideo()
+        {
+            var timeNow = getTimestampNow();
+            var descript = jQuery('.descriptVideo').val();
+            var formdata  = new FormData(jQuery('#form-postVideo')[0]);
+            var reader = new FileReader();
+            var value = reader.readAsDataURL(document.getElementById("btnLoadVideo").files[0]);
+            var userid = jQuery('#avai-userid').attr('name');
+            alert(userid + descript+timeNow);
+
+            formdata.append('image', value);
+            formdata.append('timestamp', timeNow);
+            formdata.append('descript', descript);
+            formdata.append('userid', userid);
+
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->basePath().'/plugin/upload_video.php' ;?>",
+                data: formdata,
+                cache: false,
+                contentType: false,
+                processData: false,
+                async:false,
+                success: function(data) {
+                    alert(data);
+                    if(data!='error')
+                    {
+                        ajaxSaveVideo(userid, timeNow, descript, data);
+                    }
+                    else
+                    {
+                        alert('Video tải lên không đúng định dạng hoặc dung lượng quá lớn!.');
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+
+        function ajaxSaveVideo(userid, timeStamp, descript, dataType)
+        {
+            var dataval = "userid=" + userid+"&createdTime=" + timeStamp+"&descript="+descript+"&videoType=" +dataType;
+
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('success', array('action' => 'savevideo')); ?>",
+                data: dataval,
+                async:false,
+                success: function(data) {
+                    alert(data);
+<!--                    data = JSON.parse(data);-->
+<!--                    var instanceImage = descript + " <img src='--><?php //echo $this->basePath();?><!--" +"/uploads/"+ data["success"] + "'/>";-->
+<!--                    instancePostStatus(instanceImage, timstamp);-->
+<!--                    var divFirstAction =  jQuery('.statusBlock').next();-->
+<!--                    divFirstAction.css("opacity", 0);-->
+<!--                    divFirstAction.animate({-->
+<!--                        opacity:1-->
+<!--                    },3000, "linear");-->
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+
 
 
 

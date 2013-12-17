@@ -79,8 +79,6 @@ class UserpageController extends AbstractActionController
             $allContent = $successModel->getAllContentPrivatePage($userid, $userid, $dm);
 
 
-
-
             return array(
                 'datauser' => $identity,
                 'pathUserAvatar'        => $path['pathAvaUser'],
@@ -99,6 +97,8 @@ class UserpageController extends AbstractActionController
                 'allCommentID' => $allContent['allCommentID'],
                 //bang Image
                 'arrayPathALLIMAGE'     => $allContent['arrayPathALLIMAGE'],
+                //bang video
+                'arrayPathALLVIDEO'     => $allContent['arrayPathALLVIDEO']
             );
         }
     }
@@ -357,7 +357,7 @@ class UserpageController extends AbstractActionController
         return $base;
     }
 
-    //FUNCTION FOR UPLOAD NORMAL IMAGE
+    //FUNCTION FOR UPLOAD NORMAL IMAGE.
     public function savenormalimageAction()
     {
         $response = $this->getResponse();
@@ -395,5 +395,29 @@ class UserpageController extends AbstractActionController
 
     }
 
+    //FUNCTION FOR UPLOADING VIDEO.
+    public function savevideoAction()
+    {
+        $response = $this->getResponse();
+
+        $dm = $this->getDocumentService();
+        $successModel = new SuccessModel();
+
+        $data = $this->params()->fromPost();
+        $result = $successModel->saveNewVideo($dm, $data);
+
+        if($result)
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 1,
+            )));
+        }
+        else
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0,
+            )));
+        }
+    }
 
 }

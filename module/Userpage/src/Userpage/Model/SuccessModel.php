@@ -163,6 +163,9 @@ class SuccessModel
         //BangStatus
         $arrayStatusContent = array();
 
+        //bang Video
+        $arrayListVID = array();
+
         //BangComment
         $arrayCommentID = array();
         $arrayCommentContent = array();
@@ -212,25 +215,28 @@ class SuccessModel
                 {
                     if($check == "IMG")
                     {
-                        $arrayActionType[$actionIDNow] = $document->getActionType();
+//                        $arrayActionType[$actionIDNow] = $document->getActionType();
                         $arrayImagesID[] = $document->getActionType();
+                        $arrayTrueActionID[] = $document->getActionid();
+                    }
+                    elseif($check == "STT")
+                    {
+//                        $arrayActionType[$actionIDNow] = $document->getActionType();
+                        $arrayTrueActionID[] = $document->getActionid();
                     }
                     else
                     {
-                        $arrayActionType[$actionIDNow] = $document->getActionType();
-//                        $arrayTrueActionID[] = $document->getActionid();
+                        $arrayTrueActionID[] = $document->getActionid();
+                        $arrayListVID[] = $document->getActionType();
                     }
+                    $arrayActionType[$actionIDNow] = $document->getActionType();
 
-                    $arrayTrueActionID[] = $document->getActionid();
                 }
-
-
                 $document = $dm->createQueryBuilder('Application\Document\Comment')
                     ->field('actionid')->equals($actID)
                     ->field('commentid')->equals($cucbo)
                     ->getQuery()
                     ->getSingleResult();
-
                 if(isset($document))
                 {
                     $actionIDChange = $document->getActionid();
@@ -238,6 +244,8 @@ class SuccessModel
                 }
             }
         }
+
+//        var_dump($arrayActionType);die();
 
         foreach($arrayTrueActionID as $actionID)
         {
@@ -301,11 +309,32 @@ class SuccessModel
                 ->getSingleResult();
             if(isset($document))
             {
-                $arrayPathALLIMAGE[$imageid] = $document->getImageid().'.'.$document->getImagetype();
+                $arrayPathALLIMAGE[$imageid] = array(
+                        'path' => $document->getImageid().'.'.$document->getImagetype(),
+                        'content'=>  $document->getImagedescription(),
+                    );
+
+//                $arrayPathALLIMAGE[$imageid] = $document->getImageid().'.'.$document->getImagetype();
             }
         }
 
-//var_dump($arrayPathALLIMAGE);die();
+        $arrayPathALLVIDEO = array();
+        foreach($arrayListVID as $videoid)
+        {
+            $document = $dm->createQueryBuilder('Application\Document\Video')
+                ->field('videoid')->equals($videoid)
+                ->getQuery()
+                ->getSingleResult();
+            if(isset($document))
+            {
+                $arrayPathALLVIDEO[$videoid] = array(
+                    'path' => $document->getVideoid().'.'.$document->getVideotype(),
+                    'content' =>$document->getVideodescription(),
+                );
+            }
+        }
+
+//var_dump($arrayPathALLVIDEO);die();
 
 
         return array(
@@ -320,7 +349,9 @@ class SuccessModel
             //Bang Comment
             'arrayCommentContent'    => $arrayTrueCommentID,
             'allCommentID'           => $allCommentID,
-            'arrayPathALLIMAGE'     => $arrayPathALLIMAGE,
+            'arrayPathALLIMAGE'      => $arrayPathALLIMAGE,
+            //Bang video
+            'arrayPathALLVIDEO'     => $arrayPathALLVIDEO,
         );
 
 
@@ -507,6 +538,7 @@ class SuccessModel
                 ->insert()
                 ->field('imageid')->set($imageid)
                 ->field('albumid')->set($albumID)
+                ->field('imagedescription')->set($descript)
                 ->field('imagestatus')->set($imageStatus)
                 ->field('imagetype')->set($imageType)
                 ->getQuery()
@@ -550,6 +582,7 @@ class SuccessModel
                 ->insert()
                 ->field('imageid')->set($imageid)
                 ->field('albumid')->set($albumID)
+                ->field('imagedescription')->set($descript)
                 ->field('imagestatus')->set($imageStatus)
                 ->field('imagetype')->set($imageType)
                 ->getQuery()
@@ -570,6 +603,65 @@ class SuccessModel
                 return null;
 
         }
+    }
+
+    //FUNCTION FOR SAVE VIDEO
+    public function saveNewVideo($dm, $data)
+    {
+        $createdTime = $data['createdTime'];
+        $userid = $data['userid'];
+        //Bang Video
+        $videoID = 'VID'.$userid.$createdTime;
+        $videoDescription = $data['descript'];
+        $videoType = $data['videoType'];
+        $videoType = substr($videoType, -3, 3);
+
+        //Bang Action
+        $actionID = 'ACT'.$createdTime;
+        $actionUser =  $actionLocation= $userid;
+        $actionType = $videoID;
+        $actionCreatedTime = $createdTime;
+
+        //Bang Album
+        $albumID = 'ALB'.$userid.'VID';
+        $albumUserID = $userid;
+
+        $checkAlbum = $this->checkIsHaveUserAlbumAvatar($userid, $dm, "VID");
+
+        if($checkAlbum == null)
+        {
+            $document = $dm->createQueryBuilder('Application\Document\Album')
+                ->insert()
+                ->field('albumid')->set($albumID)
+                ->field('userid')->set($userid)
+                ->getQuery()
+                ->execute();
+
+        }
+
+        $document=$dm->createQueryBuilder('Application\Document\Video')
+            ->insert()
+            ->field('videoid')->set($videoID)
+            ->field('albumid')->set($albumID)
+            ->field('videodescription')->set($videoDescription)
+            ->field('videotype')->set($videoType)
+            ->getQuery()
+            ->execute();
+
+        $document=$dm->createQueryBuilder('Application\Document\Action')
+            ->insert()
+            ->field('actionid')->set($actionID)
+            ->field('actionuser')->set($actionUser)
+            ->field('actionlocation')->set($actionLocation)
+            ->field('actiontype')->set($actionType)
+            ->field('createdtime')->set($actionCreatedTime)
+            ->getQuery()
+            ->execute();
+
+        if(isset($document))
+            return true;
+        else
+            return false;
     }
 
 }
