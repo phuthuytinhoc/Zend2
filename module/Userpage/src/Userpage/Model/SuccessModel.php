@@ -166,6 +166,9 @@ class SuccessModel
         //bang Video
         $arrayListVID = array();
 
+        //bang Place
+        $arrayListPLA = array();
+
         //BangComment
         $arrayCommentID = array();
         $arrayCommentContent = array();
@@ -222,6 +225,11 @@ class SuccessModel
                     elseif($check == "STT")
                     {
 //                        $arrayActionType[$actionIDNow] = $document->getActionType();
+                        $arrayTrueActionID[] = $document->getActionid();
+                    }
+                    elseif($check == "PLA")
+                    {
+                        $arrayListPLA[] = $document->getActionType();
                         $arrayTrueActionID[] = $document->getActionid();
                     }
                     else
@@ -334,7 +342,37 @@ class SuccessModel
             }
         }
 
-//var_dump($arrayPathALLVIDEO);die();
+
+
+        $arrayALLSharePlace = array();
+        foreach($arrayListPLA as $placeid)
+        {
+            $document = $dm->createQueryBuilder('Application\Document\Place')
+                ->field('placeid')->equals($placeid)
+                ->getQuery()
+                ->getSingleResult();
+
+            if(isset($document))
+            {
+                $imageIDTemp = $document->getImageid();
+                $doc = $dm->createQueryBuilder('Application\Document\Image')
+                    ->field('imageid')->equals($imageIDTemp)
+                    ->getQuery()
+                    ->getSingleResult();
+
+                $arrayALLSharePlace[$placeid] = array(
+                    'placeName' => $document->getPlacename(),
+                    'placeDescription' => $document->getPlacedescription(),
+                    'hashTag'   => $document->getHashtag(),
+                    'pathImage' => $imageIDTemp.'.'.$doc->getImagetype(),
+                );
+            }
+        }
+
+
+
+
+//var_dump($arrayALLSharePlace);die();
 
 
         return array(
@@ -352,6 +390,8 @@ class SuccessModel
             'arrayPathALLIMAGE'      => $arrayPathALLIMAGE,
             //Bang video
             'arrayPathALLVIDEO'     => $arrayPathALLVIDEO,
+            //bang Place
+            'arrayALLSharePlace'   => $arrayALLSharePlace,
         );
 
 
@@ -655,6 +695,90 @@ class SuccessModel
             ->field('actionlocation')->set($actionLocation)
             ->field('actiontype')->set($actionType)
             ->field('createdtime')->set($actionCreatedTime)
+            ->getQuery()
+            ->execute();
+
+        if(isset($document))
+            return true;
+        else
+            return false;
+    }
+
+    //FUCTION FOR SAVE NEW SHARE PLACE
+    public function saveNewSharePlace($data, $dm)
+    {
+        $userid = $data['userid'];
+        $createdTime = $data['createdTime'];
+        $extImage = $data['imageType'];
+        if(substr($extImage, -4,1) == ".")
+        {
+            $extImage = substr($extImage, -3,3);
+        }
+        else
+        {
+            $extImage = substr($extImage, -4,4);
+        }
+
+        //Bang Album
+        $albumID = "ALB".$userid."NOR";
+        $albumUserid = $userid;
+
+        //Bang Image
+        $imageID = "IMG".$userid.$createdTime."NOR";
+        $imageAlbumID = $albumID;
+        $imageStatus = "NOR";
+        $imageType = $extImage;
+
+        //Bang PLACE
+        $placeID = "PLA".$userid.$createdTime;
+        $placeName = $data['placeName'];
+        $placeDescription = $data['descript'];
+        $placeImageID = $imageID;
+        $hashTag = $data['hashTag'];
+
+        //bang Action
+        $actionID = "ACT".$createdTime;
+        $actionUser =  $actionLocation = $userid;
+        $actionType = $placeID;
+
+        $checkAlbum = $this->checkIsHaveUserAlbumAvatar($userid, $dm, "NOR");
+
+        if($checkAlbum == null)
+        {
+            $document = $dm->createQueryBuilder('Application\Document\Album')
+                ->insert()
+                ->field('albumid')->set($albumID)
+                ->field('userid')->set($albumUserid)
+                ->getQuery()
+                ->execute();
+        }
+
+        $document=$dm->createQueryBuilder('Application\Document\Image')
+            ->insert()
+            ->field('imageid')->set($imageID)
+            ->field('albumid')->set($imageAlbumID)
+            ->field('imagestatus')->set($imageStatus)
+            ->field('imagetype')->set($imageType)
+            ->getQuery()
+            ->execute();
+
+        $document=$dm->createQueryBuilder('Application\Document\Place')
+            ->insert()
+            ->field('placeid')->set($placeID)
+            ->field('placename')->set($placeName)
+            ->field('placedescription')->set($placeDescription)
+            ->field('imageid')->set($placeImageID)
+            ->field('hashtag')->set($hashTag)
+            ->getQuery()
+            ->execute();
+
+        $document=$dm->createQueryBuilder('Application\Document\Action')
+            ->insert()
+            ->field('actionid')->set($actionID)
+            ->field('actionuser')->set($actionUser)
+            ->field('actionlocation')->set($actionLocation)
+            ->field('actiontype')->set($actionType)
+            ->field('createdtime')->set($createdTime)
             ->getQuery()
             ->execute();
 

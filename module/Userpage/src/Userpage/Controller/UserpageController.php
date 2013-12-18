@@ -98,7 +98,9 @@ class UserpageController extends AbstractActionController
                 //bang Image
                 'arrayPathALLIMAGE'     => $allContent['arrayPathALLIMAGE'],
                 //bang video
-                'arrayPathALLVIDEO'     => $allContent['arrayPathALLVIDEO']
+                'arrayPathALLVIDEO'     => $allContent['arrayPathALLVIDEO'],
+                //bang place
+                'arrayALLSharePlace'    => $allContent['arrayALLSharePlace'],
             );
         }
     }
@@ -420,4 +422,29 @@ class UserpageController extends AbstractActionController
         }
     }
 
+    //FUNCTION FOR SAVE NEW SHARE
+    public  function saveshareplaceAction()
+    {
+        $response = $this->getResponse();
+
+        $dm = $this->getDocumentService();
+        $successModel = new SuccessModel();
+
+        $data = $this->params()->fromPost();
+
+        $result = $successModel->saveNewSharePlace($data, $dm);
+
+        if($result)
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 1,
+            )));
+        }
+        else
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0,
+            )));
+        }
+    }
 }

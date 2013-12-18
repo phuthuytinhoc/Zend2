@@ -278,6 +278,7 @@ function time_difference($date)
             </div>
 
             <div class="clickShare" style="display: none;">
+<<<<<<< HEAD
                 <form method="post" action=""
                       id="form-postShare" name="form-postShare" enctype="multipart/form-data">
                     <div class="statusComposeArea">
@@ -285,10 +286,28 @@ function time_difference($date)
                         <input type="file" class="btnLoadShare" id="btnLoadShare" name="share" accept="image/*"/>
                         <input type="text" class="descriptShare" name="descriptImage" placeholder="Nhập bình luận về chia sẻ này..."/>
 
+=======
+                <form method="post" id="form-postShare"  enctype="multipart/form-data">
+                    <div class="statusComposeArea">
+                        <div class="place-image">
+                            <input class="hide-btn" type="button">
+                            <input type="file" id="btnLoadShare" name="image" accept="image/*"/>
+                        </div>
+                        <div class="place-name">
+                            <input type="text" class="txt-place-name" name="placeName" id="placeName" placeholder="Tên địa điểm bạn muốn chia sẻ...">
+                        </div>
+                        <div class="place-description">
+                            <textarea id="descriptPlace" name="descriptPlace" class="txt-place-des" placeholder="Bạn hãy mô tả về địa điểm của mình ..."></textarea>
+                        </div>
+>>>>>>> Hoàn thành chức năng share địa điểm
                     </div>
                     <div class="btnSubmit">
                         <input id="btnPost" class="postShare" type="submit" value="Feel" />
                     </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> Hoàn thành chức năng share địa điểm
                 </form>
             </div>
 
@@ -353,7 +372,9 @@ function time_difference($date)
                 <div class="statusContent">
                     <?php
 
-//                    var_dump($arrayActionType); die();
+//                    var_dump($arrayTrueActionID); die();
+
+
                     $statusID = $arrayActionType[$actionID];
 
 
@@ -361,32 +382,52 @@ function time_difference($date)
                     if(substr($statusID,0,3) == "STT")
                     {
 
-                        echo $arrayStatusContent[$statusID];
+                        echo "<pre>".$arrayStatusContent[$statusID]."</pre>";
                     }
                     elseif(substr($statusID,0,3) == "IMG")
                     {
 //                        var_dump($arrayPathALLIMAGE) ; die();
-                        echo $arrayPathALLIMAGE[$statusID]['content'];
+                        echo "<pre>".$arrayPathALLIMAGE[$statusID]['content']."</pre>";
                         echo "<img src='".$this->basePath()."/uploads/". $arrayPathALLIMAGE[$statusID]['path']."'/>";
                     }
                     elseif(substr($statusID,0,3) == "VID")
                     {
-                        echo $arrayPathALLVIDEO[$statusID]['content'];
+                        echo "<pre>".$arrayPathALLVIDEO[$statusID]['content']."</pre>";
                         $pathViddeo = $arrayPathALLVIDEO[$statusID]['path'];
                         $typteVideo = substr($pathViddeo, -3, 3);
 
                     ?>
 
                     <video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="100%" height="375"
-                           poster=""
+                           poster="<?php echo $this->basePath().'/img/Logo_Video.png'; ?>"
                            data-setup="{}">
                         <source src="<?php echo $this->basePath().'/uploads/'.$pathViddeo;?>"
                                 type='video/<?php echo $typteVideo ?>'>
                     </video>
 
                     <?php
-//                        var_dump($arrayPathALLVIDEO); die();
+//                        var_dump($arrayALLSharePlace); die();
 //                        echo 'day la video';
+                    }
+                    else
+                    {
+//                        $arrayALLSharePlace[$statusID][]
+                    ?>
+
+                        <div class="statusContent">
+                        <div class="status-place-image">
+                            <img src="<?php echo $this->basePath().'/uploads/'.$arrayALLSharePlace[$statusID]['pathImage']?>">
+                        </div>
+                        <div class="status-place-name">
+                            <span class="name"><?php echo $arrayALLSharePlace[$statusID]['placeName']; ?></span><br>
+                            <span class="hashtag"><?php echo $arrayALLSharePlace[$statusID]['hashTag']; ?></span>
+                        </div>
+                        <div class="status-place-des">
+                            <pre><?php echo $arrayALLSharePlace[$statusID]['placeDescription']; ?></pre>
+                        </div>
+                    </div>
+
+                    <?php
                     }
                     ?>
                 </div>
@@ -496,7 +537,6 @@ function time_difference($date)
                 }
             });
         });
-
 
         jQuery('.form-subPostCmt input.postComment').each(function(){
             jQuery(this).on('click',function(){
@@ -737,7 +777,7 @@ function time_difference($date)
             var divstatusContent = document.createElement('div');
             divstatusContent.className= 'statusContent';
 //            jQuery(divstatusContent).innerHTML=statusContent;
-            jQuery(divstatusContent).append(statusContent);
+            jQuery(divstatusContent).append('<pre>' + statusContent + '</pre>');
 
             var divstatusFooter = document.createElement('div');
             divstatusFooter.className='statusFooter';
@@ -963,7 +1003,7 @@ function time_difference($date)
                     }
                 },
                 submitHandler : function(){
-                    alert('ajjax thoi');
+//                    alert('ajjax thoi');
                     ajaxMoveVideo();
                 }
             });
@@ -977,7 +1017,7 @@ function time_difference($date)
             var reader = new FileReader();
             var value = reader.readAsDataURL(document.getElementById("btnLoadVideo").files[0]);
             var userid = jQuery('#avai-userid').attr('name');
-            alert(userid + descript+timeNow);
+//            alert(userid + descript+timeNow);
 
             formdata.append('image', value);
             formdata.append('timestamp', timeNow);
@@ -993,7 +1033,7 @@ function time_difference($date)
                 processData: false,
                 async:false,
                 success: function(data) {
-                    alert(data);
+//                    alert(data);
                     if(data!='error')
                     {
                         ajaxSaveVideo(userid, timeNow, descript, data);
@@ -1020,15 +1060,28 @@ function time_difference($date)
                 data: dataval,
                 async:false,
                 success: function(data) {
-                    alert(data);
-<!--                    data = JSON.parse(data);-->
-<!--                    var instanceImage = descript + " <img src='--><?php //echo $this->basePath();?><!--" +"/uploads/"+ data["success"] + "'/>";-->
-<!--                    instancePostStatus(instanceImage, timstamp);-->
-<!--                    var divFirstAction =  jQuery('.statusBlock').next();-->
-<!--                    divFirstAction.css("opacity", 0);-->
-<!--                    divFirstAction.animate({-->
-<!--                        opacity:1-->
-<!--                    },3000, "linear");-->
+//                    alert(data);
+                    data = JSON.parse(data);
+                    if(data['success'] == 1)
+                    {
+                        var videoType = dataType.substr(-3,3);
+                        var videoName = 'VID'+userid+timeStamp+'.'+videoType;
+                        var instanceVideo = descript;
+                        instanceVideo += ' <video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" ';
+                        instanceVideo += ' width="100%" height="375" poster="<?php echo $this->basePath();?>/img/Logo_Video.png" data-setup="{}"> ';
+                        instanceVideo += '  <source src="<?php echo $this->basePath();?>' + '/uploads/'+videoName+ '" ';
+                        instanceVideo += ' type="video/'+ videoType+' ">';
+                        instanceVideo += ' </video>';
+
+//                        alert(instanceVideo);
+
+                        instancePostStatus(instanceVideo, timeStamp);
+                        var divFirstAction =  jQuery('.statusBlock').next();
+                        divFirstAction.css("opacity", 0);
+                        divFirstAction.animate({
+                            opacity:1
+                        },3000, "linear");
+                    }
                 },
                 error: function() {
                     alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
@@ -1037,6 +1090,140 @@ function time_difference($date)
             return false;
         }
 
+        jQuery('.postShare').click(function(){
+//            alert('da click');
+            jQuery('#form-postShare').validate({
+                errorElement: "span",
+                rules: {
+                    share:{
+                        required:true
+                    },
+                    placeName: {
+                        required:true
+                    },
+                    descriptPlace:{
+                        required : true
+                    }
+                },
+                messages:{
+                    share:{
+                        required:"**"
+                    },
+                    placeName: {
+                        required:"**"
+                    },
+                    descriptPlace:{
+                        required : "**"
+                    }
+                },
+                submitHandler : function(){
+//                    alert('ajjax thoi');
+                    saveImageofShare();
+                }
+            });
+        });
+
+        function saveImageofShare()
+        {
+            var timeNow = getTimestampNow();
+            var placeName = jQuery('#placeName').val();
+            var descript = jQuery('#descriptPlace').val();
+            var formdata  = new FormData(jQuery('#form-postShare')[0]);
+            var reader = new FileReader();
+            var value = reader.readAsDataURL(document.getElementById("btnLoadShare").files[0]);
+            var userid = jQuery('#avai-userid').attr('name');
+//            alert(userid + descript+timeNow);
+
+            formdata.append('image', value);
+            formdata.append('timestamp', timeNow);
+            formdata.append('descript', descript);
+            formdata.append('placeName', placeName);
+            formdata.append('userid', userid);
+
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->basePath().'/plugin/upload_normal.php' ;?>",
+                data: formdata,
+                cache: false,
+                contentType: false,
+                processData: false,
+                async:false,
+                success: function(data) {
+//                    alert(data);
+                    if(data!='error')
+                    {
+                        var pathImage = data;
+                        alert('thanh cong');
+                        ajaxSaveNewSharePlace(userid, timeNow, placeName, descript, pathImage);
+                    }
+                    else
+                    {
+                        alert('Video tải lên không đúng định dạng hoặc dung lượng quá lớn!.');
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+
+        function createHashTag(str)
+        {
+            str = str.toLowerCase();
+            str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+            str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+            str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+            str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+            str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+            str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+            str = str.replace(/đ/g, "d");
+            str = str.replace(/!|\$|\@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'| |\"|\&|\#|\[|\]|~|$|-/g, "_");
+            //thay doi toan bo cac ki tu la trong chuoi
+            str = str.replace(/_+_/g, "_"); //thay the 2 dau __ thanh 1_
+            str = str.replace(/^\_+|\_+$/g, ""); // bo ki tu dau va cuoi chuoi
+            return '#' +str;
+        }
+
+//        alert(createHashTag('- _ Sông cầu _ !@#$%^&*()_+'));
+
+        function ajaxSaveNewSharePlace(userid, timeNow, placeName, descript, pathImage)
+        {
+
+            var hashTag = createHashTag(placeName);
+            var dataval = "userid=" + userid+"&createdTime=" + timeNow+"&placeName="+placeName;
+            dataval += "&descript="+descript+"&imageType=" +pathImage + "&hashTag=" + hashTag;
+
+            alert(dataval);
+
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('success', array('action' => 'saveshareplace')); ?>",
+                data: dataval,
+                async:false,
+                success: function(data) {
+                    alert(data);
+                    data = JSON.parse(data);
+                    var instanceImage = " <img src='<?php echo $this->basePath();?>" +"/uploads/"+pathImage + "'/>";
+                    instanceImage +=    "<div class='status-place-name'>";
+                    instanceImage +=        "<span class='name'>"+placeName+"</span></br>";
+                    instanceImage +=        "<span class='hashtag'>"+hashTag+"</span></br>";
+                    instanceImage +=    "</div>";
+                    instanceImage += "<div class='status-place-des'><pre>"+descript+"</pre></div>";
+                    alert(instanceImage);
+                    instancePostStatus(instanceImage, timeNow);
+                    var divFirstAction =  jQuery('.statusBlock').next();
+                    divFirstAction.css("opacity", 0);
+                    divFirstAction.animate({
+                        opacity:1
+                    },3000, "linear");
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
 
 
 

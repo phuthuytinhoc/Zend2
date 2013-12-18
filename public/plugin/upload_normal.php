@@ -1,7 +1,7 @@
 <?php
 
 $valid_exts = array('jpeg', 'jpg', 'png', 'gif'); // valid extensions
-$max_size = 2000 * 1024; // max file size
+$max_size = 20000 * 1024; // max file size
 $path = '../uploads/'; // upload directory
 $userid = $createdTime = uniqid();
 
