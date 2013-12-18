@@ -278,7 +278,18 @@ function time_difference($date)
             </div>
 
             <div class="clickShare" style="display: none;">
-               Đay là phần chia sẻ
+                <form method="post" action=""
+                      id="form-postShare" name="form-postShare" enctype="multipart/form-data">
+                    <div class="statusComposeArea">
+
+                        <input type="file" class="btnLoadShare" id="btnLoadShare" name="share" accept="image/*"/>
+                        <input type="text" class="descriptShare" name="descriptImage" placeholder="Nhập bình luận về chia sẻ này..."/>
+
+                    </div>
+                    <div class="btnSubmit">
+                        <input id="btnPost" class="postShare" type="submit" value="Feel" />
+                    </div>
+                </form>
             </div>
 
             <div class="clickImage" style="display: none;">
