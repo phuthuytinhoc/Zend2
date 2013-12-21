@@ -87,23 +87,20 @@ class SuccessModel
             $tempPath = 'cover-temp.jpg';
             $imageStatus="COV_NOW";
         }
-
-
         if(isset($albumidIfAvailable))
         {
             $result = $dm->createQueryBuilder('Application\Document\Image')
                 ->field('albumid')->equals($albumidIfAvailable)
-//                ->field('userid')->equals($userid)
                 ->field('imagestatus')->equals($imageStatus)
                 ->getQuery()
                 ->getSingleResult();
 
             $path = $result->getImageid().'.'.$result->getImagetype();;
-            return array('pathAvaUser' => $path);
+            return $path;
         }
         else
         {
-            return array('pathAvaUser' => $tempPath);
+            return $tempPath;
         }
     }
 
@@ -166,12 +163,19 @@ class SuccessModel
         //bang Video
         $arrayListVID = array();
 
+        //Test array userid va array userlocation
+        $arrayActuserAclocation = array();
+
         //bang Place
         $arrayListPLA = array();
 
         //BangComment
         $arrayCommentID = array();
         $arrayCommentContent = array();
+
+        //Bang LIKE
+        //@TODO:
+        $arrayListLike = array();
 
         $arrayTrueCommentID = array();
 
@@ -180,7 +184,7 @@ class SuccessModel
         $cucbo = "";
 
         $document = $dm->createQueryBuilder('Application\Document\Action')
-            ->field('actionuser')->equals($actionUser)
+//            ->field('actionuser')->equals($actionUser)
             ->field('actionlocation')->equals($actionLocation)
             ->sort('createdtime', 'desc')
             ->getQuery()
@@ -213,29 +217,59 @@ class SuccessModel
                     $commentID = $document->getActionType();
                     $cucbo = $commentID;
                     $arrayCommentID[] = $commentID;
+
+                    $arrayActuserAclocation[$document->getActionid()] =array(
+                        'actionUser' => $document->getActionUser(),
+                        'actionLocation' =>$document->getActionLocation(),
+                    );
+                }
+                elseif($check == "LIK")
+                {
+                    $arrayListLike[] = $document->getActionid();
                 }
                 else
                 {
                     if($check == "IMG")
-                    {
+                    {//danh sach IMG
 //                        $arrayActionType[$actionIDNow] = $document->getActionType();
                         $arrayImagesID[] = $document->getActionType();
                         $arrayTrueActionID[] = $document->getActionid();
+
+                        $arrayActuserAclocation[$document->getActionid()] =array(
+                            'actionUser' => $document->getActionUser(),
+                            'actionLocation' =>$document->getActionLocation(),
+                        );
                     }
                     elseif($check == "STT")
-                    {
+                    {//danh sach status id
 //                        $arrayActionType[$actionIDNow] = $document->getActionType();
                         $arrayTrueActionID[] = $document->getActionid();
+
+                        $arrayActuserAclocation[$document->getActionid()] =array(
+                            'actionUser' => $document->getActionUser(),
+                            'actionLocation' =>$document->getActionLocation(),
+                        );
+
                     }
                     elseif($check == "PLA")
-                    {
+                    { //danh sach place share
                         $arrayListPLA[] = $document->getActionType();
                         $arrayTrueActionID[] = $document->getActionid();
+
+                        $arrayActuserAclocation[$document->getActionid()] =array(
+                            'actionUser' => $document->getActionUser(),
+                            'actionLocation' =>$document->getActionLocation(),
+                        );
                     }
                     else
-                    {
+                    { //danh sach video
                         $arrayTrueActionID[] = $document->getActionid();
                         $arrayListVID[] = $document->getActionType();
+
+                        $arrayActuserAclocation[$document->getActionid()] =array(
+                            'actionUser' => $document->getActionUser(),
+                            'actionLocation' =>$document->getActionLocation(),
+                        );
                     }
                     $arrayActionType[$actionIDNow] = $document->getActionType();
 
@@ -253,7 +287,7 @@ class SuccessModel
             }
         }
 
-//        var_dump($arrayActionType);die();
+//        var_dump($arrayTrueActionID);die();
 
         foreach($arrayTrueActionID as $actionID)
         {
@@ -293,7 +327,7 @@ class SuccessModel
         {
             $document = $dm->createQueryBuilder('Application\Document\Action')
                 ->field('actionid')->equals($actionID)
-                ->field('actionuser')->equals($actionUser)
+//                ->field('actionuser')->equals($actionUser)
                 ->field('actionlocation')->equals($actionLocation)
                 ->sort('createdtime', 'asc')
                 ->getQuery()
@@ -307,6 +341,8 @@ class SuccessModel
                 }
             }
         }
+
+//        var_dump($allCommentID); die();
 
         $arrayPathALLIMAGE = array();
         foreach($arrayImagesID as $imageid)
@@ -372,7 +408,7 @@ class SuccessModel
 
 
 
-//var_dump($arrayALLSharePlace);die();
+//var_dump($arrayTrueActionID);die();
 
 
         return array(
@@ -392,21 +428,25 @@ class SuccessModel
             'arrayPathALLVIDEO'     => $arrayPathALLVIDEO,
             //bang Place
             'arrayALLSharePlace'   => $arrayALLSharePlace,
+
+            //test
+            'arrayActuserAclocation' =>$arrayActuserAclocation
         );
 
 
     }
 
-    public function saveNewStatus($statusContent, $userid, $timeStamp , $documentService )
+    public function saveNewStatus($statusContent, $userID, $userlocationID, $timeStamp , $documentService )
     {
         $createdTime = $timeStamp;
 
         //collection('status')
-        $statusID = 'STT'.$userid. $createdTime;
+        $statusID = 'STT'.$userID. $createdTime;
 
         //collection('action')
         $actionID = 'ACT'. $createdTime;
-        $actionUser = $actionLocation = $userid;
+        $actionUser = $userID;
+        $actionLocation = $userlocationID;
         $actionType = $statusID;
 
         //THem mot bang moi vao Sttus
@@ -433,17 +473,20 @@ class SuccessModel
             return false;
     }
 
-    public function saveNewComment($data, $userid, $documentService)
+    public function saveNewComment($data, $documentService)
     {
         $createdTime = $data['timeCreatedComment'];
+        $actUserID = $data['actionUser'];
+        $actLocationID = $data['actionLocation'];
         //value for comment
-        $commentID = 'CMT'.$userid.$createdTime;
+        $commentID = 'CMT'.$actUserID.$createdTime;
         $actionID =  $data['actionStatusSave'];
         $commentContent = $data['cmtContent'];
 
         //value for action
         $newActionID = 'ACT'.$createdTime;
-        $actionUser = $actionLocation = $userid;
+        $actionUser = $actUserID;
+        $actionLocation = $actLocationID;
         $actionType = $commentID;
 
         //them vao bang action
@@ -707,7 +750,8 @@ class SuccessModel
     //FUCTION FOR SAVE NEW SHARE PLACE
     public function saveNewSharePlace($data, $dm)
     {
-        $userid = $data['userid'];
+        $actUserID = $data['actionUser'];
+        $actLocationID = $data['actionLocation'];
         $createdTime = $data['createdTime'];
         $extImage = $data['imageType'];
         if(substr($extImage, -4,1) == ".")
@@ -718,19 +762,18 @@ class SuccessModel
         {
             $extImage = substr($extImage, -4,4);
         }
-
         //Bang Album
-        $albumID = "ALB".$userid."NOR";
-        $albumUserid = $userid;
+        $albumID = "ALB".$actUserID."NOR";
+        $albumUserid = $actUserID;
 
         //Bang Image
-        $imageID = "IMG".$userid.$createdTime."NOR";
+        $imageID = "IMG".$actUserID.$createdTime."NOR";
         $imageAlbumID = $albumID;
         $imageStatus = "NOR";
         $imageType = $extImage;
 
         //Bang PLACE
-        $placeID = "PLA".$userid.$createdTime;
+        $placeID = "PLA".$actUserID.$createdTime;
         $placeName = $data['placeName'];
         $placeDescription = $data['descript'];
         $placeImageID = $imageID;
@@ -738,10 +781,11 @@ class SuccessModel
 
         //bang Action
         $actionID = "ACT".$createdTime;
-        $actionUser =  $actionLocation = $userid;
+        $actionUser = $actUserID;
+        $actionLocation = $actLocationID;
         $actionType = $placeID;
 
-        $checkAlbum = $this->checkIsHaveUserAlbumAvatar($userid, $dm, "NOR");
+        $checkAlbum = $this->checkIsHaveUserAlbumAvatar($actUserID, $dm, "NOR");
 
         if($checkAlbum == null)
         {
@@ -787,5 +831,198 @@ class SuccessModel
         else
             return false;
     }
+
+    //FUNCTION FOR SAVE LIKE STATUS
+    public function saveLikeStatus($data, $dm)
+    {
+        $createdTime = $data['timeStamp'];
+        $userid = $data['userid'];
+        //Bang Like
+        $likeID = "LIK".$userid.$createdTime;
+        $likeAction = $data['actionid'];
+        //bang Action
+        $actionID = "ACT".$createdTime;
+        $actionUser = $actionLocation = $userid;
+        $actionType = $likeID;
+
+        $document=$dm->createQueryBuilder('Application\Document\Like')
+            ->insert()
+            ->field('likeid')->set($likeID)
+            ->field('actionid')->set($likeAction)
+            ->getQuery()
+            ->execute();
+
+        $document=$dm->createQueryBuilder('Application\Document\Action')
+            ->insert()
+            ->field('actionid')->set($actionID)
+            ->field('actionuser')->set($actionUser)
+            ->field('actionlocation')->set($actionLocation)
+            ->field('actiontype')->set($actionType)
+            ->field('createdtime')->set($createdTime)
+            ->getQuery()
+            ->execute();
+
+        if(isset($document))
+            return true;
+        else
+            return false;
+
+    }
+
+    //FUNCTION FOR Load all private Infomation
+    public function getPrivateInfomationUser($userid, $dm)
+    {
+        $document = $dm->getRepository('Application\Document\User')->findOneBy(array('userid' => $userid));
+        if(isset($document))
+        {
+            return $document;
+        }
+        else
+            return null;
+    }
+
+    public function getInfoUserByID($dm)
+    {
+        $result = array();
+
+        $qb = $dm->createQueryBuilder('Application\Document\User')
+            ->eagerCursor(true);
+        $query = $qb->getQuery();
+        $cursor = $query->execute();
+
+        foreach($cursor as $doc)
+        {
+            $pathAva = $this->getPathImageAvatarUser($doc->getUserid(), $dm, "AVA" );
+            $result[$doc->getUserid()] = array(
+                'fullname' => $doc->getLastname().' '.$doc->getFirstname(),
+                'pathAvatar'       => $pathAva,
+            );
+        }
+
+        return $result;
+    }
+
+    public function getInfoUserbyActionType($dm)
+    {
+        $result = array();
+
+        $qb = $dm->createQueryBuilder('Application\Document\Action')
+            ->eagerCursor(true);
+        $query = $qb->getQuery();
+        $cursor = $query->execute();
+
+        foreach($cursor as $doc)
+        {
+            $pathAva = $this->getPathImageAvatarUser($doc->getActionUser(), $dm, "AVA" );
+            $actionType = $doc->getActionType();
+            $fullname = $this->getPrivateInfomationUser($doc->getActionUser(),$dm);
+            $result[$actionType] = array(
+                'fullname' => $fullname->getLastname().' '.$fullname->getFirstname(),
+                'pathAvatar'       => $pathAva,
+            );
+        }
+
+        return $result;
+    }
+
+    //FUNCTION FOR FRIEND
+
+    public function saveNewFriend($data, $dm)
+    {
+
+    }
+
+    public function sendRequestAddFriend($data, $dm)
+    {
+        //bang friend
+        $friendUserSend = $data['actionUser'];
+        $friendUserRecieve = $data['actionLocation'];
+        $friendStatus = $data['friendStatus'];
+
+        $document=$dm->createQueryBuilder('Application\Document\Friend')
+            ->insert()
+            ->field('friendusersend')->set($friendUserSend)
+            ->field('frienduserrecieve')->set($friendUserRecieve)
+            ->field('friendstatus')->set($friendStatus)
+            ->getQuery()
+            ->execute();
+
+        if(isset($document))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
+    public function sendRequestUnFriend($data, $dm)
+    {
+        $friendUserSend = $data['actionUser'];
+        $friendUserRecieve = $data['actionLocation'];
+        $friendStatus = $data['friendStatus'];
+
+        $document = $dm -> createQueryBuilder('Application\Document\Friend')
+            ->remove()
+            ->field('friendusersend')->equals($friendUserSend)
+            ->field('frienduserrecieve')->equals($friendUserRecieve)
+            ->field('friendstatus')->equals($friendStatus)
+            ->getQuery()
+            ->execute();
+
+        $document2 = $dm -> createQueryBuilder('Application\Document\Friend')
+            ->remove()
+            ->field('friendusersend')->equals($friendUserRecieve)
+            ->field('frienduserrecieve')->equals($friendUserSend)
+            ->field('friendstatus')->equals($friendStatus)
+            ->getQuery()
+            ->execute();
+
+        if(isset($document))
+        {
+            return true;
+        }
+        elseif(isset($document2))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+
+    public function checkFriend($userSend, $userRecieve, $dm)
+    {
+        $document=$dm->createQueryBuilder('Application\Document\Friend')
+            ->field('friendusersend')   ->equals($userSend)
+            ->field('frienduserrecieve')->equals($userRecieve)
+            ->getQuery()
+            ->getSingleResult();
+
+        $document2=$dm->createQueryBuilder('Application\Document\Friend')
+            ->field('friendusersend')   ->equals($userRecieve)
+            ->field('frienduserrecieve')->equals($userSend)
+            ->getQuery()
+            ->getSingleResult();
+
+        if(isset($document))
+        {
+            return $document->getFriendstatus();
+        }
+        elseif(isset($document2))
+        {
+            return $document2->getFriendstatus();
+        }
+        else
+            return null;
+
+    }
+
+
+
 
 }

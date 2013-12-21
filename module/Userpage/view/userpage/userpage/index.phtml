@@ -170,10 +170,15 @@ function time_difference($date)
                 <div class="divMenuName noti">Shake</div>
             </div>
         </a>
-        <a href="<?php echo $this->url('success', array('action' => 'friend')); ?>">
+<!--        <a href="--><?php //echo $this->url('success', array('action' => 'friend')); ?><!--">-->
+        <a href="#">
             <div class="menuSub friend">
                 <div class="divMenuIcon friend"></div>
-                <div class="divMenuName friend">Friend</div>
+                <div class="divMenuName friend" id="menuFriend" data-notifications="10">Friend</div>
+                <div style="width: 300px; height: 300px; position: relative; left: 98px; background-color: black;
+                left: -303px;top: 15px;opacity: 0.925; border-radius: 15px; display: block;">
+                    aaaa
+                </div>
             </div>
         </a>
         <a>
@@ -192,12 +197,13 @@ function time_difference($date)
 
     <div class="divUserPanel">
         <div class="userAvatar">
-            <img src="<?php echo $this->basePath().'/uploads/'.$pathUserAvatar; ?>" id="userAvatar" />
+            <img src="<?php echo $this->basePath().'/uploads/'.$bigAvatar; ?>" id="userAvatar" />
         </div>
         <div class="userInfo">
-            <div class="info name" id="avai-userid" name="<?php echo $datauser->getUserid(); ?>">
+            <div class="info name" id="avai-userid" name="<?php echo $actionUserID; ?>">
                 <?php echo $datauser->getLastname() .' '. $datauser->getFirstname(); ?>
             </div>
+            <div style="display: none" id="actionLocation" name="<?php echo $actionLocationID; ?>"></div>
             <div class="info age">
                 <div class="infoIcon age"></div>
                 <div class="infoContent age">
@@ -243,7 +249,49 @@ function time_difference($date)
                         }
                     ?>
                 </div>
-            </div>
+                <?php
+
+//                var_dump($checkFriend);die();
+                if($checkFriend == "HOME")
+                {
+                }
+                elseif($checkFriend == "ACCEPTED")
+                {
+                ?>
+                    <a href="#" style="margin-top:30px; " class="a-btn" id="unFriend">
+						<span class="a-btn-text">+</span>
+						<span class="a-btn-slide-text">Unfriend</span>
+						<span class="a-btn-icon-right"><span></span></span>
+					</a>
+
+                <?php
+                }
+                else
+                {
+                ?>
+                    <a href="#" style="margin-top:30px; " class="a-btn" id="addFriend">
+                        <span class="a-btn-text">+</span>
+                        <span class="a-btn-slide-text">
+                            <?php
+                            if($checkFriend == "SENT")
+                            {
+                                echo "Đã gửi";
+                            }
+                            elseif($checkFriend == "WAITTING")
+                            {
+                                echo "Đang chờ";
+                            }
+                            else
+                                echo "Kết bạn";
+                            ?>
+                        </span>
+                        <span class="a-btn-icon-right"><span></span></span>
+                    </a>
+                <?php
+                }
+
+                ?>
+                </div>
             <div class="logOut">
                 <div class="infoIcon logout"></div>
                 <a href="<?php echo $this->url('success', array('action' => 'logout')); ?>" style="color: white;"><div class="infoContent logout">Log Out</div></a>
@@ -255,14 +303,31 @@ function time_difference($date)
 
 <div class="divRight">
     <div class="divCover">
-        <img id="imgCover" src="<?php echo $this->basePath().'/uploads/'.$pathCover; ?>" />
+        <img id="imgCover" src="<?php echo $this->basePath().'/uploads/'.$imageCover; ?>" />
     </div>
+    <?php
+    if($checkFriend == "ACCEPTED" or $checkFriend =="HOME")
+    {
+
+
+    ?>
+
     <div class="statusBlock">
         <div class="statusType">
             <div id="clickStatus" style="cursor: pointer;" class="type normal">Trạng thái</div>
             <div id="clickShare" class="type share">Chia sẻ</div>
+
+            <?php
+            if($checkFriend == "HOME")
+            {
+            ?>
             <div id="clickImage" class="type image">Đăng Ảnh</div>
             <div id="clickVideo" class="type video">Đăng Video</div>
+
+            <?php
+            }
+            ?>
+
         </div>
         <div class="statusContent">
 
@@ -326,6 +391,10 @@ function time_difference($date)
         </div>
     </div>
 
+    <?php
+    }
+    ?>
+
 <!--  moi them vao  -->
 <!--    <div class="scroll-now" style="overflow: scroll; height: 800px; width: 100%;">-->
     <?php
@@ -339,18 +408,31 @@ function time_difference($date)
     arsort($arrayTrueActionID);
     foreach($arrayTrueActionID as $actionID)
     {
+        $isOnAnotherWall = false;
+        $checkUser  =  $arrayActuserAclocation[$actionID]['actionUser'];
+        $checkLocation  =  $arrayActuserAclocation[$actionID]['actionLocation'];
+        if($checkUser != $checkLocation)
+        {
+            $isOnAnotherWall = true;
+        }
 
-//        var_dump($arrayTrueActionID); die();
+//        var_dump($arrayActuserAclocation); die();
     ?>
     <div class="divAction">
         <div class="divStatus">
             <div class="statusAvatar">
-                <img src="<?php echo $this->basePath().'/uploads/'.$pathUserAvatar; ?>" />
+                <img src="
+                <?php
+                    echo $this->basePath().'/uploads/'. $infoUseronWal[$checkUser]['pathAvatar'];
+                ?>
+                " />
             </div>
             <div class="statusRightPanel">
                 <div class="statusPosition">
                     <span>
-                        <?php echo $datauser->getLastname() .' '. $datauser->getFirstname(); ?>
+                        <?php
+                        echo $infoUseronWal[$checkUser]['fullname'];
+                        ?>
                     </span> &curren;
                     <?php
                     echo getFullTime($arrayActionCreatedTime[$actionID]);
@@ -358,17 +440,11 @@ function time_difference($date)
                 </div>
                 <div class="statusContent">
                     <?php
-
-//                    var_dump($arrayTrueActionID); die();
-
-
+//                    var_dump($arrayActionType); die();
                     $statusID = $arrayActionType[$actionID];
-
-
 
                     if(substr($statusID,0,3) == "STT")
                     {
-
                         echo "<pre>".$arrayStatusContent[$statusID]."</pre>";
                     }
                     elseif(substr($statusID,0,3) == "IMG")
@@ -393,12 +469,10 @@ function time_difference($date)
                     </video>
 
                     <?php
-//                        var_dump($arrayALLSharePlace); die();
-//                        echo 'day la video';
+
                     }
-                    else
-                    {
-//                        $arrayALLSharePlace[$statusID][]
+                    else{
+
                     ?>
 
                         <div class="statusContent">
@@ -416,37 +490,46 @@ function time_difference($date)
 
                     <?php
                     }
+
                     ?>
                 </div>
                 <div class="statusFooter">
-                    <div class="summary">
-                        <a class="like" href="#">Like</a>
-                        <a class="comment" href="#">Comment</a>
-                        <a class="share" href="#">Share</a>
+                    <div class="summary" >
+                        <a class="like" name="<?php echo $actionID; ?>" style="cursor: pointer;" >Like</a>
+                        <a class="comment" href="javascript:void(0)">Comment</a>
+                        <a class="share" href="javascript:void(0)">Share</a>
                     </div>
                     <div class="icon">
-                        <a class="like" href="#"></a><span>30</span>
-                        <a class="comment" href="#"></a><span>30</span>
-                        <a class="share" href="#"></a><span>30</span>
+                        <a class="like" href="javascript:void(0)"></a><span>30</span>
+                        <a class="comment" href="javascript:void(0)"></a><span>30</span>
+                        <a class="share" href="javascript:void(0)"></a><span>30</span>
                     </div>
                 </div>
                 <div class="divComment" >
                 <?php
-                asort($allCommentID);
+                $names = $allCommentID;
+
+                usort($allCommentID, function($a, $b) {
+                    $a = substr($a, -10, 10);
+                    $b = substr($b, -10, 10);
+                    return strcmp($a, $b);
+                });
+
                 foreach($allCommentID as $comentid)
                 {
+
                     if(isset($arrayCommentContent[$actionID][$comentid]))
                     {
-
+//                        var_dump($allCommentID);die();
 
                 ?>
                     <div class="commentAction">
                         <div class="commentUserAvatar">
-                            <img src="<?php echo $this->basePath().'/uploads/'.$pathUserAvatar.'"' ?>">
+                            <img src="<?php echo $this->basePath().'/uploads/'.$infoUserCommented[$comentid]['pathAvatar'].'"' ?>">
                         </div>
                         <div class="commentRight">
                             <div class="commentContent"><div class="commentUserName">
-                                    <?php echo $datauser->getLastname() .' '. $datauser->getFirstname(); ?>
+                                    <?php echo $infoUserCommented[$comentid]['fullname']; ?>
                                 </div>
                                 <?php
                                     echo $arrayCommentContent[$actionID][$comentid];
@@ -472,10 +555,13 @@ function time_difference($date)
                 <?php
                     }
                 }
+
+                if($checkFriend == "ACCEPTED" or $checkFriend == "HOME")
+                {
                 ?>
                     <div class="commentCompose" id="placeNewCMT_<?php echo $actionID; ?>">
                         <div class="commentUserAvatar">
-                            <img src="<?php echo $this->basePath().'/uploads/'. $pathUserAvatar;?>"/>
+                            <img src="<?php echo $this->basePath().'/uploads/'. $smallAvatar;  ?>"/>
                         </div>
                         <form class="form-subPostCmt" name="<?php echo $actionID; ?>" id="fCmt<?php echo $actionID; ?>">
                             <div class="commentRight">
@@ -484,12 +570,16 @@ function time_difference($date)
                             <input type="submit" class="postComment" value="Post" />
                         </form>
                     </div>
+                    <?php
+                }
+                    ?>
                 </div>
             </div>
         </div>
     </div>
 
     <?php
+
         }
     ?>
         <!--   moi them vao     -->
@@ -565,8 +655,10 @@ function time_difference($date)
         {
             //timestamp là lúc colick vào postComment
             var timeNow = getTimestampNow();
-            var data = "cmtContent="+ cmtContent +"&timeCreatedComment="+timeNow + "&actionStatusSave="+actionIDforCMT;
-//            alert(data);
+            var actionUser = jQuery('#avai-userid').attr('name');
+            var actionLocation = jQuery('#actionLocation').attr('name');
+            var data = "actionUser=" +actionUser+"&actionLocation="+actionLocation+"&cmtContent="+ cmtContent +"&timeCreatedComment="+timeNow + "&actionStatusSave="+actionIDforCMT;
+            alert(data);
             jQuery.ajax({
                 type: "POST",
                 url: "<?php echo $this->url('success', array('action' => 'savecomment')); ?>",
@@ -605,7 +697,7 @@ function time_difference($date)
             divCommentUserAvatar.className = "commentUserAvatar";
 
             var imgCommentUserAvatar = document.createElement('img');
-            jQuery(imgCommentUserAvatar).attr('src', '<?php echo $this->basePath()."/uploads/". $pathUserAvatar;?>');
+            jQuery(imgCommentUserAvatar).attr('src', '<?php echo $this->basePath()."/uploads/". $smallAvatar;?>');
 
             var divCommentRight = document.createElement('div');
             divCommentRight.className='commentRight';
@@ -615,7 +707,7 @@ function time_difference($date)
 
             var divcommentUserName = document.createElement('div');
             divcommentUserName.className='commentUserName';
-            jQuery(divcommentUserName).text('<?php  echo $datauser->getLastname() ." ". $datauser->getFirstname(); ?>');
+            jQuery(divcommentUserName).text('<?php  echo $dataGuest->getLastname() .' '. $dataGuest->getFirstname(); ?>');
             jQuery(divcommentContent).append(commentContent);
 
             var divcommentFooter = document.createElement('div');
@@ -669,8 +761,12 @@ function time_difference($date)
         {
             var status = jQuery('#statusPostContent').val();
             var timeNow = getTimestampNow();
-//            alert(status);
-            var data = "status="+status+"&timestamp="+timeNow;
+            var actionLocation = jQuery('#actionLocation').attr('name');
+            var actionUser = jQuery('#avai-userid').attr('name');
+
+
+            var data = "status="+status+"&timestamp="+timeNow + "&actionUser=" +actionUser+"&actionLocation=" +actionLocation;
+            alert(data);
 
             jQuery.ajax({
                 type: "POST",
@@ -749,7 +845,8 @@ function time_difference($date)
             divStatusAvatar.className='statusAvatar';
 
             var imgDivStatusAvatar = document.createElement('img');
-            imgDivStatusAvatar.src='<?php echo $this->basePath().'/uploads/'.$pathUserAvatar; ?>';
+            var actionName = 'ACT'+timeStamp;
+            imgDivStatusAvatar.src="<?php echo $this->basePath().'/uploads/'.$smallAvatar; ?>";
 
             var divStatusRightPanel = document.createElement('div');
             divStatusRightPanel.className='statusRightPanel';
@@ -758,7 +855,7 @@ function time_difference($date)
             divstatusPosition.className='statusPosition';
 
             var spandivstatusPosition = document.createElement('span');
-            spandivstatusPosition.innerHTML='<?php echo $datauser->getLastname() .' '. $datauser->getFirstname(); ?>';
+            spandivstatusPosition.innerHTML='<?php echo $dataGuest->getLastname() .' '. $dataGuest->getFirstname(); ?>';
             jQuery(spandivstatusPosition).append("<p style='display: inline-block;color: #333; font-size: 12px;'>&curren; "+showdate+"</p>");
 
             var divstatusContent = document.createElement('div');
@@ -789,21 +886,21 @@ function time_difference($date)
 
             var tagaLikeCount = document.createElement('a');
             tagaLikeCount.className='like';
-            jQuery(tagaLikeCount).attr('href', '#');
+            jQuery(tagaLikeCount).attr('href', 'javascript:void(0)');
 
             var spanLikeCount = document.createElement('span');
             jQuery(spanLikeCount).text('30');
 
             var tagaCommentCount = document.createElement('a');
             tagaCommentCount.className='comment';
-            jQuery(tagaCommentCount).attr('href', '#');
+            jQuery(tagaCommentCount).attr('href', 'javascript:void(0)');
 
             var spanCommentCount = document.createElement('span');
             jQuery(spanCommentCount).text('30');
 
             var tagaShareCount = document.createElement('a');
             tagaShareCount.className = 'share';
-            jQuery(tagaShareCount).attr('href', '#');
+            jQuery(tagaShareCount).attr('href', 'javascript:void(0)');
 
             var spanShareCount = document.createElement('span');
             jQuery(spanShareCount).text('30');
@@ -819,7 +916,7 @@ function time_difference($date)
             divcommentUserAvatar.className='commentUserAvatar';
 
             var imgcommentUserAvatar = document.createElement('img');
-            imgcommentUserAvatar.src='<?php echo $this->basePath().'/uploads/'. $pathUserAvatar;?>';
+            imgcommentUserAvatar.src='<?php echo $this->basePath().'/uploads/'. $smallAvatar;?>';
 
             var formSubtmit = document.createElement('form');
             formSubtmit.className='form-subPostCmt';
@@ -1118,14 +1215,16 @@ function time_difference($date)
             var formdata  = new FormData(jQuery('#form-postShare')[0]);
             var reader = new FileReader();
             var value = reader.readAsDataURL(document.getElementById("btnLoadShare").files[0]);
-            var userid = jQuery('#avai-userid').attr('name');
+            var actionUser = jQuery('#avai-userid').attr('name');
+            var actionLocation = jQuery('#actionLocation').attr('name');
 //            alert(userid + descript+timeNow);
 
             formdata.append('image', value);
             formdata.append('timestamp', timeNow);
             formdata.append('descript', descript);
             formdata.append('placeName', placeName);
-            formdata.append('userid', userid);
+            formdata.append('actionUser', actionUser);
+            formdata.append('actionLocation', actionLocation);
 
             jQuery.ajax({
                 type: "POST",
@@ -1141,7 +1240,7 @@ function time_difference($date)
                     {
                         var pathImage = data;
                         alert('thanh cong');
-                        ajaxSaveNewSharePlace(userid, timeNow, placeName, descript, pathImage);
+                        ajaxSaveNewSharePlace(actionUser, actionLocation, timeNow, placeName, descript, pathImage);
                     }
                     else
                     {
@@ -1174,11 +1273,11 @@ function time_difference($date)
 
 //        alert(createHashTag('- _ Sông cầu _ !@#$%^&*()_+'));
 
-        function ajaxSaveNewSharePlace(userid, timeNow, placeName, descript, pathImage)
+        function ajaxSaveNewSharePlace(actionUser, actionLocation, timeNow, placeName, descript, pathImage)
         {
 
             var hashTag = createHashTag(placeName);
-            var dataval = "userid=" + userid+"&createdTime=" + timeNow+"&placeName="+placeName;
+            var dataval = "actionUser=" + actionUser+ "&actionLocation="+actionLocation+"&createdTime=" + timeNow+"&placeName="+placeName;
             dataval += "&descript="+descript+"&imageType=" +pathImage + "&hashTag=" + hashTag;
 
             alert(dataval);
@@ -1210,6 +1309,128 @@ function time_difference($date)
                 }
             });
             return false;
+        }
+
+        //FUNCTION FOR LIKE &SHARE
+
+        jQuery('div.summary > a.like').each(function(){
+            var buttonLike = jQuery(this);
+            buttonLike.click(function(){
+                var actionid = buttonLike.attr('name');
+                var timeStamp = getTimestampNow();
+                var userid = jQuery('#actionLocation').attr('name');
+
+                if(buttonLike.text() == "Like")
+                {
+                    setLikeStatus(actionid, timeStamp, userid, buttonLike);
+                }
+                else
+                {
+                    buttonLike.text('Like');
+                    setUnlikeStatus(actionid, timeStamp, userid, buttonLike);
+                }
+            });
+        });
+
+        //FUNCTION FOR ADD FRIEND
+        jQuery('#addFriend').click(function(){
+            var actionUser = jQuery('#avai-userid').attr('name');
+            var actionLocation = jQuery('#actionLocation').attr('name');
+            var friendStatus = "SENT";
+            var data = "actionUser=" + actionUser+"&actionLocation=" + actionLocation+ "&friendStatus="+friendStatus;
+
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('success', array('action' => 'addfriend')); ?>",
+                data: data,
+                async:false,
+                success: function(data) {
+                    alert(data);
+                    data = JSON.parse(data);
+                    var success = data['success'];
+                    if(success == "1")
+                    {
+                       alert("Yêu cầu kết bạn đã được gửi đi. Bạn hãy chờ xác nhận!");
+                    }
+                    else
+                    {
+                        alert('Bạn đã gửi yêu cầu kết bạn, hãy chờ xác nhận từ người này');
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        });
+
+        jQuery('#unFriend').click(function(){
+            var actionUser = jQuery('#avai-userid').attr('name');
+            var actionLocation = jQuery('#actionLocation').attr('name');
+            var friendStatus = "ACCEPTED";
+            var data = "actionUser=" + actionUser+"&actionLocation=" + actionLocation+ "&friendStatus="+friendStatus;
+
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('success', array('action' => 'unfriend')); ?>",
+                data: data,
+                async:false,
+                success: function(data) {
+                    alert(data);
+                    data = JSON.parse(data);
+                    var success = data['success'];
+                    if(success == "1")
+                    {
+                        alert("thanh cong");
+                    }
+                    else
+                    {
+                        alert('Bạn đã gửi yêu cầu kết bạn, hãy chờ xác nhận từ người này');
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        });
+
+        jQuery('#menuFriend').click(function(){
+
+        });
+
+        function setLikeStatus(actionid, timeStamp, userid, buttonLike)
+        {
+            var data = "actionid="+ actionid +"&timeStamp="+timeStamp + "&userid="+userid;
+            alert(data);
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('success', array('action' => 'savelikestatus')); ?>",
+                data: data,
+                async:false,
+                success: function(data) {
+                    alert(data);
+                    data = JSON.parse(data);
+                    var success = data['success'];
+                    if(success == "1")
+                    {
+                        buttonLike.text('Unlike');
+                    }
+                    else
+                    {
+                        alert('Đăng bình luận thất bại. Hãy thử lại sau một ít phút nữa.');
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+
+        function setUnlikeStatus(actionid, timeStamp, userid, buttonLike)
+        {
+
         }
 
 

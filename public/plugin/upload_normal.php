@@ -9,9 +9,9 @@ if(isset($_POST['timestamp']))
 {
     $createdTime = $_POST['timestamp'];
 }
-if(isset($_POST['userid']))
+if(isset($_POST['actionUser']))
 {
-    $userid = $_POST['userid'];
+    $userid = $_POST['actionUser'];
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

@@ -62,45 +62,87 @@ class UserpageController extends AbstractActionController
         else
         {
             date_default_timezone_set('Asia/Ho_Chi_Minh');
-
-            $identity = $result->getIdentity();
-            $userid = $identity->getUserid();
-            $dm = $this->getDocumentService();
-            //get model
             $successModel = new SuccessModel();
-            //get Service
             $dm = $this->getDocumentService();
+//            $dataInfo = "";
 
-            //get path for avatar and cover picture
-            $path = $successModel->getPathImageAvatarUser($userid, $dm, 'AVA');
-            $pathCover = $successModel->getPathImageAvatarUser($userid, $dm, 'COV');
+            $actionUser = $this->getUserIdentity()->getUserid();
+            $actionLocation = $this->params()->fromQuery('user');
 
-            //get content page: status, post image, change image.
-            $allContent = $successModel->getAllContentPrivatePage($userid, $userid, $dm);
+            if($actionLocation == null)
+            {
+                $actionLocation = $actionUser;
+            }
 
+
+            if($actionUser == $actionLocation)
+            {//dang o trang ca nhan cua chinh nguoi dung
+                $dataInfo        = $dataUserNow   = $successModel->getPrivateInfomationUser($actionUser, $dm);
+                $pathSmallAvatar = $pathBigAvatar = $successModel->getPathImageAvatarUser($actionUser, $dm, "AVA");
+                $pathCover       = $successModel->getPathImageAvatarUser($actionUser, $dm, 'COV');
+                $activityContent = $successModel->getAllContentPrivatePage($actionUser, $actionUser, $dm);
+                $checkFriend = "HOME";
+            }
+            else
+            {//dang o trang ca nhan ban be actionLocation
+                $dataInfo        = $successModel->getPrivateInfomationUser($actionLocation, $dm);
+                $dataUserNow     = $successModel->getPrivateInfomationUser($actionUser, $dm);
+                $pathSmallAvatar = $successModel->getPathImageAvatarUser($actionUser, $dm, "AVA");
+                $pathBigAvatar   = $successModel->getPathImageAvatarUser($actionLocation, $dm, "AVA");
+                $pathCover       = $successModel->getPathImageAvatarUser($actionLocation, $dm, 'COV');
+                $activityContent = $successModel->getAllContentPrivatePage($actionLocation, $actionLocation, $dm);
+                $checkFriend     = $successModel->checkFriend($actionUser, $actionLocation, $dm);
+            }
+
+            $infoUseronWal =  $successModel->getInfoUserByID($dm);
+            $infoUserCommented = $successModel->getInfoUserbyActionType($dm);
+//            var_dump($checkFriend); die();
 
             return array(
-                'datauser' => $identity,
-                'pathUserAvatar'        => $path['pathAvaUser'],
-                'pathCover'             => $pathCover['pathAvaUser'],
+                //tra ve actionUser va actionLocation
+                'actionUserID'              => $actionUser,
+                'actionLocationID'          => $actionLocation,
+                'infoUseronWal'             => $infoUseronWal,
+                'infoUserCommented'         => $infoUserCommented,
+                //check Friend
+                'checkFriend'               => $checkFriend,
+                //lay thong tin ca nhan cua user
+                'datauser'                  => $dataInfo,
+                'dataGuest'                 => $dataUserNow,
+                //lay link anh dai dien & anh cover user
+                'smallAvatar'               => $pathSmallAvatar,
+                'bigAvatar'                 => $pathBigAvatar,
+                'imageCover'                => $pathCover,
+                //lay thong tin toan bo activity Content cua user: STT PLACE IMAGE VIDEO
+                    //danh sach cac actionID
+                    'arrayTrueActionID'     => $activityContent['arrayTrueActionID'],
+                    //lay danh sach cac action Type
+                    'arrayActionType'       => $activityContent['arrayActionType'],
+                    //lay array status content
+                    'arrayStatusContent'    => $activityContent['arrayStatusContent'],
+                    //lay array image content
+                    'arrayPathALLIMAGE'     => $activityContent['arrayPathALLIMAGE'],
+                    //lay array video content
+                    'arrayPathALLVIDEO'     => $activityContent['arrayPathALLVIDEO'],
+                    //lay array share content
+                    'arrayALLSharePlace'    => $activityContent['arrayALLSharePlace'],
+                    //lay thoi gian createdtime action
+                    'arrayActionCreatedTime'=> $activityContent['arrayActionCreatedTime'],
+                //Lay toan bo commentID tuong ung voi actionID
+                    //lay array commentID
+                    'allCommentID'          => $activityContent['allCommentID'],
+                    //lay array comment content
+                    'arrayCommentContent'   => $activityContent['arrayCommentContent'],
 
-                'arrayTrueActionID'       => $allContent['arrayTrueActionID'],
+                //test
+                'arrayActuserAclocation' => $activityContent['arrayActuserAclocation'],
+
                 //Bang Action
-                'arrayActionUser'       => $allContent['arrayActionUser'],
-                'arrayActionLocation'   => $allContent['arrayActionLocation'],
-                'arrayActionType'       => $allContent['arrayActionType'],
-                'arrayActionCreatedTime'=> $allContent['arrayActionCreatedTime'],
-                //Bang Status
-                'arrayStatusContent'    => $allContent['arrayStatusContent'],
-                //Bang Comment
-                'arrayCommentContent'    => $allContent['arrayCommentContent'],
-                'allCommentID' => $allContent['allCommentID'],
-                //bang Image
-                'arrayPathALLIMAGE'     => $allContent['arrayPathALLIMAGE'],
-                //bang video
-                'arrayPathALLVIDEO'     => $allContent['arrayPathALLVIDEO'],
-                //bang place
-                'arrayALLSharePlace'    => $allContent['arrayALLSharePlace'],
+//                'arrayActionUser'       => $allContent['arrayActionUser'],
+//                'arrayActionLocation'   => $allContent['arrayActionLocation'],
+//
+//                'arrayActionCreatedTime'=> $allContent['arrayActionCreatedTime'],
+
             );
         }
     }
@@ -110,15 +152,17 @@ class UserpageController extends AbstractActionController
     public function savestatusAction()
     {
         $response = $this->getResponse();
-        $status = $this->params()->fromPost('status');
-        $userid = $this->getUserIdentity()->getUserid();
+        $data = $this->params()->fromPost();
+        $status = $data['status'];
+        $actionUser = $data['actionUser'];
+        $actionLocation = $data['actionLocation'];
         $createdTime = $this->params()->fromPost('timestamp');
 
         $documentService = $this->getDocumentService();
 
         $successModel = new SuccessModel();
 
-        $result = $successModel->saveNewStatus($status, $userid, $createdTime,$documentService);
+        $result = $successModel->saveNewStatus($status, $actionUser,$actionLocation, $createdTime,$documentService);
 
         if($result)
         {
@@ -148,8 +192,7 @@ class UserpageController extends AbstractActionController
         $successModel = new SuccessModel();
 
         $data = $this->params()->fromPost();
-        $userid = $this->getUserIdentity()->getUserid();
-        $result = $successModel->saveNewComment($data, $userid, $dm);
+        $result = $successModel->saveNewComment($data, $dm);
 
         if($result)
         {
@@ -211,8 +254,8 @@ class UserpageController extends AbstractActionController
         return $response->setContent(\Zend\Json\Json::encode(array(
             'success' => 1,
             'userid' => $userid,
-            'pathavatar' => $pathAva['pathAvaUser'],
-            'pathCover' => $pathCover['pathAvaUser'],)));
+            'pathavatar' => $pathAva,
+            'pathCover' => $pathCover,)));
     }
 
     //AJAX UPDATE INFO
@@ -447,4 +490,88 @@ class UserpageController extends AbstractActionController
             )));
         }
     }
+
+    //FUNCTION FOR LIKE STATUS
+    public function savelikestatusAction()
+    {
+        $response = $this->getResponse();
+        $data = $this->params()->fromPost();
+        $dm = $this->getDocumentService();
+        $successModel = new SuccessModel();
+        $result = $successModel->saveLikeStatus($data, $dm);
+
+        if($result)
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 1,
+            )));
+        }
+        else
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0,
+            )));
+        }
+    }
+
+    //FUNCTION FOR Ket ban
+
+    public function addfriendAction()
+    {
+        $response = $this->getResponse();
+        $data = $this->params()->fromPost();
+        $dm = $this->getDocumentService();
+        $successModel = new SuccessModel();
+
+        $check = $successModel->checkFriend($data['actionUser'], $data['actionLocation'], $dm);
+        if($check== null)
+        {
+            $result = $successModel->sendRequestAddFriend($data, $dm);
+
+            if($result)
+            {
+                return $response->setContent(\Zend\Json\Json::encode(array(
+                    'success' => 1,
+                )));
+            }
+            else
+            {
+                return $response->setContent(\Zend\Json\Json::encode(array(
+                    'success' => 0,
+                )));
+            }
+        }
+        else
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0,
+            )));
+        }
+
+    }
+
+    public function unfriendAction()
+    {
+        $response = $this->getResponse();
+        $data = $this->params()->fromPost();
+        $dm = $this->getDocumentService();
+        $successModel = new SuccessModel();
+
+        $result = $successModel->sendRequestUnFriend($data, $dm);
+        if($result)
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 1,
+            )));
+        }
+        else
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0,
+            )));
+        }
+
+
+    }
+
 }
