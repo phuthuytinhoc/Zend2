@@ -8,7 +8,7 @@ return array(
         'DoctrineMongoODMModule',
         'Application',
         'Userpage',
-//        'Loginpage',
+        'Example',
     ),
 
     // These are various options for the listeners attached to the ModuleManager

@@ -927,6 +927,25 @@ class SuccessModel
 
     //FUNCTION FOR FRIEND
 
+    public function getRequestFriend($actionUser, $actionLocation, $dm)
+    {
+        $doc1=$dm->createQueryBuilder('Application\Document\Friend')
+
+            ->field('frienduserrecieve')->equals($actionUser)
+            ->field('friendstatus')->equals("SENT")
+            ->getQuery()
+            ->execute();
+
+
+        if(isset($doc1))
+        {
+            return $doc1->count();
+        }
+        else
+            return null;
+
+    }
+
     public function saveNewFriend($data, $dm)
     {
 

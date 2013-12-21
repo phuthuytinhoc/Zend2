@@ -174,10 +174,25 @@ function time_difference($date)
         <a href="#">
             <div class="menuSub friend">
                 <div class="divMenuIcon friend"></div>
-                <div class="divMenuName friend" id="menuFriend" data-notifications="10">Friend</div>
-                <div style="width: 300px; height: 300px; position: relative; left: 98px; background-color: black;
-                left: -303px;top: 15px;opacity: 0.925; border-radius: 15px; display: block;">
-                    aaaa
+                <?php
+                if($getNotifFriend != null && $getNotifFriend > 0)
+                {
+                ?>
+                <div class="divMenuName friend" id="menuFriend" data-notifications="<?php echo $getNotifFriend;?>">Friend</div>
+
+                <?php
+                }
+                else
+                {
+                ?>
+                    <div class="divMenuName friend" id="menuFriend" >Friend</div>
+                <?php
+                }
+                ?>
+                <div class="arrow_box" style=" position: relative; display: none;">
+                    <div>
+                        <img src="">
+                    </div>
                 </div>
             </div>
         </a>

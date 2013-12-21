@@ -10,6 +10,7 @@
 namespace Userpage\Controller;
 
 use Symfony\Component\Console\Application;
+use Userpage\Model\FriendModel;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Session\Container;
 use Zend\Session\SessionManager;
@@ -74,7 +75,6 @@ class UserpageController extends AbstractActionController
                 $actionLocation = $actionUser;
             }
 
-
             if($actionUser == $actionLocation)
             {//dang o trang ca nhan cua chinh nguoi dung
                 $dataInfo        = $dataUserNow   = $successModel->getPrivateInfomationUser($actionUser, $dm);
@@ -96,7 +96,8 @@ class UserpageController extends AbstractActionController
 
             $infoUseronWal =  $successModel->getInfoUserByID($dm);
             $infoUserCommented = $successModel->getInfoUserbyActionType($dm);
-//            var_dump($checkFriend); die();
+            $getNotifFriend = $successModel->getRequestFriend($actionUser, $actionLocation, $dm);
+//            var_dump('gia tri la:' .$getNotifFriend); die();
 
             return array(
                 //tra ve actionUser va actionLocation
@@ -106,6 +107,7 @@ class UserpageController extends AbstractActionController
                 'infoUserCommented'         => $infoUserCommented,
                 //check Friend
                 'checkFriend'               => $checkFriend,
+                'getNotifFriend'            => $getNotifFriend,
                 //lay thong tin ca nhan cua user
                 'datauser'                  => $dataInfo,
                 'dataGuest'                 => $dataUserNow,
@@ -223,7 +225,15 @@ class UserpageController extends AbstractActionController
         $result = new ViewModel();
         $result->setTemplate('userpage/userpage/friend');
 
-        return $result;
+        $dm = $this->getDocumentService();
+        $friendModel = new FriendModel();
+        $actionUser = $this->getUserIdentity()->getUserid();
+
+        $listFriend = $friendModel->getListFriend($actionUser, $dm);
+
+//        var_dump($listFriend); die();
+
+        return null;
 
     }
 

@@ -1,0 +1,88 @@
+<br>
+<br>
+<br>
+<div style="margin-left: 100px;">
+    <form method="post">
+        <input type="text" id="firstname" placeholder="Nhập Tên...">
+        <input type="text" id="lastname" placeholder="Nhập Họ...">
+        <input type="button" id="insert" value="Insert">
+    </form>
+</div>
+
+<div style="margin-top: 30px; margin-left: 100px;">
+    <input type="button" id="select" value="Select">
+    <div id="resultContent"></div>
+</div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+
+
+        //Click vao Insert
+        jQuery('#insert').click(function(){
+            var firstname = jQuery('#firstname').val();
+            var lastname = jQuery('#lastname').val();
+            var data = "firstname=" + firstname + "&lastname=" + lastname;
+            alert(data);
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('example', array('action' => 'insert')); ?>",
+                data: data,
+                async:false,
+                success: function(data) {
+                    alert(data);
+                    data = JSON.parse(data);
+
+                    if(data['success'] == "1")
+                    {
+                        alert('insert thanh cong');
+                    }
+                    else
+                    {
+                        alert('Insert that bai');
+                    }
+
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+
+        });
+
+
+        //Click vao show thong tin vua insert ra
+        jQuery('#select').click(function(){
+
+            var data = "";
+            alert(data);
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('example', array('action' => 'select')); ?>",
+                data: data,
+                async:false,
+                success: function(data) {
+                    alert(data);
+                    data = JSON.parse(data);
+
+                    if(data['success'] == "1")
+                    {
+
+                        jQuery('#resultContent').text(data['value']);
+                    }
+                    else
+                    {
+                        alert('select that bai');
+                    }
+
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        });
+
+    });
+</script>
