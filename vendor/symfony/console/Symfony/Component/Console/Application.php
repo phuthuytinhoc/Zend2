@@ -56,13 +56,13 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Application
 {
-    private $commands;
+    private $commands = array();
     private $wantHelps = false;
     private $runningCommand;
     private $name;
     private $version;
-    private $catchExceptions;
-    private $autoExit;
+    private $catchExceptions = true;
+    private $autoExit = true;
     private $definition;
     private $helperSet;
     private $dispatcher;
@@ -80,9 +80,6 @@ class Application
     {
         $this->name = $name;
         $this->version = $version;
-        $this->catchExceptions = true;
-        $this->autoExit = true;
-        $this->commands = array();
         $this->helperSet = $this->getDefaultHelperSet();
         $this->definition = $this->getDefaultInputDefinition();
 
@@ -407,8 +404,8 @@ class Application
             return;
         }
 
-        if (null === $command->getAliases()) {
-            throw new \InvalidArgumentException(sprintf('You must call the parent constructor in "%s::__construct()"', get_class($command)));
+        if (null === $command->getDefinition()) {
+            throw new \LogicException(sprintf('Command class "%s" is not correctly initialized. You probably forgot to call the parent constructor.', get_class($command)));
         }
 
         $this->commands[$command->getName()] = $command;
@@ -518,8 +515,8 @@ class Application
         }
 
         $exact = in_array($namespace, $namespaces, true);
-        if (1 < count($namespaces) && !$exact) {
-            throw new \InvalidArgumentException(sprintf('The namespace "%s" is ambiguous (%s).', $namespace, $this->getAbbreviationSuggestions($namespaces)));
+        if (count($namespaces) > 1 && !$exact) {
+            throw new \InvalidArgumentException(sprintf('The namespace "%s" is ambiguous (%s).', $namespace, $this->getAbbreviationSuggestions(array_values($namespaces))));
         }
 
         return $exact ? $namespace : reset($namespaces);
@@ -849,16 +846,12 @@ class Application
 
         if (true === $input->hasParameterOption(array('--quiet', '-q'))) {
             $output->setVerbosity(OutputInterface::VERBOSITY_QUIET);
-        } elseif ($input->hasParameterOption(array('--verbose', '-v', '-vv', '-vvv'))) {
-            $verbosity = 1;
-            if ($input->hasParameterOption('--verbose')) {
-                $verbosity = min(max((int) $input->getParameterOption('--verbose'), 1), 3);
-            }
-            if ($input->hasParameterOption('-vvv') || $verbosity === 3) {
+        } else {
+            if ($input->hasParameterOption('-vvv') || $input->hasParameterOption('--verbose=3') || $input->getParameterOption('--verbose') === 3) {
                 $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
-            } elseif ($input->hasParameterOption('-vv') || $verbosity === 2) {
+            } elseif ($input->hasParameterOption('-vv') || $input->hasParameterOption('--verbose=2') || $input->getParameterOption('--verbose') === 2) {
                 $output->setVerbosity(OutputInterface::VERBOSITY_VERY_VERBOSE);
-            } else {
+            } elseif ($input->hasParameterOption('-v') || $input->hasParameterOption('--verbose=1') || $input->hasParameterOption('--verbose') || $input->getParameterOption('--verbose')) {
                 $output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
             }
         }
@@ -933,7 +926,7 @@ class Application
 
             new InputOption('--help',           '-h', InputOption::VALUE_NONE, 'Display this help message.'),
             new InputOption('--quiet',          '-q', InputOption::VALUE_NONE, 'Do not output any message.'),
-            new InputOption('--verbose',        '-v|vv|vvv', InputOption::VALUE_OPTIONAL, 'Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug'),
+            new InputOption('--verbose',        '-v|vv|vvv', InputOption::VALUE_NONE, 'Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug'),
             new InputOption('--version',        '-V', InputOption::VALUE_NONE, 'Display this application version.'),
             new InputOption('--ansi',           '',   InputOption::VALUE_NONE, 'Force ANSI output.'),
             new InputOption('--no-ansi',        '',   InputOption::VALUE_NONE, 'Disable ANSI output.'),
