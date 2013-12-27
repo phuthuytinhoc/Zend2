@@ -18,7 +18,7 @@ return array(
                 'server'           => 'localhost',
                 'port'             => '27017',
                 'connectionString' => null,
-                'user'             => "hungnguyen",
+                'user'             => "root",
                 'password'         => "123456",
                 'dbname'           => "facebook",
                 'options'          => array()

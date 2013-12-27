@@ -5,6 +5,7 @@
     <form method="post">
         <input type="text" id="firstname" placeholder="Nhập Tên...">
         <input type="text" id="lastname" placeholder="Nhập Họ...">
+        <input type="text" id="userid" placeholder="User ID...">
         <input type="button" id="insert" value="Insert">
     </form>
 </div>
@@ -12,6 +13,12 @@
 <div style="margin-top: 30px; margin-left: 100px;">
     <input type="button" id="select" value="Select">
     <div id="resultContent"></div>
+</div>
+
+<div style="margin-top: 30px; margin-left: 100px;">
+    <input type="text" id="useriddelete" placeholder="UserID...">
+    <input type="button" id="delete" value="Delete">
+    <div id="deletecontent"></div>
 </div>
 
 <script type="text/javascript">
@@ -22,20 +29,21 @@
         jQuery('#insert').click(function(){
             var firstname = jQuery('#firstname').val();
             var lastname = jQuery('#lastname').val();
-            var data = "firstname=" + firstname + "&lastname=" + lastname;
-            alert(data);
+            var userid = jQuery('#userid').val();
+            var data = "firstname=" + firstname + "&lastname=" + lastname + '&userid=' + userid;
             jQuery.ajax({
                 type: "POST",
                 url: "<?php echo $this->url('example', array('action' => 'insert')); ?>",
                 data: data,
                 async:false,
                 success: function(data) {
-                    alert(data);
                     data = JSON.parse(data);
 
                     if(data['success'] == "1")
                     {
-                        alert('insert thanh cong');
+                        jQuery('#firstname').val('');
+                        jQuery('#lastname').val('');
+                        jQuery('#userid').val('');
                     }
                     else
                     {
@@ -53,7 +61,7 @@
 
 
         //Click vao show thong tin vua insert ra
-        jQuery('#select').click(function(){
+        jQuery('#dfdsf').click(function(){
 
             var data = "";
             alert(data);
@@ -78,10 +86,50 @@
 
                 },
                 error: function() {
-                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                    alert("H? th?ng ?ang b?o trì, xin hãy th? l?i sau m?t ít phút n?a!");
                 }
             });
             return false;
+        });
+
+        jQuery('#select').on('click', function() {
+            jQuery.ajax({
+               url: '<?php echo $this->url('example', array('action' => 'select')); ?>',
+               type: 'post',
+               data: '',
+               async: false,
+               success: function(data) {
+                   data = JSON.parse(data);
+                   if (data['success'] == 1) {
+                       jQuery('#resultContent').html(data['fristname']);
+                   }
+               },
+               error: function(data) {
+                   alert('loi');
+               }
+            });
+        });
+
+        jQuery('#delete').on('click', function() {
+            var userid =  jQuery('#useriddelete').val();
+            var data = 'userid=' + userid;
+
+            jQuery.ajax({
+                url: '<?php echo $this->url("example", array("action" => "delete")) ?>',
+                type: 'post',
+                data: data,
+                async:false,
+                success: function(data) {
+                    data = JSON.parse(data);
+                    if (data['success'] == 1) {
+                        jQuery('#deletecontent').html('thanh cong');
+                        jQuery('#useriddelete').val('');
+                    }
+                },
+                error: function(data) {
+                    alert('loi');
+                }
+            });
         });
 
     });
