@@ -1,8 +1,55 @@
+<?php
+// Time Difference
+function time_difference($date)
+{
+    if(empty($date)) {
+        return "unidentifed";
+    }
+    $periods = array("giây", "phút", "giờ", "ngày", "tuần", "tháng", "năm", "thập kỷ");
+    $lengths = array("60","60","24","7","4.35","12","10");
+    $now = time();
+// $unix_date = strtotime($date);
+    $unix_date = $date;
+    // Check validity of date
+
+    if(empty($unix_date)) {
+        return "Bad date";
+
+    }
+    // Determine tense of date
+
+    if($now > $unix_date) {
+        $difference = $now - $unix_date;
+        $tense = "trước"; } else {
+        $difference = $unix_date - $now;
+        $tense = "vừa mới";
+    }
+    for($j = 0; $difference >= $lengths[$j] && $j < count($lengths)-1; $j++) {
+        $difference /= $lengths[$j];
+    }
+
+    $difference = round($difference);
+
+    if($difference != 1) {
+        $periods[$j].= " ";
+    }
+    return "$difference $periods[$j] {$tense}";
+}
+
+function getFullTime($date)
+{
+    $value  = ' lúc '.date('H', $date). ' giờ ';
+    $value .= date('i', $date) . ' phút';
+    $value .= ' ngày '.date('d/m/Y', $date);
+    return $value;
+}
+?>
+
 <section class="userInfo">
     <div class="info">
         <div class="userAvatar">
             <img alt="User Name" src="<?php echo $this->basePath().'/uploads/'.$useravatar; ?>" />
-            <span><a href="#"><?php echo $userdata->getFirstName(). ' ' . $userdata->getLastName() ?></a></span>
+            <span><a href="<?php echo $this->basePath() ?>"><?php echo $userdata->getLastName(). ' ' . $userdata->getFirstName() ?></a></span>
         </div>
     </div>
     <div class="showMe">
@@ -14,102 +61,154 @@
 
 <section class="newsInfo">
     <div class="news friendNews">
+
+        <?php $i = 0; foreach ($actionlist as $action) { ?>
+            <?php if ($action['type'] != 'PLA') { ?>
         <div class="friendNews-block">
             <div class="friendNews-block-avatar">
-                <img alt="User Name" src="<?php echo $this->basePath();?>/img/1.Avatar-200x200.jpg" />
-                <span>John Smith</span>
+                <img alt="User Name" src="<?php echo $this->basePath();?>/uploads/<?php echo $action['avatarpath']; ?>" />
+                <span><a href="<?php echo $this->basePath().'/success?user='.$action['actionuser'] ?>"><?php echo $action['username'] ?></a></span>
             </div>
             <div class="friendNews-block-content">
                 <div class="time-content">
-                    <span>vừa đăng</span>
+                    <span title="<?php echo getFullTime($action['createdtime']); ?>">
+                        <?php if ($action['actionuser'] != $action['actionlocation']): ?>
+                            <?php echo '> '.'<a href="'.$this->basePath().'/success?user='.$action['actionlocation'].'">'.$action['actionlocationname'].'</a>'.'<br>' ?>
+                            <?php echo time_difference($action['createdtime']); ?>
+                        <?php endif; ?>
+                        <?php if ($action['actionuser'] == $action['actionlocation']): ?>
+                            <?php echo time_difference($action['createdtime']); ?>
+                            <?php if ($action['type'] == 'IMG'): ?>
+                                <span> đã đăng ảnh</span>
+                            <?php elseif ($action['type'] == 'VID'): ?>
+                                <span> đã đăng video</span>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    </span>
                 </div>
                 <div class="content-content">
-                    <p>Hôm nay ngày gì mà lạnh thế ko biết :-S</p>
+                    <?php if ($action['type'] == 'STT'): ?>
+                        <pre><?php echo $action['content']; ?></pre>
+                    <?php endif ?>
+                    <?php if ($action['type'] == 'IMG'): ?>
+                        <?php if($action['content']): ?>
+                            <pre class="content-a" style="display: none"><?php echo $action['content'] ?></pre>
+                            <img src="<?php echo $this->basePath(); ?>/uploads/<?php echo $action['mediapath'] ?>">
+                        <?php else: ?>
+                            <img src="<?php echo $this->basePath(); ?>/uploads/<?php echo $action['mediapath'] ?>">
+                        <?php endif; ?>
+                    <?php endif; ?>
+                    <?php if ($action['type'] == 'VID'): ?>
+                        <?php if($action['content']): ?>
+                            <pre class="content-a" style="display: none"><?php echo $action['content'] ?></pre>
+                            <video id="example_video_1" class="video-js vjs-default-skin" controls preload="true" width="90" height="auto"
+                                   poster="<?php echo $this->basePath().'/img/Logo_Video.png'; ?>"
+                                   data-setup="{}">
+                                <source src="<?php echo $this->basePath().'/uploads/'.$action['mediapath'];?>"
+                                        type='video/mp4'>
+                            </video>
+                        <?php else: ?>
+                            <video id="example_video_1" class="video-js vjs-default-skin" controls preload="true" width="90" height="auto"
+                                   poster="<?php echo $this->basePath().'/img/Logo_Video.png'; ?>"
+                                   data-setup="{}">
+                                <source src="<?php echo $this->basePath().'/uploads/'.$action['mediapath'];?>"
+                                        type='video/mp4'>
+                            </video>
+                        <?php endif; ?>
+                    <?php endif; ?>
                 </div>
                 <div class="content-like-comment-share">
-                    <a href="#">Thích</a>
-                    <a href="#">Bình luận</a>
+                    <?php if ($action['checklike'] == 0): ?>
+                        <a id="like-<?php echo $action['actionid'] ?>" class="action-like" name="<?php echo $action['actionid'] ?>" href="#">Thích</a>
+                    <?php endif; ?>
+                    <?php if ($action['checklike'] == 1): ?>
+                        <a id="like-<?php echo $action['actionid'] ?>" class="action-like" name="<?php echo $action['actionid'] ?>" href="#">Không thích</a>
+                    <?php endif; ?>
+                    <a href="#">Bình luận <span>(<?php echo $action['commentnumber'] ?>)</span></a>
                     <a href="#">Chia sẻ</a>
-                    <img src="images/star1.png"><span> 12 người thích điều này</span>
+                    <?php if ($action['likenumber'] > 0): ?>
+                        <?php if($action['checklike'] == 0): ?>
+                            <div  id="likestatus-<?php echo $action['actionid'] ?>">
+                                <img src="<?php echo $this->basePath(); ?>/img/star1.png"><span> <?php echo $action['likenumber']; ?> người thích điều này</span>
+                            </div>
+                        <?php elseif($action['checklike'] == 1) : ?>
+                            <?php if(($action['likenumber'] - 1) > 0): ?>
+                            <div id="likestatus-<?php echo $action['actionid'] ?>">
+                                <img src="<?php echo $this->basePath(); ?>/img/star1.png"><span> Bạn và <?php echo ($action['likenumber'] - 1); ?> người thích điều này</span>
+                            </div>
+                                <?php else: ?>
+                                <div id="likestatus-<?php echo $action['actionid'] ?>">
+                                    <img src="<?php echo $this->basePath(); ?>/img/star1.png"><span> Bạn thích điều này</span>
+                                </div>
+                                <?php endif; ?>
+                        <?php endif; ?>
+                    <?php elseif ($action['likenumber'] == 0): ?>
+                         <div id="likestatus-<?php echo $action['actionid'] ?>"></div>
+                    <?php endif; ?>
+                </div>
+                <div class="comment-block">
+                <?php if (isset($action['comment'])): ?>
+                    <div class="comment-block-content">
+                        <?php foreach($action['comment'] as $comment): ?>
+                            <div class="comment-content">
+                                <div class="user-avatar">
+                                    <img alt="<?php echo $comment['username'] ?>" src="<?php echo $this->basePath();?>/uploads/<?php echo $comment['avatarpath']; ?>" />
+                                </div>
+                                <div class="comment-detail">
+                                    <div class="user-name">
+                                        <?php echo $comment['username'] ?>
+                                    </div>
+                                    <div class="comment-time">
+                                        <span title="<?php echo getFullTime($comment['createdtime']); ?>">
+                                            <?php echo time_difference($comment['createdtime']); ?>
+                                        </span>
+                                    </div>
+                                    <div class="comment-content-detail">
+                                        <?php echo $comment['content'] ?>
+                                    </div>
+                                    <div class="comment-like">
+                                        <a id="like-<?php echo $comment['actionid'] ?>" class="action-like" name="<?php echo $comment['actionid'] ?>" href="#">
+                                            <?php if($comment['checklike'] == 1): ?>
+                                                Không thích
+                                            <?php else: ?>
+                                                Thích
+                                            <?php endif; ?>
+                                        </a>
+                                        <span id="likestatus-<?php echo $comment['actionid'] ?>">
+                                            <?php if($comment['likenumber'] >= 1): ?>
+                                                <img src="<?php echo $this->basePath(); ?>/img/star1.png">
+                                                <?php if($comment['checklike'] == 1 && $comment['likenumber'] == 1): ?>
+                                                    <span>Bạn thích điều này</span>
+                                                <?php elseif ($comment['checklike'] == 1 && $comment['likenumber'] > 1): ?>
+                                                    <span>Bạn và <?php echo ($comment['likenumber']-1) ?> người thích điều này</span>
+                                                <?php endif; ?>
+                                                <?php if ($comment['checklike'] == 0): ?>
+                                                    <span><?php echo ($comment['likenumber']) ?> người thích điều này</span>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <div class="comment-block-content">
+                    </div>
+                <?php endif; ?>
+                    <div class="comment-compose">
+                        <div class="user-avatar">
+                            <img alt="User Name" src="<?php echo $this->basePath().'/uploads/'.$useravatar; ?>" />
+                        </div>
+                        <div class="txt-compose">
+                            <textarea class="txt-comment" placeholder="Nhập bình luận của bạn ..."></textarea>
+                            <input class="btn-comment" name="<?php echo $action['actionid'] ?>" type="button" value="Bình luận">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="friendNews-block">
-            <div class="friendNews-block-avatar">
-                <img alt="User Name" src="<?php echo $this->basePath();?>/img/2.Avatar-200x200.jpg" />
-                <span>Adam Culi</span>
-            </div>
-            <div class="friendNews-block-content">
-                <div class="time-content">
-                    <span>vào 10 phút trước</span>
-                </div>
-                <div class="content-content">
-                    <p>Lạnh teo trYm rồi :((</p>
-                </div>
-                <div class="content-like-comment-share">
-                    <a href="#">Thích</a>
-                    <a href="#">Bình luận</a>
-                    <a href="#">Chia sẻ</a>
-                </div>
-            </div>
-        </div>
-        <div class="friendNews-block">
-            <div class="friendNews-block-avatar">
-                <img alt="User Name" src="<?php echo $this->basePath();?>/img/3.Avatar-200x200.jpg" />
-                <span>Peter Fever</span>
-            </div>
-            <div class="friendNews-block-content">
-                <div class="time-content">
-                    <span>vào 20 phút trước</span>
-                </div>
-                <div class="content-content">
-                    <p>Chắc ngày mai có tuyết rơi =))</p>
-                </div>
-                <div class="content-like-comment-share">
-                    <a href="#">Thích</a>
-                    <a href="#">Bình luận</a>
-                    <a href="#">Chia sẻ</a>
-                </div>
-            </div>
-        </div>
-        <div class="friendNews-block">
-            <div class="friendNews-block-avatar">
-                <img alt="User Name" src="<?php echo $this->basePath();?>/img/4.Avatar-200x200.jpg" />
-                <span>Jean Charle</span>
-            </div>
-            <div class="friendNews-block-content">
-                <div class="time-content">
-                    <span>vào 2 tiếng trước</span>
-                </div>
-                <div class="content-content">
-                    <p>Sắp tới Noel rồi, phải kiếm gấu thôi :"></p>
-                </div>
-                <div class="content-like-comment-share">
-                    <a href="#">Thích</a>
-                    <a href="#">Bình luận</a>
-                    <a href="#">Chia sẻ</a>
-                </div>
-            </div>
-        </div>
-        <div class="friendNews-block">
-            <div class="friendNews-block-avatar">
-                <img alt="User Name" src="<?php echo $this->basePath();?>/img/4.Avatar-200x200.jpg" />
-                <span>Jean Charle</span>
-            </div>
-            <div class="friendNews-block-content">
-                <div class="time-content">
-                    <span>vào 2 tiếng trước</span>
-                </div>
-                <div class="content-content">
-                    <p>Sắp tới Noel rồi, phải kiếm gấu thôi :"></p>
-                </div>
-                <div class="content-like-comment-share">
-                    <a href="#">Thích</a>
-                    <a href="#">Bình luận</a>
-                    <a href="#">Chia sẻ</a>
-                </div>
-            </div>
-        </div>
+        <?php }} ?>
     </div>
     <div class="news placeNews">
         <div class="placeNews-block">
@@ -132,35 +231,121 @@
                 </div>
             </div>
         </div>
-        <div class="placeNews-block hashtag">
-            <div class="placeNews-block-avatar">
-                <img alt="User Name" src="<?php echo $this->basePath();?>/img/Avatar-200x200.jpg" />
-                <span>Xu Bi</span>
+        <?php $i = 0; foreach ($actionlist as $action) { ?>
+        <?php if ($action['type'] == 'PLA') { ?>
+            <div class="placeNews-block hashtag">
+                <div class="placeNews-block-avatar">
+                    <img alt="User Name" src="<?php echo $this->basePath();?>/uploads/<?php echo $action['avatarpath'] ?>" />
+                    <span><a href="<?php echo $this->basePath().'/success?user='.$action['actionuser'] ?>"><?php echo $action['username'] ?></a> </span>
+                </div>
+                <div class="placeNews-block-content">
+                    <div class="time-content">
+                        <span title="<?php echo getFullTime($action['createdtime']); ?>"><?php echo time_difference($action['createdtime']); ?></span>
+                    </div>
+                    <div class="content-content">
+                        <div class="status-place-image">
+                            <img src="<?php echo $this->basePath();?>/uploads/<?php echo $action['mediapath'] ?>">
+                        </div>
+                        <div class="status-place-name">
+                            <span class="name"><?php echo $action['placename'] ?></span><br>
+                            <span class="hashtag"><?php echo $action['placehashtag'] ?></span>
+                        </div>
+                        <div class="status-place-des">
+                            <p><?php echo $action['content'] ?></p>
+                        </div>
+                    </div>
+                    <div class="content-like-comment-share">
+                        <?php if ($action['checklike'] == 0): ?>
+                            <a id="like-<?php echo $action['actionid'] ?>" class="action-like" name="<?php echo $action['actionid'] ?>" href="#">Thích</a>
+                        <?php endif; ?>
+                        <?php if ($action['checklike'] == 1): ?>
+                            <a id="like-<?php echo $action['actionid'] ?>" class="action-like" name="<?php echo $action['actionid'] ?>" href="#">Không thích</a>
+                        <?php endif; ?>
+                        <a class="place-comment" href="#">Bình luận (<?php echo $action['commentnumber'] ?>)</a>
+                        <a href="#">Chia sẻ</a>
+                        <?php if ($action['likenumber'] > 0): ?>
+                            <?php if($action['checklike'] == 0): ?>
+                                <div  id="likestatus-<?php echo $action['actionid'] ?>">
+                                    <img src="<?php echo $this->basePath(); ?>/img/star1.png"><span> <?php echo $action['likenumber']; ?> người thích điều này</span>
+                                </div>
+                            <?php elseif($action['checklike'] == 1) : ?>
+                                <?php if(($action['likenumber'] - 1) > 0): ?>
+                                    <div>
+                                        <img src="<?php echo $this->basePath(); ?>/img/star1.png"><span> Bạn và <?php echo ($action['likenumber'] - 1); ?> người thích điều này</span>
+                                    </div>
+                                <?php else: ?>
+                                    <div>
+                                        <img src="<?php echo $this->basePath(); ?>/img/star1.png"><span> Bạn thích điều này</span>
+                                    </div>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        <?php elseif ($action['likenumber'] == 0): ?>
+                            <div id="likestatus-<?php echo $action['actionid'] ?>"></div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="comment-block">
+                        <?php if (isset($action['comment'])): ?>
+                            <div class="comment-block-content">
+                                <?php foreach($action['comment'] as $comment): ?>
+                                    <div class="comment-content">
+                                        <div class="user-avatar">
+                                            <img alt="<?php echo $comment['username'] ?>" src="<?php echo $this->basePath();?>/uploads/<?php echo $comment['avatarpath']; ?>" />
+                                        </div>
+                                        <div class="comment-detail">
+                                            <div class="user-name">
+                                                <?php echo $comment['username'] ?>
+                                            </div>
+                                            <div class="comment-time">
+                                        <span title="<?php echo getFullTime($comment['createdtime']); ?>">
+                                            <?php echo time_difference($comment['createdtime']); ?>
+                                        </span>
+                                            </div>
+                                            <div class="comment-content-detail">
+                                                <?php echo $comment['content'] ?>
+                                            </div>
+                                            <div class="comment-like">
+                                                <a id="like-<?php echo $comment['actionid'] ?>" class="action-like" name="<?php echo $comment['actionid'] ?>" href="#">
+                                                    <?php if($comment['checklike'] == 1): ?>
+                                                        Không thích
+                                                    <?php else: ?>
+                                                        Thích
+                                                    <?php endif; ?>
+                                                </a>
+                                        <span id="likestatus-<?php echo $comment['actionid'] ?>">
+                                            <?php if($comment['likenumber'] >= 1): ?>
+                                                <img src="<?php echo $this->basePath(); ?>/img/star1.png">
+                                                <?php if($comment['checklike'] == 1 && $comment['likenumber'] == 1): ?>
+                                                    <span>Bạn thích điều này</span>
+                                                <?php elseif ($comment['checklike'] == 1 && $comment['likenumber'] > 1): ?>
+                                                    <span>Bạn và <?php echo ($comment['likenumber']-1) ?> người thích điều này</span>
+                                                <?php endif; ?>
+                                                <?php if ($comment['checklike'] == 0): ?>
+                                                    <span><?php echo ($comment['likenumber']) ?> người thích điều này</span>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                        </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php else: ?>
+                            <div class="comment-block-content">
+                            </div>
+                        <?php endif; ?>
+                        <div class="comment-compose">
+                            <div class="user-avatar">
+                                <img alt="User Name" src="<?php echo $this->basePath().'/uploads/'.$useravatar; ?>" />
+                            </div>
+                            <div class="txt-compose">
+                                <textarea class="txt-comment" placeholder="Nhập bình luận của bạn ..."></textarea>
+                                <input class="btn-comment" name="<?php echo $action['actionid'] ?>" type="button" value="Bình luận">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="placeNews-block-content">
-                <div class="time-content">
-                    <span>vào 2 tiếng trước</span>
-                </div>
-                <div class="content-content">
-                    <div class="status-place-image">
-                        <img src="<?php echo $this->basePath();?>/img/place-500x500.jpg">
-                    </div>
-                    <div class="status-place-name">
-                        <span class="name">Hồ Chí Minh City</span><br>
-                        <span class="hashtag">#ho_chi_minh_city</span>
-                    </div>
-                    <div class="status-place-des">
-                        <p>Sài gòn, thành phố tôi yêu!! Sài gòn, thành phố tôi yêu!!Sài gòn, thành phố tôi yêu!! Sài gòn, thành phố tôi yêu!!Sài gòn, thành phố tôi yêu!! Sài gòn, thành phố tôi yêu!!Sài gòn, thành phố tôi yêu!! Sài gòn, thành phố tôi yêu!!</p>
-                    </div>
-                </div>
-                <div class="content-like-comment-share">
-                    <a href="#">Thích</a>
-                    <a href="#">Bình luận</a>
-                    <a href="#">Chia sẻ</a>
-                    <img src="<?php echo $this->basePath();?>/img/star1.png"><span> 12 người thích điều này</span>
-                </div>
-            </div>
-        </div>
+        <?php }} ?>
     </div>
 </section>
 
@@ -251,7 +436,56 @@
     <div class="zess-logo">This is logo</div>
     <div class="search">
         <i class="icon-search"></i>
-        <input type="text" placeholder="Search everything you want ...">
+        <input id="txt-search" type="text" placeholder="Search everything you want ...">
+    </div>
+    <div class="search-block">
+        <div class="search-block-content friend">
+            <div class="search-header"></div>
+            <div class="search-content">
+                <div class="search-content-avatar">
+                </div>
+                <div class="search-content-name">
+                    <a href="#"></a>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div class="search-block-content page">
+            <div class="search-header">Fan Page</div>
+            <div class="search-content">
+                <div class="search-content-avatar">
+                    <img src="<?php echo $this->basePath();?>/img/2.avatar-70x70.jpg">
+                </div>
+                <div class="search-content-name">
+                    <a href="#">Cuu Lii</a>
+                    <span>Du lịch</span>
+                    <span>6789 lượt thích</span>
+                </div>
+            </div>
+            <div class="search-content">
+                <div class="search-content-avatar">
+                    <img src="<?php echo $this->basePath();?>/img/2.avatar-70x70.jpg">
+                </div>
+                <div class="search-content-name">
+                    <a href="#">Cuu Lii</a>
+                    <span>Du lịch</span>
+                    <span>6789 lượt thích</span>
+                </div>
+            </div>
+        </div>
+        <div class="search-block-content place">
+            <div class="search-header"></div>
+            <div class="search-content">
+                <div class="search-content-avatar">
+                </div>
+                <div class="search-content-name">
+                    <a href="#"></a>
+                    <span class="hashtag"></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="footer-menu">
         <div class="menu-home">
@@ -262,3 +496,390 @@
         </div>
     </div>
 </footer>
+
+<script type="text/javascript">
+    function getTimestampNow()
+    {
+        var datenow = new Date();
+        datenow = parseInt(datenow.setFullYear(datenow.getFullYear(), datenow.getMonth(), datenow.getDate())/1000);
+        return datenow;
+    }
+
+    function createHashTag(str)
+    {
+        str = str.toLowerCase();
+        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+        str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+        str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+        str = str.replace(/đ/g, "d");
+        str = str.replace(/!|\$|\@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'| |\"|\&|\#|\[|\]|~|$|-/g, "_");
+        //thay doi toan bo cac ki tu la trong chuoi
+        str = str.replace(/_+_/g, "_"); //thay the 2 dau __ thanh 1_
+        str = str.replace(/^\_+|\_+$/g, ""); // bo ki tu dau va cuoi chuoi
+        return str;
+    }
+
+    jQuery(document).ready(function(e){
+
+        jQuery('.friendNews-block:odd').addClass('odd');
+
+        jQuery('.newsInfo .friendNews-block .friendNews-block-content .content-content').toggle(
+            function() {
+                jQuery('.friendNews-block').css({
+                    'width': '49%',
+                    'height': '200px'
+                })
+
+                jQuery('.friendNews-block-content .content-content .content-a').hide();
+
+                jQuery('.friendNews-block-content .content-content img').css({
+                    'width': '90px',
+                    'height': 'auto'
+                })
+
+                jQuery('.friendNews-block-content .content-content').removeClass('hidden');
+
+                jQuery('.friendNews-block-content .content-content').css({
+                    'width': 'auto',
+                    'height': '113px'
+                });
+
+                jQuery('.comment-block').hide();
+                jQuery('.friendNews-block-content').css({
+                    'width':'48%'
+                });
+
+                if(jQuery(this).parent().parent().hasClass('odd')) {
+                    jQuery(this).parent().parent().prev().css({
+                        'width': '99%'
+                    })
+                }
+
+                jQuery(this).parent().parent().css({
+                    'width': '99%',
+                    'height': 'auto'
+                })
+
+                jQuery(this).parent().css({
+                    'width':'74%'
+                })
+
+                jQuery(this).css({
+                    'width':'99%',
+                    'height': 'auto'
+                })
+
+                jQuery(this).children('pre').css({
+                    'height':'auto'
+                })
+
+                jQuery(this).addClass('hidden');
+
+                jQuery(this).children('img').css({
+                    'width': 'auto',
+                    'height': 'auto',
+                    'max-width': '500px'
+                })
+
+                jQuery(this).children('.content-a').show();
+
+                jQuery(this).next().next().show();
+
+                var newinfo_height = jQuery('.newsInfo').outerHeight();
+                jQuery('.suggestion').css('height',newinfo_height);
+
+            },function() {
+                jQuery('.friendNews-block').css({
+                    'width': '48%',
+                    'height': '200px'
+                })
+
+                jQuery(this).parent().parent().css({
+                    'width': '48%',
+                    'height': '200px'
+                })
+
+                jQuery(this).next().next().hide();
+                jQuery(this).removeClass('hidden');
+                jQuery(this).parent().css({
+                    'width':'48%'
+                })
+
+                jQuery(this).css({
+                    'height': '113px',
+                    'width': 'auto'
+                })
+
+                jQuery(this).children('pre').css({
+                    'height':'65px'
+                })
+
+                jQuery(this).children('img').css({
+                    'width': '90px',
+                    'height': 'auto'
+                })
+
+                jQuery(this).children('.content-a').hide();
+
+                var newinfo_height = jQuery('.newsInfo').outerHeight();
+                jQuery('.suggestion').css('height',newinfo_height);
+            }
+        );
+
+        jQuery('.comment-like a').click(function(e) {
+            e.preventDefault();
+        })
+
+        jQuery('.place-comment').toggle(
+            function(e) {
+                e.preventDefault();
+                var comment_block = jQuery(this).parent().next();
+                comment_block.show();
+                var newinfo_height = jQuery('.newsInfo').outerHeight();
+                jQuery('.suggestion').css('height',newinfo_height);
+
+                jQuery('.newsInfo .placeNews-block .placeNews-block-content .content-like-comment-share').css({
+                    'border-bottom':'1px dotted #fff',
+                    'margin-bottom': '3px'
+                })
+
+            },
+            function(e) {
+                e.preventDefault();
+                var comment_block = jQuery(this).parent().next();
+                comment_block.hide();
+
+                var newinfo_height = jQuery('.newsInfo').outerHeight();
+                jQuery('.suggestion').css('height',newinfo_height);
+
+                jQuery('.newsInfo .placeNews-block .placeNews-block-content .content-like-comment-share').css({
+                    'border-bottom':'none',
+                    'margin-bottom': '0px'
+                })
+            }
+        )
+
+        jQuery('body').on('click', '.action-like', function(e) {
+            e.preventDefault();
+            var actionid = jQuery(this).attr('name');
+            var time = getTimestampNow();
+            var actionuser = '<?php echo $userdata->getUserid(); ?>';
+            var data = 'actionid='+actionid+'&actionuser='+actionuser+'&actiontime='+time;
+
+            jQuery.ajax({
+                type: 'post',
+                url: '<?php echo $this->url('homepage', array('action' => 'savelike')); ?>',
+                data: data,
+                async:false,
+                success: function(data) {
+                    data = JSON.parse(data);
+                    var success = data['success'];
+                    var likenumber = -1;
+                    var likenumber = data['number'];
+
+                    if(likenumber != -1){
+                        if (success == 'like'){
+                            jQuery('#like-'+actionid).html('Không thích ');
+                            if(likenumber == 1) {
+                                jQuery('#likestatus-'+actionid).html('<img src="<?php echo $this->basePath(); ?>/img/star1.png"><span> Bạn thích điều này</span>');
+                            }
+                            if (likenumber > 1) {
+                                jQuery('#likestatus-'+actionid).html('<img src="<?php echo $this->basePath(); ?>/img/star1.png"><span> Bạn và '+ (likenumber - 1) +' người thích điều này</span>');
+                            }
+                        }
+                        if (success == 'dislike') {
+
+                            jQuery('#like-'+actionid).html('Thích ');
+                            if(likenumber == 0) {
+                                jQuery('#likestatus-'+actionid).html('');
+                            }
+                            if (likenumber > 0) {
+                                jQuery('#likestatus-'+actionid).html('<img src="<?php echo $this->basePath(); ?>/img/star1.png"><span> '+ likenumber +' người thích điều này</span>');
+                            }
+                        }
+                    }
+                    else{
+                        alert('ko like dc');
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+        });
+
+        jQuery('.btn-comment').on('click', function(e) {
+            var comment = jQuery(this).prev().val();
+            var actionid = jQuery(this).attr('name');
+            var actionuser = '<?php echo $userdata->getUserid(); ?>';
+            var time = getTimestampNow();
+            var data = 'actionid='+actionid+'&actionuser='+actionuser+'&actiontime='+time+'&commentcontent='+comment;
+
+            var comment_block = jQuery(this).parent().parent().prev();
+
+            if (comment !== ''){
+                jQuery.ajax({
+                    type: 'post',
+                    url: '<?php echo $this->url('homepage', array('action' => 'savecomment')); ?>',
+                    data: data,
+                    async:false,
+                    success: function(data) {
+                        data = JSON.parse(data);
+                        if (data['success'] == '1') {
+                            jQuery('.txt-comment').val('');
+
+                            jQuery(comment_block).append('' +
+                                '<div class="comment-content">' +
+                                    '<div class="user-avatar"><img alt="'+data['username']+'" src="<?php echo $this->basePath()."/uploads/" ?>'+data['avatarpath']+'" /></div>' +
+                                    '<div class="comment-detail">' +
+                                        '<div class="user-name">'+data['username']+'</div>' +
+                                        '<div class="comment-time"><span title="">vừa xong</span></div> ' +
+                                        '<div class="comment-content-detail">'+data['commentcontent']+'</div>' +
+                                        '<div class="comment-like">' +
+                                            '<a id=like-' + data['actionid'] + ' class="action-like" name="'+ data['actionid'] +'" href="#">Thích </a>' +
+                                            '<span id="likestatus-'+ data['actionid'] +'"></span>' +
+                                        '</div> ' +
+                                    '</div>' +
+                                '</div>'
+                            );
+
+                            jQuery('.comment-like a').click(function(e) {
+                                e.preventDefault();
+                            })
+
+                        }else {
+                            alert('that bai');
+                        }
+                    },
+                    error: function() {
+                        alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                    }
+                });
+            }
+        });
+
+        jQuery('.search-block-content.friend').on('click', '.search-header', function() {
+            alert('friend click');
+        })
+
+        jQuery('.search-block-content.place').on('click', '.search-header', function() {
+            alert('place click');
+        })
+
+        jQuery('#txt-search').on('keyup', function() {
+            var search_key = jQuery(this).val();
+            var hashtag = createHashTag(search_key);
+            var currentuser = '<?php echo $userdata->getUserid(); ?>';
+            var data = 'string='+search_key+'&currentuser='+currentuser+'&hashtag='+hashtag;
+            jQuery('.search-block').hide();
+
+            if (search_key != '') {
+                jQuery('.search-block').show();
+                jQuery.ajax({
+                    type: 'post',
+                    url: '<?php echo $this->url('homepage', array('action' => 'search')); ?>',
+                    data: data,
+                    async:false,
+                    success: function(data) {
+                        data = JSON.parse(data);
+                        if (data['success'] == 1) {
+                            var i = 0;
+                            if (data['friendlist'].length >= 3){
+                                jQuery('.search-block-content.friend').html('<div class="search-header">Bạn bè (Nhấp vào đây để xem hết '+ data['friendlist'].length +' kết quả)</div>');
+
+                                for (i = 0; i < 2; i++) {
+//                                console.log(data['friendlist'][i]['avatarpath']);
+                                    jQuery('.search-block-content.friend').append('' +
+                                        '<div class="search-content">' +
+                                        '<div class="search-content-avatar">' +
+                                        '<img src="<?php echo $this->basePath()?>/uploads/'+ data['friendlist'][i]['avatarpath'] +'">' +
+                                        '</div>' +
+                                        '<div class="search-content-name">' +
+                                        '<a href="<?php echo $this->basePath()?>/success?user='+ data['friendlist'][i]['userid'] +'">'+ data['friendlist'][i]['username'] +'</a>' +
+                                        '<span>'+ data['friendlist'][i]['additioninfo'] +'</span>' +
+                                        '<span>'+ data['friendlist'][i]['muturalfriend'] +'</span>' +
+                                        '</div>' +
+                                        '</div>');
+//                                console.log(data['friendlist']);
+                                }
+                            }else {
+                                jQuery('.search-block-content.friend').html('<div class="search-header">Bạn bè ('+ data['friendlist'].length +' kết quả)</div>');
+
+                                for (i = 0; i < data['friendlist'].length; i++) {
+//                                console.log(data['friendlist'][i]['avatarpath']);
+                                    jQuery('.search-block-content.friend').append('' +
+                                        '<div class="search-content">' +
+                                        '<div class="search-content-avatar">' +
+                                        '<img src="<?php echo $this->basePath()?>/uploads/'+ data['friendlist'][i]['avatarpath'] +'">' +
+                                        '</div>' +
+                                        '<div class="search-content-name">' +
+                                        '<a href="<?php echo $this->basePath()?>/success?user='+ data['friendlist'][i]['userid'] +'">'+ data['friendlist'][i]['username'] +'</a>' +
+                                        '<span>'+ data['friendlist'][i]['additioninfo'] +'</span>' +
+                                        '<span>'+ data['friendlist'][i]['muturalfriend'] +'</span>' +
+                                        '</div>' +
+                                        '</div>');
+//                                console.log(data['friendlist']);
+                                }
+                            }
+
+                            if (data['placelist'].length >= 3) {
+                                jQuery('.search-block-content.place').html('<div class="search-header">Địa điểm (Nhấp vào đây để xem hết '+ data['placelist'].length +' kết quả)</div>');
+
+                                for (i = 0; i < 2; i++) {
+                                    jQuery('.search-block-content.place').append('' +
+                                        '<div class="search-content">' +
+                                            '<div class="search-content-avatar">' +
+                                                '<img src="<?php echo $this->basePath()?>/uploads/'+ data['placelist'][i]['imagepath'] +'">' +
+                                            '</div>' +
+                                            '<div class="search-content-name">' +
+                                                '<a href="#">'+ data['placelist'][i]['placename'] +'</a>' +
+                                                '<span class="hashtag">'+ data['placelist'][i]['hashtag'] +'</span>' +
+                                                '<span>'+ data['placelist'][i]['count'] +' người nói về điều này</span>' +
+                                            '</div>' +
+                                        '</div>');
+                                }
+                            }else {
+                                jQuery('.search-block-content.place').html('<div class="search-header">Địa điểm ('+ data['placelist'].length +' kết quả)</div>');
+
+                                for (i = 0; i < data['placelist'].length; i++) {
+                                    jQuery('.search-block-content.place').append('' +
+                                        '<div class="search-content">' +
+                                        '<div class="search-content-avatar">' +
+                                        '<img src="<?php echo $this->basePath()?>/uploads/'+ data['placelist'][i]['imagepath'] +'">' +
+                                        '</div>' +
+                                        '<div class="search-content-name">' +
+                                        '<a href="#">'+ data['placelist'][i]['placename'] +'</a>' +
+                                        '<span class="hashtag">'+ data['placelist'][i]['hashtag'] +'</span>' +
+                                        '<span>'+ data['placelist'][i]['count'] +' người nói về điều này</span>' +
+                                        '</div>' +
+                                        '</div>');
+                                }
+                            }
+
+//                            console.log(data['placelist']);
+                        }else {
+                            alert('success = 0');
+                        }
+                    },
+                    error: function(data) {
+//                        alert('failed');
+                    }
+                });
+            }else {
+                jQuery('.search-block').hide();
+            }
+        });
+
+        jQuery('.btnShow.friend').on('click', function() {
+            jQuery.ajax({
+                type: 'post',
+                url: '<?php echo $this->url('homepage', array('action' => 'index')); ?>',
+                async:false
+            });
+        });
+
+    });
+</script>

@@ -48,6 +48,9 @@ body, html {
 	display: inline-block;
 	float:left;
     position: relative;
+    background-color: #888;
+    width: 200px;
+    height: 200px;
 }
 
 .userInfo .info .userAvatar span {
@@ -127,8 +130,8 @@ body, html {
 	display:inline-block;
 	float:left;
 	margin-left:0px;
-	margin-top: -8px;
-	margin-bottom:40px;
+	margin-top: 0px;
+	margin-bottom:65px;
 	width: 60%;
 	min-height: 92%;
 	height: auto;
@@ -154,6 +157,7 @@ body, html {
 	float:left;
 	cursor: pointer;
 	position:relative;
+    background-color: #888;
 }
 
 .newsInfo .friendNews-block .friendNews-block-avatar span {
@@ -168,6 +172,11 @@ body, html {
 	display: none;
 }
 
+.newsInfo .friendNews-block .friendNews-block-avatar span a {
+    text-decoration: none;
+    color: #FFF;
+}
+
 .newsInfo .friendNews-block .friendNews-block-avatar img:hover{
 	opacity: 0.6;
 }
@@ -179,8 +188,8 @@ body, html {
 
 .newsInfo .friendNews-block .friendNews-block-content {
 	background-color:transparent;
-	width: 49%;
-	height:200px;
+	width: 48%;
+	height:100%;
 	display:inline-block;
 	float:left;
 	border-left: 1px solid #FFF;
@@ -196,25 +205,58 @@ body, html {
 	font-size:70%;
 }
 
+.newsInfo .friendNews-block .friendNews-block-content .time-content span a {
+    color: #fff;
+}
+
 .newsInfo .friendNews-block .friendNews-block-content .content-content {
 	margin-left:10px;
 	font-size:85%;
-	max-height: 120px;
+	height: 113px;
 	overflow-y: hidden;
 	display:inline-block;
 	float:left;
 	clear: both;
+    cursor: pointer;
+}
+
+.newsInfo .friendNews-block .friendNews-block-content .content-content pre {
+    height: 65px;
+    font-family: "Roboto Slab", Tahoma;
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
+.newsInfo .friendNews-block .friendNews-block-content .content-content img {
+    width: 90px;
+    height: auto;
+}
+
+.newsInfo .friendNews-block .friendNews-block-content .content-content:after {
+    position: absolute;
+    content: 'Chi tiết ...';
+    font-size: 10px;
+}
+
+.newsInfo .friendNews-block .friendNews-block-content .content-content.hidden:after {
+    display: none;
 }
 
 .newsInfo .friendNews-block .friendNews-block-content .content-like-comment-share {
 	border-top: 1px dotted #FFF;
-	padding-top: 3px;
+    border-bottom: 1px dotted #FFF;
+    padding-top: 3px;
 	font-size: 80%;
 	margin-left:10px;
-	width:170px;
-    position: absolute;
-    bottom: 2px;
-    left: 0;
+	width:90%;
+    font-size: 10px;
+    display: inline-block;
+    float: left;
+    margin-top: 2px;
 }
 
 .newsInfo .friendNews-block .friendNews-block-content .content-like-comment-share span {
@@ -224,7 +266,126 @@ body, html {
 .newsInfo .friendNews-block .friendNews-block-content .content-like-comment-share a{
 	text-decoration: none;
 	color: #FFF;
-	margin-right:8px;
+	margin-right:3px;
+}
+
+.newsInfo .friendNews-block .friendNews-block-content .content-like-comment-share img {
+
+}
+
+.newsInfo .friendNews-block .friendNews-block-content  .comment-block {
+    margin-left: 2%;
+    display: inline-block;
+    float: left;
+    margin-top: 4px;
+    width: 98%;
+    display: none;
+    padding-bottom: 11px;
+}
+
+.newsInfo .friendNews-block .friendNews-block-content  .comment-block .comment-block-content {
+    display: inline-block;
+    float: left;
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    overflow: auto;
+}
+
+.newsInfo .friendNews-block .friendNews-block-content  .comment-block .comment-content {
+    display: inline-block;
+    float: left;
+    width: 95%;
+    font-size: 11px;;
+    border-bottom: 1px solid #ddd;
+}
+
+.newsInfo .friendNews-block .friendNews-block-content  .comment-block .user-avatar {
+    display: inline-block;
+    float: left;
+    width: 80px;
+    height: 80px;
+}
+
+.newsInfo .friendNews-block .friendNews-block-content  .comment-block .user-avatar img {
+    width: 100%;
+    height: 100%;
+}
+
+.newsInfo .friendNews-block .friendNews-block-content  .comment-block .comment-content .comment-detail {
+    display: inline-block;
+    float: left;
+    width: 450px;
+    margin-left: 5px;
+}
+
+.newsInfo .friendNews-block .friendNews-block-content  .comment-block .comment-content .comment-detail .user-name {
+    display: inline-block;
+    float: left;
+    font-size: 13px;
+}
+
+.newsInfo .friendNews-block .friendNews-block-content  .comment-block .comment-content .comment-detail .comment-time {
+    display: inline-block;
+    float: left;
+    margin-left: 10px;
+    margin-top: 2px;
+}
+
+.newsInfo .friendNews-block .friendNews-block-content  .comment-block .comment-content .comment-detail .comment-content-detail {
+    margin-top: 5px;
+    float: left;
+    display: inline-block;
+    width: 100%;
+    min-height: 40px;
+}
+
+.newsInfo .friendNews-block .friendNews-block-content  .comment-block .comment-content .comment-detail .comment-like {
+    display: inline-block;
+    float: left;
+    padding-bottom: 2px;
+}
+
+.newsInfo .friendNews-block .friendNews-block-content  .comment-block .comment-content .comment-detail .comment-like a {
+    text-decoration: none;
+    color: #FFF;
+}
+
+.newsInfo .friendNews-block .friendNews-block-content  .comment-block .comment-compose {
+    display: inline-block;
+    float: left;
+    width: 100%;
+    margin-top: 4px;
+}
+
+.newsInfo .friendNews-block .friendNews-block-content  .comment-block .comment-compose .user-avatar {
+    width: 60px;
+    height: 60px;
+}
+
+.newsInfo .friendNews-block .friendNews-block-content  .comment-block .comment-compose textarea {
+    border: 1px solid #fff;
+    font-family: "Roboto Slab";
+    width: 428px;
+    height: 52px;
+    padding-top: 4px;
+    padding-left: 4px;
+    margin-left: 4px;
+    display: inline-block;
+    float: left;
+}
+
+.newsInfo .friendNews-block .friendNews-block-content  .comment-block .comment-compose input[type="button"]{
+    border: 2px solid #1fa3ff;
+    background-color: #FFF;
+    color: #1fa3ff;
+    width: 75px;
+    height: 60px;
+    font-family: "Roboto Slab";
+    display: inline-block;
+    float: left;
+    cursor: pointer;
+    margin-left: 5px;
 }
 
 .newsInfo .placeNews {
@@ -248,7 +409,6 @@ body, html {
 	display:inline-block;
 	float:left;
 	position:relative;
-	border-right: 1px solid #FFF;
     cursor: pointer;
 }
 
@@ -272,6 +432,11 @@ body, html {
 	opacity: 0.5;
 }
 
+.newsInfo .placeNews-block .placeNews-block-avatar span a {
+    text-decoration: none;
+    color: #FFF;
+}
+
 .newsInfo .placeNews-block .placeNews-block-content {
 	font-family: "Roboto Slab", Tahoma;
 	font-size: 14px;
@@ -281,6 +446,7 @@ body, html {
 	padding-top: 10px;
 	padding-left: 10px;
 	width: 70%;
+    border-left: 1px solid #FFF;
 }
 
 .newsInfo .placeNews-block .placeNews-block-content .time-content {
@@ -302,6 +468,7 @@ body, html {
     margin-left: -4px;
     display: inline-block;
     float: left;
+    padding-top: 5px;
 }
 
 .newsInfo .placeNews-block .placeNews-block-content .content-content .status-place-image img {
@@ -316,7 +483,7 @@ body, html {
     clear: both;
 }
 
-.newsInfo .placeNews-block .placeNews-block-content .content-content .status-place-name .hashtag {
+.hashtag {
     color: #1fa3ff;
     cursor: pointer;
 }
@@ -343,6 +510,122 @@ body, html {
 	text-decoration: none;
 	color: #FFF;
 	padding-right: 10px;
+}
+
+
+.newsInfo .placeNews-block .placeNews-block-content  .comment-block {
+    margin-left: 2%;
+    display: inline-block;
+    float: left;
+    margin-top: 4px;
+    width: 110%;
+    display: none;
+    padding-bottom: 11px;
+}
+
+.newsInfo .placeNews-block .placeNews-block-content  .comment-block .comment-block-content {
+    display: inline-block;
+    float: left;
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    overflow: auto;
+}
+
+.newsInfo .placeNews-block .placeNews-block-content  .comment-block .comment-content {
+    display: inline-block;
+    float: left;
+    width: 95%;
+    font-size: 11px;;
+    border-bottom: 1px solid #ddd;
+}
+
+.newsInfo .placeNews-block .placeNews-block-content  .comment-block .user-avatar {
+    display: inline-block;
+    float: left;
+    width: 80px;
+    height: 80px;
+}
+
+.newsInfo .placeNews-block .placeNews-block-content  .comment-block .user-avatar img {
+    width: 100%;
+    height: 100%;
+}
+
+.newsInfo .placeNews-block .placeNews-block-content  .comment-block .comment-content .comment-detail {
+    display: inline-block;
+    float: left;
+    width: 450px;
+    margin-left: 5px;
+}
+
+.newsInfo .placeNews-block .placeNews-block-content  .comment-block .comment-content .comment-detail .user-name {
+    display: inline-block;
+    float: left;
+    font-size: 13px;
+}
+
+.newsInfo .placeNews-block .placeNews-block-content  .comment-block .comment-content .comment-detail .comment-time {
+    display: inline-block;
+    float: left;
+    margin-left: 10px;
+    margin-top: 2px;
+}
+
+.newsInfo .placeNews-block .placeNews-block-content  .comment-block .comment-content .comment-detail .comment-content-detail {
+    margin-top: 5px;
+    float: left;
+    display: inline-block;
+    width: 100%;
+    min-height: 40px;
+}
+
+.newsInfo .placeNews-block .placeNews-block-content  .comment-block .comment-content .comment-detail .comment-like {
+    display: inline-block;
+    float: left;
+    padding-bottom: 2px;
+}
+
+.newsInfo .placeNews-block .placeNews-block-content  .comment-block .comment-content .comment-detail .comment-like a {
+    text-decoration: none;
+    color: #FFF;
+}
+
+.newsInfo .placeNews-block .placeNews-block-content .comment-block .comment-compose {
+    display: inline-block;
+    float: left;
+    width: 100%;
+    margin-top: 4px;
+}
+
+.newsInfo .placeNews-block .placeNews-block-content  .comment-block .comment-compose .user-avatar {
+    width: 60px;
+    height: 60px;
+}
+
+.newsInfo .placeNews-block .placeNews-block-content  .comment-block .comment-compose textarea {
+    border: 1px solid #fff;
+    font-family: "Roboto Slab";
+    width: 428px;
+    height: 52px;
+    padding-top: 4px;
+    padding-left: 4px;
+    margin-left: 4px;
+    display: inline-block;
+    float: left;
+}
+
+.newsInfo .placeNews-block .placeNews-block-content  .comment-block .comment-compose input[type="button"]{
+    border: 2px solid #1fa3ff;
+    background-color: #FFF;
+    color: #1fa3ff;
+    width: 75px;
+    height: 60px;
+    font-family: "Roboto Slab";
+    display: inline-block;
+    float: left;
+    cursor: pointer;
+    margin-left: 5px;
 }
 
 .suggestion {
@@ -490,6 +773,80 @@ body, html {
 
 }
 
+.footer .search-block {
+    font-family: "Roboto Slab", Tahoma;
+    position: absolute;
+    bottom: 45px;
+    left: 202px;
+    background-image: url("../img/discoverbg1.jpg");
+    background-size: 100% 100%;
+    border: 1px solid;
+    font-size: 13px;
+    width: 536px;
+    display: none;
+}
+
+.footer .search-block .search-block-content {
+    width: 100%;
+    display: inline-block;
+    float: left;
+}
+
+.footer .search-block .search-block-content .search-header {
+    height: 25px;
+    display: inline-block;
+    float: left;
+    text-align: left;
+    width: 526px;
+    padding-top: 5px;
+    padding-left: 10px;
+    background-color: #3a87ad;
+    cursor: pointer;
+}
+
+.footer .search-block .search-block-content .search-content {
+    width: 100%;
+    height: 70px;
+    display: inline-block;
+    float: left;
+    text-align: left;
+    border-bottom: 1px solid #fff;
+}
+
+.footer .search-block .search-block-content .search-content:hover {
+    background-color: #446388;
+    cursor: pointer;
+}
+
+.footer .search-block .search-block-content .search-content .search-content-avatar {
+    display: inline-block;
+    float: left;
+    width: 70px;
+    height: 70px;
+}
+
+.footer .search-block .search-block-content .search-content .search-content-avatar img {
+    width: 100%;
+    height: 100%;
+    border-right: 1px solid #FFF;
+}
+
+.footer .search-block .search-block-content .search-content .search-content-name {
+    display: inline-block;
+    float: left;
+    margin-left: 10px;
+    padding-top: 5px;
+}
+
+.footer .search-block .search-block-content .search-content .search-content-name a, .footer .search-block .search-block-content .search-content .search-content-name span {
+    display: block;
+}
+
+.footer .search-block a {
+    color: #CCC;
+    text-decoration: none;
+}
+
 .footer .footer-menu {
     height: 100%;
     display: inline-block;
@@ -547,4 +904,15 @@ body, html {
     border-top: 5px solid rgb(31, 163, 255);
 }
 
+.lightbox {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .8);
+    color: #FFF;
+    text-align: center;
+    display: none;
+}
 

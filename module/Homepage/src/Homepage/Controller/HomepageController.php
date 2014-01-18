@@ -63,15 +63,112 @@ class HomepageController extends AbstractActionController {
 
             $userdata = $homepageModel->getUserInfo($dm, $userID);
             $useravatar = $homepageModel->getPathImageAvatarUser($dm, $userID, 'AVA');
-            $userfiend = $homepageModel->getUserFriend($dm, $userID);
-
-            var_dump($userfiend);
-            die();
+            $userList = $homepageModel->getUserFriend($dm, $userID);
+            $actionList = $homepageModel->getAllAction($dm, $userList, $userdata->getUserid());
+//
+//            var_dump($actionList);
+//            die();
 
             return array (
                 'userdata'      => $userdata,
                 'useravatar'    => $useravatar,
+                'actionlist'    => $actionList,
             );
+        }
+    }
+
+    public function savelikeAction() {
+        $response = $this->getResponse();
+
+        $dm = $this->getDocumentService();
+        $homepageModel = new HomepageModel();
+        $data = $this->params()->fromPost();
+
+        $result = $homepageModel->saveLike($dm, $data);
+        $count = $homepageModel->countlike($dm, $data['actionid']);
+
+        if($result){
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => $result,
+                'number'  => $count,
+            )));
+        }
+        else
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0,)));
+        }
+    }
+
+    public function dislikeAction() {
+        $response = $this->getResponse();
+
+        $dm = $this->getDocumentService();
+        $homepageModel = new HomepageModel();
+        $data = $this->params()->fromPost();
+
+        $result = $homepageModel->dislike($dm, $data);
+
+        if($result){
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 1,
+                'number' => $result,
+            )));
+        }
+        else
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0,)));
+        }
+    }
+
+    public function savecommentAction() {
+        $response = $this->getResponse();
+
+        $dm = $this->getDocumentService();
+        $homepageModel = new HomepageModel();
+        $data = $this->params()->fromPost();
+
+        $result = $homepageModel->saveComment($dm, $data);
+        $username = $homepageModel->getUserName($dm, $data['actionuser']);
+        $avatarpath = $homepageModel->getUserAvatarPath($dm, $data['actionuser']);
+        $createdtime = $data['actiontime'];
+        $commentcontent = $data['commentcontent'];
+
+        if ($result) {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success'           => 1,
+                'username'          => $username,
+                'avatarpath'        => $avatarpath,
+                'createdtime'       => $createdtime,
+                'commentcontent'    => $commentcontent,
+                'actionid'          => $result,
+            )));
+        }else {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0,)));
+        }
+    }
+
+    public function searchAction() {
+        $response = $this->getResponse();
+
+        $dm = $this->getDocumentService();
+        $homepageModel = new HomepageModel();
+        $data = $this->params()->fromPost();
+
+        $friendList = $homepageModel->searchFriend($dm, $data['string'], $data['currentuser']);
+        $placeList = $homepageModel->searchPlace($dm, $data['hashtag']);
+
+        if ($friendList !== false) {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 1,
+                'friendlist' => $friendList,
+                'placelist' => $placeList,
+            )));
+        }else {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0,)));
         }
     }
 }
