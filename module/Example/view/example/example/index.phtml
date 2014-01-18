@@ -71,13 +71,12 @@
                 data: data,
                 async:false,
                 success: function(data) {
-                    alert(data);
                     data = JSON.parse(data);
 
                     if(data['success'] == "1")
                     {
-
-                        jQuery('#resultContent').text(data['value']);
+                        alert('select thanh cong, chuan bị in giá trị ra');
+                        jQuery('#resultContent').text(data['value']); //day la bien truyen tu ben Controller
                     }
                     else
                     {

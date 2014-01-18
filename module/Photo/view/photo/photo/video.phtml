@@ -1,0 +1,89 @@
+<noscript>
+    <style>
+        .es-carousel ul{
+            display:block;
+            width: auto !important;
+        }
+        .es-carousel ul li {
+            width: 100% !important;
+        }
+        .newDiv > ul > li {
+            display: inline-block;
+        }
+
+
+    </style>
+</noscript>
+<script id="img-wrapper-tmpl" type="text/x-jquery-tmpl">
+    <div class="rg-image-wrapper">
+        {{if itemsCount > 1}}
+        <div class="rg-image-nav">
+            <a href="#" class="rg-image-nav-prev">Previous Image</a>
+            <a href="#" class="rg-image-nav-next">Next Image</a>
+        </div>
+        {{/if}}
+        <div class="rg-image">
+            <div id="imageContent">abc</div>
+        </div>
+        <div class="rg-caption-wrapper">
+            <div class="rg-caption" style="display:none;">
+                <img src="<?php echo $this->basePath().'/img/quote.png' ?>" style="width:16px; height:16px;">
+                <p style="display:inline-block;"></p>
+            </div>
+
+            <div class="imageContent">
+
+            </div>
+        </div>
+    </div>
+</script>
+
+<div class="container">
+    <div class="content">
+        <h1 style="color: black;">
+            <?php
+            if(isset($listVideo))
+            {
+                echo 'Album video đã tải lên ('.count($listVideo).' video)';
+            }
+            else echo 'Hiện tại chưa có video nào.';
+            ?>
+        </h1>
+
+        <?php
+        if(isset($listVideo) && $listVideo != null)
+        {
+            ?>
+
+            <div class="newDiv">
+                <ul>
+                    <?php
+
+                    foreach($listVideo as $node)
+                    {
+                        echo '<li style="display: inline-block; margin-left: 20px;">';
+                        echo '<a>';
+                        echo '<video id="example_video_1" class="video-js vjs-default-skin" controls ';
+                        echo 'preload="true" width="450px" height="350px" poster="" data-setup="{}" >';
+                        echo '<source src="'. $this->basePath().'/uploads/'.$node['videoPath'].'" ';
+                        echo ' type="video/'.$node['videoType'].'" >';
+                        echo '</video>';
+
+                        echo '</a>';
+                        echo '<p class="icon"></p><p class="videoDescript">'.$node['videoDescript'].'</p>';
+                        echo '</li>';
+                    }
+
+                    ?>
+                </ul>
+            </div>
+
+
+        <?php
+
+        }
+        ?>
+
+
+    </div><!-- content -->
+</div><!-- container -->

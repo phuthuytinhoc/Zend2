@@ -76,6 +76,7 @@ class SuccessModel
     public function getPathImageAvatarUser($userid, $dm, $albumType)
     {
         $albumidIfAvailable = $this->checkIsHaveUserAlbumAvatar($userid, $dm, $albumType);
+//        $albumID = 'ALB'.$userid.$albumType;
 
         if($albumType=="AVA")
         {
@@ -87,7 +88,7 @@ class SuccessModel
             $tempPath = 'cover-temp.jpg';
             $imageStatus="COV_NOW";
         }
-        if(isset($albumidIfAvailable))
+        if($albumidIfAvailable != null)
         {
             $result = $dm->createQueryBuilder('Application\Document\Image')
                 ->field('albumid')->equals($albumidIfAvailable)
@@ -121,7 +122,7 @@ class SuccessModel
             ->update()
             ->multiple(true)
             ->field('imagestatus')->set($resetValue)
-            ->field('userid')->equals($userid)
+            ->field('albumid')->equals('ALB'.$userid.$albumType)
             ->field('imagestatus')->equals($resetAVAorCOV)
             ->getQuery()
             ->execute();
@@ -836,13 +837,15 @@ class SuccessModel
     public function saveLikeStatus($data, $dm)
     {
         $createdTime = $data['timeStamp'];
-        $userid = $data['userid'];
+        $actUser = $data['actionUser'];
+        $actLocation = $data['actionLocation'];
         //Bang Like
-        $likeID = "LIK".$userid.$createdTime;
+        $likeID = "LIK".$actLocation.$createdTime;
         $likeAction = $data['actionid'];
         //bang Action
         $actionID = "ACT".$createdTime;
-        $actionUser = $actionLocation = $userid;
+        $actionUser = $actUser;
+        $actionLocation = $actLocation;
         $actionType = $likeID;
 
         $document=$dm->createQueryBuilder('Application\Document\Like')
@@ -869,10 +872,148 @@ class SuccessModel
 
     }
 
+    public function getCountLikeActionID($actionLocation, $dm)
+    {
+        $listActionIDs = array();
+        $countLikes = array();
+        $checkLikeYourself = array();
+
+        $test = array();
+
+        $document = $dm->createQueryBuilder('Application\Document\Action')
+            ->field('actionlocation')->equals($actionLocation)
+            ->getQuery()
+            ->execute();
+        if(isset($document))
+        {
+            foreach($document as $doc)
+            {
+                $actionType = $doc->getActionType();
+
+                if(substr($actionType, 0,3) != "LIK")
+                {
+                    $listActionIDs[] = $doc->getActionid();
+
+                }
+
+            }
+
+            $arrLike = $dm->createQueryBuilder('Application\Document\Like')
+                ->getQuery()
+                ->execute();
+            if(isset($arrLike))
+            {
+                foreach($listActionIDs as $actID)
+                {
+                    $count = 0;
+                    foreach($arrLike as $arr)
+                    {
+                        if($actID == $arr->getActionid())
+                        {
+                            $count++;
+                            $countLikes[$actID] = $count;
+                            $test = $actID;
+                        }
+                    }
+
+
+
+                }
+                foreach($arrLike as $val)
+                {
+                    $value = $dm->createQueryBuilder('Application\Document\Action')
+                        ->field('actionlocation')->equals($actionLocation)
+//                        ->field('actionuser')->equals($actionLocation)
+                        ->field('actiontype')->equals($val->getLikeid())
+                        ->getQuery()
+                        ->execute();
+                    if(isset($value))
+                    {
+                        foreach($value as $smallValue)
+                        {
+                            $checkLikeYourself[$val->getActionid()][$smallValue->getActionUser()] = array(
+                                'userLiked' =>$smallValue->getActionUser(),
+                                'actOfLike' => $smallValue->getActionType(),
+                            );
+                        }
+                    }
+                }
+            }
+
+
+
+//            var_dump($checkLikeYourself);die();
+
+            return array(
+                'countLikes' => $countLikes,
+                'checkLikeYourself' =>$checkLikeYourself
+            );
+        }
+        else
+            return null;
+
+    }
+
+    public function unlikeStatus($data, $dm)
+    {
+        $likeID = $data['likeID'];
+
+        $document=$dm->createQueryBuilder('Application\Document\Like')
+            ->remove()
+            ->field('likeid')->equals($likeID)
+            ->getQuery()
+            ->execute();
+        if(isset($document))
+        {
+            $document=$dm->createQueryBuilder('Application\Document\Action')
+                ->remove()
+                ->field('actiontype')->equals($likeID)
+                ->getQuery()
+                ->execute();
+            if(isset($document))
+            {
+                return true;
+            }
+            else
+                return false;
+        }
+        else
+            return false;
+
+    }
+
+    public function getActionIDofCommentbyCMTID($actionLocation, $dm)
+    {
+        $arrayCMTID = array();
+
+        $document=$dm->createQueryBuilder('Application\Document\Action')
+            ->field('actionlocation')->equals($actionLocation)
+            ->getQuery()
+            ->execute();
+        if(isset($document))
+        {
+            foreach($document as $doc)
+            {
+                if(substr($doc->getActionType(), 0, 3) == "CMT")
+                {
+                    $arrayCMTID[$doc->getActionType()] = $doc->getActionid();
+                }
+            }
+            return $arrayCMTID;
+        }
+        else
+            return null;
+    }
+
+
     //FUNCTION FOR Load all private Infomation
     public function getPrivateInfomationUser($userid, $dm)
     {
-        $document = $dm->getRepository('Application\Document\User')->findOneBy(array('userid' => $userid));
+//        $document = $dm->getRepository('Application\Document\User')->findOneBy(array('userid' => $userid));
+        $document=$dm->createQueryBuilder('Application\Document\User')
+            ->field('userid')->equals($userid)
+            ->getQuery()
+            ->getSingleResult();
         if(isset($document))
         {
             return $document;
@@ -906,20 +1047,27 @@ class SuccessModel
     {
         $result = array();
 
-        $qb = $dm->createQueryBuilder('Application\Document\Action')
-            ->eagerCursor(true);
-        $query = $qb->getQuery();
-        $cursor = $query->execute();
+        $document=$dm->createQueryBuilder('Application\Document\Action')
+            ->getQuery()
+            ->execute();
 
-        foreach($cursor as $doc)
+        if(isset($document))
         {
-            $pathAva = $this->getPathImageAvatarUser($doc->getActionUser(), $dm, "AVA" );
-            $actionType = $doc->getActionType();
-            $fullname = $this->getPrivateInfomationUser($doc->getActionUser(),$dm);
-            $result[$actionType] = array(
-                'fullname' => $fullname->getLastname().' '.$fullname->getFirstname(),
-                'pathAvatar'       => $pathAva,
-            );
+            foreach($document as $doc)
+            {
+                $pathAva = $this->getPathImageAvatarUser($doc->getActionUser(), $dm, "AVA" );
+                $actionType = $doc->getActionType();
+
+                $fullname = $this->getPrivateInfomationUser($doc->getActionUser(),$dm);
+                if(isset($fullname))
+                {
+                    $result[$actionType] = array(
+                        'fullname'       => $fullname->getLastname().' '.$fullname->getFirstname(),
+                        'pathAvatar'     => $pathAva,
+                    );
+                }
+
+            }
         }
 
         return $result;
@@ -976,6 +1124,8 @@ class SuccessModel
         }
 
     }
+
+
 
     public function sendRequestUnFriend($data, $dm)
     {
@@ -1040,6 +1190,64 @@ class SuccessModel
             return null;
 
     }
+
+    public function getAlbumAvatarHome($userid, $dm, $albumType)
+    {
+        $albumID = 'ALB'.$userid.$albumType;
+
+        $document=$dm->createQueryBuilder('Application\Document\Image')
+            ->field('albumid')->equals($albumID)
+            ->field('imagestatus')->equals('AVA_OLD')
+            ->getQuery()
+            ->execute();
+
+        $result = array();
+        if(isset($document)){
+            foreach($document as $a)
+            {
+                $result[] = $a->getImageid().'.'.$a->getImagetype();
+            }
+            return $result;
+        }
+        else
+            return null;
+    }
+
+    public function getFriendByStatus($actionUser, $dm, $friendStatus)
+    {
+        $result = array();
+
+        $document = $dm->createQueryBuilder('Application\Document\Friend')
+            ->field('frienduserrecieve')->equals($actionUser)
+            ->field('friendstatus')->equals($friendStatus)
+            ->getQuery()
+            ->execute();
+        $document2 = $dm->createQueryBuilder('Application\Document\Friend')
+            ->field('friendusersend')->equals($actionUser)
+            ->field('friendstatus')->equals($friendStatus)
+            ->getQuery()
+            ->execute();
+
+        if(isset($document))
+        {
+            foreach($document as $doc)
+            {
+                $result[] = $doc->getFriendusersend();
+            }
+        }
+
+        if(isset($document2))
+        {
+            foreach($document2 as $doc)
+            {
+                $result[] = $doc->getFrienduserrecieve();
+            }
+        }
+
+//        var_dump($result);die();
+        return $result;
+    }
+
 
 
 

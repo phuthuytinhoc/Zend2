@@ -74,6 +74,22 @@ class ApplicationDocumentImageHydrator implements HydratorInterface
             $this->class->reflFields['imagetype']->setValue($document, $return);
             $hydratedData['imagetype'] = $return;
         }
+
+        /** @Field(type="string") */
+        if (isset($data['imagelongtitude'])) {
+            $value = $data['imagelongtitude'];
+            $return = (string) $value;
+            $this->class->reflFields['imagelongtitude']->setValue($document, $return);
+            $hydratedData['imagelongtitude'] = $return;
+        }
+
+        /** @Field(type="string") */
+        if (isset($data['imagelatitude'])) {
+            $value = $data['imagelatitude'];
+            $return = (string) $value;
+            $this->class->reflFields['imagelatitude']->setValue($document, $return);
+            $hydratedData['imagelatitude'] = $return;
+        }
         return $hydratedData;
     }
 }

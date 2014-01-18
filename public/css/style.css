@@ -253,7 +253,7 @@ footer {
 
 .bodyUserpage {
     /*background-image:url("../img/friend_background.png");*/
-    background-color: #e5e5e5;
+    background-color: aliceblue;
     font-family: "Roboto Slab", Tahoma;
 }
 
@@ -358,9 +358,11 @@ footer {
     padding-bottom:2px;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.5);
     background-color: #FFF;
-    border-top-right-radius: 15px;
-    border-top-left-radius: 15px;
-    border: 1px solid #999;
+    /*border-top-right-radius: 15px;*/
+    /*border-top-left-radius: 15px;*/
+    border: 3px solid #999;
+
+
 }
 
 .divLeft .divSubMenu .divSub .divHead {
@@ -377,8 +379,8 @@ footer {
     -o-transition: border-color 0.4s ease;
     -webkit-transition: border-color 0.4s ease;
     -moz-transition: border-color 0.4s ease;
-    border-top-right-radius: 15px;
-    border-top-left-radius: 15px;
+    /*border-top-right-radius: 15px;*/
+    /*border-top-left-radius: 15px;*/
 }
 
 .divLeft .divSubMenu .divSub .divHead:hover {
@@ -434,15 +436,25 @@ footer {
 .divLeft .divSubMenu .divSub .divContent .subImage {
     margin-top: 1%;
     margin-right:1%;
-    width:15.5%;
-    height:47px;
+    width:100%;
+    /*height:47px;*/
     float:left;
-    background:url(../img/avatar.jpg) no-repeat;
+    /*background:url(../img/avatar.jpg) no-repeat;*/
+    border-bottom: 1px solid #4AABE2;
+    border-radius: 10px;
+}
+
+.divLeft .divSubMenu .divSub .divContent .subImage:hover{
+    /*background-color: #4AABE2;*/
+    /*background: linear-gradient(to bottom, #f7fbfc 0%,#d9edf2 40%,#add9e4 100%);*/
+
+    /*background: linear-gradient(to bottom, rgba(228,245,252,1) 0%,rgba(191,232,249,1) 50%,rgba(159,216,239,1) 51%,rgba(42,176,237,1) 100%);*/
+    background: linear-gradient(to bottom, rgba(235,241,246,1) 0%,rgba(171,211,238,1) 50%,rgba(137,195,235,1) 57%,rgba(213,235,251,1) 100%);
 }
 
 .divLeft .divMenu {
     float:left;
-    width:7.5%;
+    width:9%;
     height:100%;
     display:inline-block;
     position:fixed;
@@ -466,7 +478,7 @@ footer {
     margin-top: 66px;
 }
 .divLeft .divMenu .menuSub:hover {
-    width: 95%;
+    width: 100%;
     background-color: #1fa3bb;
     border-left: 4px solid #FFF;
     cursor: pointer;
@@ -509,7 +521,7 @@ footer {
 .divLeft .divMenu .divMenuName {
     margin-left: 8px;
     margin-top: 7px;
-    width:50%;
+    /*width:50%;*/
     position:static;
     float:left;
     display: inline-block;
@@ -808,7 +820,7 @@ footer {
 .divRight .statusBlock .statusContent .statusComposeArea textarea {
     width: 96%;
     height: 84%;
-    border: 1px solid #ccc;
+    border: 3px solid gray;
     padding: 2% 3% 2% 3%;
     font-family: "Roboto Slab", Tahoma;
     font-size: 14px;
@@ -816,14 +828,14 @@ footer {
     margin-right: 2%;
     border-radius: 15px;
     font-size: 13px;
-    background-color: transparent;
+    background-color: #EEEEEE;
     transition: all 0.4s ease-in-out;
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.5)
+    /*box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.5)*/
 
 }
 
 .divRight .statusBlock .statusContent .statusComposeArea textarea::-webkit-input-placeholder { /* WebKit browsers */
-    color:#0077cc;
+    color: black;
 }
 
 
@@ -847,7 +859,7 @@ footer {
 }
 
 .divRight .statusBlock .statusContent .btnSubmit #btnPost {
-    border: 2px solid #FFF;
+    border: 2px solid transparent;
     font-family: "Roboto Slab", Tahoma;
     font-size:13px;
     height:30px;
@@ -1018,6 +1030,7 @@ footer {
 .divRight .divAction .statusRightPanel .divComment .commentUserAvatar img {
     width: 100%;
     height: 100%;
+    padding-top: 2px;
 }
 
 .divRight .divAction .statusRightPanel .divComment .commentAction .commentRight {
@@ -2147,5 +2160,31 @@ footer {
     border-width: 8px;
     margin-top: -8px;
 }
+
+.left-slide-arrow{
+    width: 26px;
+    height: 14px;
+    background-image: url("../img/down.png");
+    -webkit-transform:rotate(-270deg);
+
+    background-repeat: no-repeat;
+    position: absolute;
+    margin-top: 75px;
+    left: 25px;
+    cursor: pointer;
+}
+.right-slide-arrow{
+    width: 26px;
+    height: 14px;
+    background-image: url("../img/down.png");
+    -webkit-transform:rotate(-90deg);
+
+    background-repeat: no-repeat;
+    position: absolute;
+    margin-top: -105px;
+    left: 270px;
+    cursor: pointer;
+}
+
 
 /*****END Button ket ban trang ca nhan********/

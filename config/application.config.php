@@ -9,6 +9,8 @@ return array(
         'Application',
         'Userpage',
         'Example',
+        'Photo',
+        'Fanpage',
         'Homepage',
     ),
 
