@@ -32,6 +32,11 @@ class Image
     /** @ODM\Field(type="string") */
     private $imagetype;
 
+    /** @ODM\Field(type="string") */
+    private $imagelongtitude;
+
+    /** @ODM\Field(type="string") */
+    private $imagelatitude;
 
     //******* GET METHOD *******//
 
@@ -84,8 +89,21 @@ class Image
         return $this->imagetype;
     }
 
+    /**
+     * @return the $imagelongtitude
+     */
+    public function getImagelongtitude()
+    {
+        return $this->imagelongtitude;
+    }
 
-
+    /**
+     * @return the $imagelatitude
+     */
+    public function getImagelatitude()
+    {
+        return $this->imagelatitude;
+    }
 
 
     //*****SET METHOD*****//
@@ -136,5 +154,21 @@ class Image
     public function setImagetype($imagetype)
     {
         $this->imagetype = $imagetype;
+    }
+
+    /**
+     * @param field_type $imagelongtitude
+     */
+    public function setImagelongtitude($imagelongtitude)
+    {
+        $this->imagelongtitude = $imagelongtitude;
+    }
+
+    /**
+     * @param field_type $imagelatitude
+     */
+    public function setImagelatitude($imagelatitude)
+    {
+        $this->imagelatitude = $imagelatitude;
     }
 }

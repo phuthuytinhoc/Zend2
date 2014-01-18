@@ -1,0 +1,161 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <?php echo $this->headTitle($this->translate('Zess - ảnh và video'))->setSeparator(' - ')->setAutoEscape(false) ?>
+
+    <?php echo $this->headMeta()
+        ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+        ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+    ?>
+
+    <!-- Le styles -->
+    <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+        ->prependStylesheet($this->basePath() . '/css/video-js.css')
+        ->prependStylesheet($this->basePath() . '/css/photos.css')
+        ->prependStylesheet($this->basePath() . '/css/style.css')
+        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css')
+
+    ?>
+
+    <!-- Scripts -->
+    <?php echo $this->headScript()
+        ->prependFile($this->basePath() . '/js/video.js')
+        ->prependFile($this->basePath() . '/js/jquery.accordion.js')
+        ->prependFile($this->basePath() . '/js/gallery.js')
+        ->prependFile($this->basePath() . '/js/jquery.elastislide.js')
+        ->prependFile($this->basePath() . '/js/jquery.easing.1.3.js')
+        ->prependFile($this->basePath() . '/js/jquery.tmpl.min.js')
+        ->prependFile($this->basePath() . '/js/jquery.1.7.1.min.js')
+        ->prependFile($this->basePath() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+        ->prependFile($this->basePath() . '/js/html5shiv.js',   'text/javascript', array('conditional' => 'lt IE 9',))
+    ; ?>
+
+</head>
+<body>
+
+<div class="fiend-container" style=" width: 100%;">
+
+    <div class="friend-content" style="">
+        <div class="logo-zess">
+            <a href="<?php echo $this->basePath();?>"><img src="<?php echo $this->basePath();?>/img/zess_logo.png"></a>
+        </div>
+        <ul class="ca-menu">
+            <li>
+                <a href="<?php echo $this->basePath().'/homepage/'; ?>">
+                    <span class="ca-icon">F</span>
+                    <div class="ca-content">
+                        <h2 class="ca-main">Trang chủ</h2>
+                        <h3 class="ca-sub">Mạng xã hội Zess</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="<?php echo $this->basePath().'/success/'; ?>">
+                    <span class="ca-icon">Z</span>
+                    <div class="ca-content">
+                        <h2 class="ca-main">Trang cá nhân</h2>
+                        <h3 class="ca-sub">Quay về trang cá nhân</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="<?php echo $this->url('photos', array('action' => 'index')); ?>">
+                    <span class="ca-icon">U</span>
+                    <div class="ca-content">
+                        <h2 class="ca-main">ảnh đại diện</h2>
+                        <h3 class="ca-sub">Danh sách ảnh đại diện</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="<?php echo $this->url('photos', array('action' => 'cover')); ?>">
+                    <span class="ca-icon">b</span>
+                    <div class="ca-content">
+                        <h2 class="ca-main">ảnh nền</h2>
+                        <h3 class="ca-sub">Danh sách ảnh nền</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="<?php echo $this->url('photos', array('action' => 'normal')); ?>">
+                    <span class="ca-icon">I</span>
+                    <div class="ca-content">
+                        <h2 class="ca-main">ảnh tải lên</h2>
+                        <h3 class="ca-sub">Danh sách ảnh đã tải lên </h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="<?php echo $this->url('photos', array('action' => 'video')); ?>">
+                    <span class="ca-icon">M</span>
+                    <div class="ca-content">
+                        <h2 class="ca-main">Video</h2>
+                        <h3 class="ca-sub">Các video đã tải lên</h3>
+                    </div>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+
+    <div class="rightContent-friend" style=" float: left;">
+        <div class="search-nav" style=" height: 70px; width: 100%; margin: 0 auto;">
+            <div class="webdesigntuts-workshop" style="width: 450px; margin: 0 auto;">
+                <form action="" method="">
+                    <input type="search" placeholder="Tìm kiếm mọi thứ...">
+                    <button>Search</button>
+                </form>
+            </div>
+        </div>
+
+
+        <!--        Bat dau in content nhu tren-->
+        <?php echo $this->content; ?>
+        <?php echo $this->inlineScript() ?>
+
+
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        //set class for body
+        jQuery('body').addClass('bodyFriendPage');
+
+        //set with for some div
+        function calWidthSearchDiv()
+        {
+            var winWidth = jQuery(window).width();
+            var winHeight = jQuery(window).height();
+            var widthBlack = winWidth - 280;
+            jQuery('.fiend-container').css('width', winWidth + "px");
+            jQuery('.rightContent-friend').css('width', widthBlack + "px");
+        }
+
+        //dieu chinh div truoc khi load.
+        calWidthSearchDiv();
+
+        //on window resize
+        jQuery(window).resize(function(){
+            calWidthSearchDiv();
+        });
+
+        //effect for each friend
+        jQuery('.ec-circle').hover(function(){
+            jQuery(this).children().css('color', 'white');
+        },function(){
+            jQuery(this).children().css('color', 'transparent');
+        });
+
+
+
+    });
+
+</script>
+</body>
+</html>
+

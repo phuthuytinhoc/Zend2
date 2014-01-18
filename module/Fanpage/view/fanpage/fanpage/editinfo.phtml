@@ -1,0 +1,1738 @@
+<style type="text/css">
+
+</style>
+
+
+<input type="hidden" name="<?php if(isset($pageInfo)) echo $pageInfo['pageid'] ?>" id="hidden-pageid">
+<input type="hidden" name=" <?php if(isset($pageInfo)) echo $pageInfo['userid'] ?>" id="hidden-userid">
+<input type="hidden" name=" <?php if(isset($pageInfo['pagelatitude'])) echo $pageInfo['pagelatitude'] ?>"
+       id="hidden-pageLat">
+<input type="hidden" name=" <?php if(isset($pageInfo['pagelongtitude'])) echo $pageInfo['pagelongtitude'] ?>"
+       id="hidden-pageLong">
+
+<h2 style="padding-left: 50px;font-size: 20px;font-weight: bold;">
+    Cài đặt Fanpage > Chỉnh sửa thông tin Fanpage
+</h2>
+
+<div class="container bg-update" style="max-width: 100%;">
+    <div class="wrapper" style="margin: 0px;">
+        <div id="st-accordion" class="st-accordion">
+            <ul>
+                <li>
+                    <a class="iconInfo" name="uploadPreview" href="#"> a
+                        <label  style="margin-left: 25px;">Thay đổi thông tin trang</label>
+                        <span class="st-arrow">Open or Close</span>
+                    </a>
+                    <div class="st-content">
+                        <div class="edit-infoFanpage" style="">
+                            <form method="post">
+                                <div class="edit-input">
+                                    <label>Tên fanpage:</label>
+                                    <input id="nameFanpage" type="text" placeholder="Nhập tên fanpage...">
+                                </div>
+                                <div class="edit-input">
+                                    <label>Mô tả fanpage:</label>
+                                    <textarea id="descriptFanpage" type="text" placeholder="Nhập mô tả fanpage..."
+                                              data="<?php if(isset($pageInfo['pagedescription'])) echo $pageInfo['pagedescription']; ?>">
+
+                                    </textarea>
+                                </div>
+                                <div class="edit-input">
+                                    <label></label>
+                                    <input type="button" id="sub-pageInfo" value="Lưu">
+                                    <label></label>
+                                    <p style="width: 100%;color: red; text-align: center;" id="tb-updateBasicInfo"></p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <a class="iconInfo" name="uploadPreview" href="#"> a
+                        <label  style="margin-left: 25px;">Cài đặt slide ảnh & ảnh logo</label>
+                        <span class="st-arrow">Open or Close</span>
+                    </a>
+                    <div class="st-content">
+
+                        <form method="post" enctype="multipart/form-data" id="form-imageLogo">
+                            <div class="edit-input"  style="float: left; width: 50%; text-align: center;">
+                                <label style="display: block;width: 100%;">
+                                    Chọn ảnh thay đổi logo fanpage:
+                                </label>
+                                <div class="preview-logoFanpage" id="prv-logo">
+                                <?php
+//                                var_dump($bindingInfo);die();
+
+                                if(isset($bindingInfo['bindingImageLogo']) && $bindingInfo['bindingImageLogo'] != null)
+                                {
+                                    echo "<img src='".$this->basePath()."/uploads/".$bindingInfo['bindingImageLogo']."'>";
+                                }
+                                else
+                                {
+                                    echo "<img src='".$this->basePath()."/uploads/ava-temp.png'>";
+                                }
+                                ?>
+                                </div>
+                                <input type="file" name="image" id="file-imageLogo">
+                                <input style="display: block;margin: 0 auto;" id="sub-imageLogo" type="button" value="Tải lên">
+                            </div>
+                        </form>
+
+                        <form method="post" enctype="multipart/form-data" id="form-imageAvatar">
+                            <div class="edit-input" style="width: 50%; display: inline-block; text-align: center;">
+                                <label style="display: block;width: 100%;">
+                                    Chọn ảnh thay đổi ảnh đại diện fanpage:
+                                </label>
+                                <div class="preview-logoFanpage" id="prv-avatar">
+                                    <?php
+                                    if(isset($bindingInfo['bindingImageAvatar']) && $bindingInfo['bindingImageAvatar'] != null)
+                                    {
+                                        echo "<img src='".$this->basePath()."/uploads/".$bindingInfo['bindingImageAvatar']."'>";
+                                    }
+                                    else
+                                    {
+                                        echo "<img src='".$this->basePath()."/uploads/ava-temp.png'>";
+                                    }
+                                    ?>
+                                </div>
+                                <input type="file" name="image" id="file-imageAvatar">
+                                <input style="display: block; margin: 0 auto;" type="button" value="Tải lên" id="sub-imageAvatar" >
+                            </div>
+                        </form>
+
+<!--                        <form method="post">-->
+                            <div class="edit-input" style="display: inline-block; width: 50%; vertical-align: top; margin-top: 30px;">
+                                <label style="display: block;width: 100%; padding-bottom: 15px;">
+                                    Cập nhật slideshow ảnh fanpage:
+                                </label>
+
+                                <?php
+                                if(isset($bindingInfo['bindingSlideShow']) && $bindingInfo['bindingSlideShow']!= null)
+                                {
+                                ?>
+                                    <div class="subImage" style="width: 100%; float: left;">
+                                        <div class="left-slide-arrow"></div>
+                                        <div class="right-slide-arrow"></div>
+                                        <div class="wrapper-slide" >
+                                            <div class="slide-avar" >
+                                                <?php
+                                                    foreach($bindingInfo['bindingSlideShow'] as $slideShow)
+                                                    {
+                                                ?>
+                                                        <div class="small-div" style="display: inline-block; float: left;">
+                                                            <img src="<?php echo $this->basePath().'/uploads/'.$slideShow; ?>">
+                                                        </div>
+                                                <?php
+                                                    }
+                                                ?>
+                                            </div>
+                                        </div>
+                                        <div class="preview-slideShow" >
+                                            <img style="width: 100%;height: 400px;"
+                                                 src="<?php echo $this->basePath().'/uploads/'.$bindingInfo['bindingSlideShow'][0]; ?>">
+                                        </div>
+                                    </div>
+                                <?php
+                                }
+                                else
+                                {
+                                    echo "Chưa cập nhật album ảnh slideshow";
+                                }
+                                ?>
+
+                            </div>
+<!--                        </form>-->
+
+                            <div class="edit-input" style="display: inline-block; width: 45%; margin-left: 4%; margin-top: 30px;">
+                                <label style="display: block;width: 100%; padding-bottom: 15px;">
+                                    Chọn ảnh tải lên:
+                                </label>
+                                <form method="post" enctype="multipart/form-data" id="form-slideshow">
+                                    <input type="file" name="files[]" multiple="multiple" id="file-imageAvatar">
+                                    <input type="button" value="Tải lên" id="sub-slideshow">
+                                </form>
+                            </div>
+                    </div>
+                </li>
+
+                <li id="clickMap">
+                    <a class="iconInfo" name="uploadPreview" href="#"> a
+                        <label  style="margin-left: 25px;">Thay đổi vị trí doanh nghiệp</label>
+                        <span class="st-arrow">Open or Close</span>
+                    </a>
+                    <div class="st-content">
+                        <style type="text/css">
+                            .page-location-googlemap{width: 100%; height: 350px;}
+                        </style>
+                        <div class="edit-input" style="width: 100%; display: block;overflow:hidden;z-index:-999;">
+<!--                            <div id="mapOfPage" class="page-location-googlemap" style="width: 600px; height: 350px;">-->
+<!---->
+<!--                            </div>-->
+
+                            <div>
+                                <div id="mapOfPage" class="page-location-googlemap"></div>
+                            </div>
+                        </div>
+                        <div class="edit-input" style="width: 100%;">
+                            <div style="border: 3px solid #1693EB;border-radius: 5px;padding: 10px 20px 20px 20px;
+                            text-align: center;">
+                                <form method="post">
+                                    <label style="display: block; width: auto;">
+                                        Địa điểm được chọn của trang trên bản đồ:
+                                    </label>
+                                    <input type="text" id="placeNowonGM" disabled="" placeholder="....">
+
+                                    <label style="display: block; width: auto; padding-top:15px;">
+                                        Nhập mô tả trang trên bản đồ:
+                                    </label>
+                                    <textarea id="pageMapDescription" placeholder="...."
+                                              data="<?php if(isset($pageInfo['pagemapinfo'])) echo $pageInfo['pagemapinfo']; ?>">
+
+                                    </textarea>
+                                    <input type="button" value="Lưu" id="sub-pageLocation"
+                                           style="display: block;margin-left: auto;margin-right: auto;margin-top: 20px;">
+                                    <p style="width: 100%; color: red; padding: 0px;" id="tb-updateMapInfo"></p>
+                                    <input type="hidden" id="pageLoca-longtitude" placeholder="toa do longtitue">
+                                    <input type="hidden" id="pageLoca-lattiute" placeholder="toa do latitude">
+                                </form>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </li>
+
+                <li>
+                    <a class="iconInfo" name="uploadPreview" href="#"> a
+                        <label  style="margin-left: 25px;">Cập nhật album doanh nghiệp</label>
+                        <span class="st-arrow">Open or Close</span>
+                    </a>
+                    <div class="st-content">
+                       <div style="width: 100%;">
+                            <div style="width: 100%; height: 400px;" id="canvas-albumMap">
+
+                            </div>
+                       </div>
+
+                        <style type="text/css">
+                            .form-edit>label {
+                                text-transform: none;
+                                width: 50%;
+                                /*margin-top: 20px; */
+                                text-align: left;
+                                box-shadow: none;
+                                color: #000000 !important;
+                                background-color: transparent !important;
+                            }
+                            .form-edit>p {
+                                color: red ;
+                                display: block ;
+                                text-align: right ;
+                                padding: 0px ;
+                                margin: 0 0 5px 0;
+                            }
+                            .form-edit>input{
+                                opacity: 1;
+                                position: static;
+                                width: 50%;
+                                margin-bottom: 5px;
+                                /*margin-top: 20px;*/
+                                padding: 15px 10px 15px 10px;
+                                border: 3px solid gray;
+                                border-radius: 5px; outline: none;
+                                color: black;
+                            }
+                            .form-edit>input:hover{
+                                background-color: white !important;
+                                color: black !important;
+                            }
+                            .form-edit>select{
+                                width: 60%;
+                                height: 35px;
+                                padding-left: 15px;
+                                outline: none;
+                                border: 3px solid gray;
+                                border-radius: 5px;
+                                display: block;
+                                margin: 0 auto 5px;
+                            }
+                            .form-edit>select:hover{border: 3px solid #1FA3FF;}
+                            .form-edit>input[type="file"]{
+                                display: inline-block;
+                                padding-top:5px !important;
+                            }
+                            .form-edit>input[type="file"]:hover{border: 3px solid #1FA3FF;}
+                            .form-edit>input[type="button"]:hover,.form-edit>input[type="submit"]:hover{border: 3px solid #1FA3FF; color: #000000; background-color: white;
+                                transition: background-color 0.5s ease;}
+                            .form-edit>input[type="text"]:focus{background-color: #f4f4f4; color: black;}
+                            .form-edit>input[type="text"]:hover{border-color: #1FA3FF;}
+                            .form-edit>input[type="button"], .form-edit>input[type="submit"]
+                            {border: 3px solid #1FA3FF; border 3px solid transparent; background-color: #1FA3FF;
+                                color: white; font-weight: bold; width: auto; padding: 5px 15px 5px 15px; border-radius: 0px;}
+                            .form-edit>textarea{
+                                width: 50%;
+                                margin-bottom: 5px;
+                                /*margin-top: 20px;*/
+                                border: 3px solid gray;
+                                padding: 15px 10px 15px 10px;
+                                outline: none;
+                                border-radius: 5px;
+                            }
+                            .form-edit>textarea:hover{border-color: #1FA3FF;}
+                            .form-edit>textarea:focus{background-color: #f4f4f4;}
+                        </style>
+
+                        <div style="width: 100%; display: block; padding-top: 20px;">
+
+                            <section class="tabs" style="font-family: 'Roboto Slab', 'Tahoma';">
+                                <input id="tab-1" type="radio" name="radio-set" class="tab-selector-1" checked="checked" />
+                                <label for="tab-1" class="tab-label-1">Tạo Địa Điểm</label>
+
+                                <input id="tab-2" type="radio" name="radio-set" class="tab-selector-2" />
+                                <label for="tab-2" class="tab-label-2">Thêm Album</label>
+
+                                <input id="tab-3" type="radio" name="radio-set" class="tab-selector-3" />
+                                <label for="tab-3" class="tab-label-3">Cập nhật Album</label>
+
+                                <input id="tab-4" type="radio" name="radio-set" class="tab-selector-4" />
+                                <label for="tab-4" class="tab-label-4">Cập nhật ảnh album</label>
+
+                                <div class="clear-shadow"></div>
+
+                                <div class="content">
+                                    <div class="content-1" style="width: 100%;">
+
+                                       <form method="post" class="form-edit" id="form-createAlbum">
+                                           <p id="tb-craeteAlbum"></p>
+                                           <label>Vị trí của địa điểm:</label>
+                                           <input type="text" name="nLocaAlbum" id="album_location_name">
+
+                                           <label>Nhập tên định danh địa điểm</label>
+                                           <input type="text" name="nAlbumName" id="nAlbumName">
+
+                                           <label>Nhập mô tả về địa điểm:</label>
+                                           <textarea name="nMotaAlbum" id="nMotaAlbum"></textarea>
+
+                                           <label></label>
+                                           <input type="submit" id="sub_create_album" value="Tạo">
+
+                                           <label></label>
+                                           <input type="hidden" name="long_albumLocation" id="album_long_value" placeholder="vi tri longtitude">
+                                           <label></label>
+                                           <input type="hidden" id="album_lat_value" placeholder="vi tri latitude">
+                                       </form>
+
+                                    </div>
+
+                                    <div style="width: 100%;" class="content-2">
+                                        <form method="post" class="form-edit" id="form-albumInPlace">
+                                            <p id="tb-addSubAlbum"></p>
+
+                                            <label>Vị trí của album trên bản đồ:</label>
+                                            <input type="text" name="loca_subAlbum" id="loca_subAlbum">
+
+                                            <label>
+                                                Tên Album:
+                                            </label>
+                                            <input type="text" name="name_subAlbum" id="name_subAlbum">
+
+                                            <label>Nhập mô tả cho album</label>
+                                            <textarea name="descript_subAlbum" id="descript_subAlbum"></textarea>
+
+                                            <label></label>
+                                            <input type="submit" id="add_subAlbum" value="Thêm Album">
+
+                                            <label></label>
+                                            <input type="hidden" id="long_subAlbum" placeholder="vi tri longtitude">
+                                            <label></label>
+                                            <input type="hidden" id="lat_subAlbum" placeholder="vi tri latitude">
+                                        </form>
+                                    </div>
+
+                                    <div style="width: 100%;" class="content-3">
+                                        <form method="post" class="form-edit" id="form-updateAlbum">
+                                            <label style="width: 100%;text-align: center;margin-bottom: 5px;">
+                                                Chọn album cần cập nhật:
+                                            </label>
+                                            <select id="select_album_update">
+                                                <option value="chon">Chọn</option>
+                                                <?php
+                                                if(isset($bindingInfo['bindingAlbumMain']))
+                                                {
+                                                    foreach($bindingInfo['bindingAlbumMain'] as $node)
+                                                    {
+                                                        echo '<option value="'.$node["albumid"].'">'.$node["albumName"].'</option>';
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
+
+                                            <p id="tb-updateAlbumInfo"></p>
+
+                                            <label>Vị trí của album trên bản đồ:</label>
+                                            <input type="text" name="update_loca_name" id="update_loca_name">
+
+                                            <label>Cập nhật tên album</label>
+                                            <input type="text" name="update_name_album" id="update_name_album">
+
+                                            <label>Cập nhật mô tả alum</label>
+                                            <textarea name="update_mota_album" id="update_mota_album"></textarea>
+
+                                            <label></label>
+                                            <input type="submit" id="btn_update_album" value="Cập Nhật">
+                                            <input type="submit" id="btn_delete_album" value="Xóa Album">
+
+                                            <label></label>
+                                            <input type="hidden" id="update_longtitude">
+                                            <label></label>
+                                            <input type="hidden" id="update_latitude">
+                                        </form>
+                                    </div>
+
+                                    <div style="width: 100%;" class="content-4">
+                                        <form method="post" class="form-edit" id="update_images" enctype="multipart/form-data">
+                                            <p id="tb_updateImages"></p>
+                                            <label style="width: 100%;text-align: center;margin-bottom: 5px;">
+                                                Chọn album:
+                                            </label>
+
+                                            <select id="update_image_selectAlbum">
+                                                <option value="chon">Chọn</option>
+                                                <?php
+                                                if(isset($bindingInfo['bindingAlbumMain']))
+                                                {
+                                                    foreach($bindingInfo['bindingAlbumMain'] as $node)
+                                                    {
+                                                        echo '<option value="'.$node["albumid"].'">'.$node["albumName"].'</option>';
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
+
+                                            <label style="width: 100%;text-align: center;margin-bottom: 5px; margin-top: 0px;">
+                                                Chọn ảnh trong album:
+                                            </label>
+
+                                            <select id="updateOrAddImage">
+                                                <option value="chon">Thêm một ảnh mới</option>
+
+                                            </select>
+
+                                            <label id="lbl_btnUpdateImage">Chọn ảnh tải lên:</label>
+                                            <input type="file" name="image" id="btnUpdateImage">
+
+                                            <label>Vị trí ảnh trên bản đồ:</label>
+                                            <input type="text" name="loca_updateImage" id="loca_updateImage" >
+
+                                            <label>Mô tả ảnh</label>
+                                            <textarea id="descript_updateImage" name="descript_updateImage"></textarea>
+
+                                            <label></label>
+                                            <input type="submit" style="display: none" id="update_updateImage" value="Cập Nhật">
+                                            <input type="submit" style="display: none" id="delete_updateImage" value="Xóa Ảnh">
+                                            <input type="submit" id="add_updateImage" value="Thêm Ảnh">
+
+                                            <label></label>
+                                            <input type="hidden" id="long_updateImage">
+                                            <label></label>
+                                            <input type="hidden" id="lat_updateImage">
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </section>
+
+                        </div>
+
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAYVsGMEN8T8D9-TtSVgQQgM3ecNbYYFMw&sensor=false" type="text/javascript"></script>
+<script>
+    /////////////////////////////START MAP FOR LOCATION PAGE///////////////////////
+    function addMarker(map, location, draggable, title) {
+        var marker = new google.maps.Marker({
+            position: location,
+            map: map,
+            draggable: draggable,
+            title: title,
+            zoom :11
+        });
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        return marker;
+    }
+
+    function deleteOldMarker(marker) {
+        marker.setMap(null);
+    }
+
+    function getNameLocationbyLatlng(location)
+    {
+        var latitude = location.lat();
+        var longtitude = location.lng();
+        var latlng  = new google.maps.LatLng(latitude, longtitude);
+        geocoder.geocode({'latLng': latlng}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK)
+            {
+                if (results[1])
+                {
+                    jQuery('#pageLoca-longtitude').val(longtitude);
+                    jQuery('#pageLoca-lattiute').val(latitude);
+                    jQuery('#placeNowonGM').val(results[1].formatted_address);
+                }
+                else
+                {
+                    jQuery('#placeNowonGM').val('Không tìm thấy địa chỉ thích hợp!');
+                }
+            } else
+            {
+                jQuery('#placeNowonGM').val('Vị trí này không có địa chỉ!');
+            }
+        });
+    }
+
+    function initialize()
+    {
+        geocoder = new google.maps.Geocoder();
+        var longPage = jQuery('#hidden-pageLong').attr('name');
+        var latPage = jQuery('#hidden-pageLat').attr('name');
+
+        if(longPage != "" && latPage != "")
+        {
+            var myLatlng = new google.maps.LatLng(latPage,longPage);
+        }
+        else
+        {
+            var myLatlng = new google.maps.LatLng(10.82251525771678,106.62858009338379);
+        }
+
+        //get location right now
+        var rightNowLatlng  = new google.maps.LatLng(latPage, longPage);
+        getNameLocationbyLatlng(rightNowLatlng);
+
+        var mapProp = {
+            center:myLatlng,
+            zoom:15,
+            mapTypeId:google.maps.MapTypeId.ROADMAP
+        };
+        var map=new google.maps.Map(document.getElementById("mapOfPage")
+            ,mapProp);
+
+        //tao mot marker moi
+        var tieude = "Nhấn vào đây để chọn vị trí của trang!";
+        var marker = addMarker(map, myLatlng, true, tieude);
+
+
+        google.maps.event.addDomListener(window, "scroll", function() {
+            var center = map.getCenter();
+            google.maps.event.trigger(map, "resize");
+            map.setCenter(center);
+        });
+
+        google.maps.event.addListener(map, 'click', function(event) {
+            var location = event.latLng;
+            marker.setPosition(location);
+            map.panTo(location);
+            getNameLocationbyLatlng(location);
+            if (marker.getAnimation() != null) {
+                marker.setAnimation(google.maps.Animation.BOUNCE);
+            }
+        });
+
+        google.maps.event.addListener(marker, 'dragend', function() {
+            var point = marker.getPosition();
+            map.panTo(point);
+            getNameLocationbyLatlng(point);
+            if (marker.getAnimation() != null) {
+                marker.setAnimation(google.maps.Animation.BOUNCE);
+            }
+        });
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+    /////////////////////////////END MAP FOR LOCATION PAGE///////////////////////
+
+
+    /////////////////////////////START MAP FOR ALBUM PAGE///////////////////////
+    var albumMap;
+    var markers = [];
+    var firstAlbumLocation = new google.maps.LatLng(10.82251525771678,106.62858009338379);
+
+    function getNameLocationforAlbum(location, hidLong, hidLat, divResult)
+    {
+        var latitude = location.lat();
+        var longtitude = location.lng();
+        var latlng  = new google.maps.LatLng(latitude, longtitude);
+        geocoder.geocode({'latLng': latlng}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK)
+            {
+                if (results[1])
+                {
+                    jQuery('#'+hidLong).val(longtitude);
+                    jQuery('#'+hidLat).val(latitude);
+                    jQuery('#'+divResult).val(results[1].formatted_address);
+                }
+                else
+                {
+                    jQuery('#'+divResult).val('invalid');
+                }
+            } else
+            {
+                jQuery('#'+divResult).val('invalid');
+            }
+        });
+    }
+
+    function bindingDataLocation(lat, longt ,divResult)
+    {
+        var latlng  = new google.maps.LatLng(lat, longt);
+        geocoder.geocode({'latLng': latlng}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK)
+            {
+                if (results[1])
+                {
+                    jQuery('#'+divResult).val(results[1].formatted_address);
+                }
+                else
+                {
+                    jQuery('#'+divResult).val('invalid');
+                }
+            } else
+            {
+                jQuery('#'+divResult).val('invalid');
+            }
+        });
+    }
+
+    function addMakerOptions(map, icon, title, location)
+    {
+        var marker = new google.maps.Marker({
+            position: location,
+            map: map,
+            draggable: true,
+            title: title,
+            icon: icon
+        });
+        map.panTo(location);
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        markers.push(marker);
+        return marker;
+    }
+
+    function setAllMap(map) {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(map);
+        }
+    }
+
+    function deleteMarkers() {
+        setAllMap(null);
+        markers = [];
+    }
+
+    function eventDragEndOnMap(marker, divLong, divLat, divLocationName)
+    {
+        google.maps.event.addListener(marker, 'dragend', function() {
+            var point = marker.getPosition();
+            albumMap.panTo(point);
+            getNameLocationforAlbum(point, divLong, divLat, divLocationName);
+            if (marker.getAnimation() != null) {
+                marker.setAnimation(google.maps.Animation.BOUNCE);
+            }
+        });
+    }
+
+    function initializeAlbumMap() {
+        var mapOptions = {
+            zoom: 10,
+            center: firstAlbumLocation
+        };
+        albumMap = new google.maps.Map(document.getElementById('canvas-albumMap'),
+            mapOptions);
+
+        google.maps.event.addDomListener(window, "scroll", function() {
+            var center = albumMap.getCenter();
+            google.maps.event.trigger(albumMap, "resize");
+            albumMap.setCenter(center);
+        });
+
+        var clickInfoAlbum = "Nhấn vào đây để chọn vị trí của trang!";
+        var image = '<?php echo $this->basePath().'/img/'; ?>icon-marker-baseHome.png';
+        var m = addMakerOptions(albumMap,image, clickInfoAlbum, firstAlbumLocation);
+
+        jQuery('.tab-label-1').click(function(){
+            deleteMarkers();
+            var imgAlbum = '<?php echo $this->basePath().'/img/'; ?>icon-marker-baseHome.png';
+            var m = addMakerOptions(albumMap,imgAlbum, 'Chọn vị trí của trang', firstAlbumLocation);
+
+            eventDragEndOnMap(m, 'album_long_value', 'album_lat_value', 'album_location_name');
+        });
+
+        jQuery('.tab-label-2').click(function(){
+            deleteMarkers();
+            var imgAlbum = '<?php echo $this->basePath().'/img/'; ?>icon-marker-albums.png';
+            var m = addMakerOptions(albumMap,imgAlbum, 'Chọn vị trí đặt album', firstAlbumLocation);
+
+            eventDragEndOnMap(m, 'long_subAlbum', 'lat_subAlbum', 'loca_subAlbum');
+        });
+
+        jQuery('.tab-label-3').click(function(){
+            deleteMarkers();
+            var imgAlbum = '<?php echo $this->basePath().'/img/'; ?>icon-marker-albumConfig.png';
+            var m = addMakerOptions(albumMap,imgAlbum, 'Chọn vị trí cập nhật album', firstAlbumLocation);
+
+            eventDragEndOnMap(m, 'update_longtitude', 'update_latitude', 'update_loca_name');
+        });
+
+        jQuery('.tab-label-4').click(function(){
+            deleteMarkers();
+            var imgAlbum = '<?php echo $this->basePath().'/img/'; ?>icon-markerImage.png';
+            var m = addMakerOptions(albumMap,imgAlbum, 'Chọn vị trí đặt ảnh', firstAlbumLocation);
+
+            eventDragEndOnMap(m, 'long_updateImage', 'lat_updateImage', 'loca_updateImage');
+        });
+
+        jQuery('#select_album_update').change(function(){
+            var albumID = jQuery(this).val();
+            if(albumID != 'chon')
+            {
+                bindingDataAlbum(albumID);
+
+                var nowLong = jQuery('#update_longtitude').val();
+                var nowLat  = jQuery('#update_latitude').val();
+                var nowLocation = new google.maps.LatLng(nowLat,nowLong);
+
+                deleteMarkers();
+
+                var imgAlbum = '<?php echo $this->basePath().'/img/'; ?>icon-marker-albumConfig.png';
+                var m = addMakerOptions(albumMap,imgAlbum, 'Chọn vị trí cập nhật album', nowLocation);
+                eventDragEndOnMap(m, 'update_longtitude', 'update_latitude', 'update_loca_name');
+            }
+            else{
+                jQuery('#form-updateAlbum')[0].reset();
+            }
+        });
+
+        jQuery('#update_image_selectAlbum').on('change',function(){
+            var albumID = jQuery(this).val();
+            if(albumID != 'chon')
+            {
+                bindingAllImageofAlbum(albumID);
+            }
+            else
+            {
+                jQuery('#update_images')[0].reset();
+
+                var optionSelect = document.getElementById('updateOrAddImage');
+                optionSelect.options.length = 0;
+                var option = document.createElement("option");
+                option.text = "Thêm một ảnh mới";
+                option.value = "chon";
+                optionSelect.add(option,optionSelect[0]);
+            }
+        });
+
+        jQuery('#updateOrAddImage').on('change',function(){
+            var imageID = jQuery(this).val();
+
+            if(imageID != 'chon')
+            {
+                bindingInfoImageofAlbum(imageID, albumMap);
+            }
+            else
+            {
+                jQuery('#loca_updateImage').val('');
+                jQuery('#descript_updateImage').val('');
+                jQuery('#long_updateImage').val('');
+                jQuery('#lat_updateImage').val('');
+            }
+        });
+
+
+        //event draggable and drop @@TODO
+        eventDragEndOnMap(markers[0], 'album_long_value', 'album_lat_value', 'album_location_name');
+    }
+
+    google.maps.event.addDomListener(window, 'load', initializeAlbumMap);
+    /////////////////////////////END MAP FOR ALBUM PAGE///////////////////////
+
+    /////////////////////////////START FUNCTION FOR BINDING DATA//////////////////
+    function bindingInfoImageofAlbum(imageID, map)
+    {
+        var dataval = "imageID="+imageID;
+
+        jQuery.ajax({
+            type: "POST",
+            url: "<?php echo $this->url('fanpage', array('action' => 'bindinginfoimageofalbum')); ?>",
+            data: dataval,
+            async:false,
+            success: function(data) {
+                data = jQuery.parseJSON(data);
+
+                if(data['success'] == 1)
+                {
+                    var longt = data['bindingInfoImg']['imageLong'];
+                    var latitude = data['bindingInfoImg']['imageLat'];
+
+                   jQuery('#descript_updateImage').val(data['bindingInfoImg']['imageDes']);
+                   jQuery('#long_updateImage').val(longt);
+                   jQuery('#lat_updateImage').val(latitude);
+
+                    bindingDataLocation(latitude, longt, 'loca_updateImage');
+
+                    deleteMarkers();
+                    var latlng  = new google.maps.LatLng(latitude, longt);
+                    var imgAlbum = '<?php echo $this->basePath().'/img/'; ?>icon-markerImage.png';
+                    var m = addMakerOptions(map,imgAlbum, 'Chọn vị trí cập nhật ảnh', latlng);
+                    eventDragEndOnMap(m, 'long_updateImage', 'lat_updateImage', 'loca_updateImage');
+                }
+            },
+            error: function() {
+                alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+            }
+        });
+    }
+
+    function bindingAllImageofAlbum(albumID)
+    {
+        var dataval = "albumID="+albumID;
+        jQuery.ajax({
+            type: "POST",
+            url: "<?php echo $this->url('fanpage', array('action' => 'bindingimageofalbum')); ?>",
+            data: dataval,
+            async:false,
+            success: function(data) {
+                data = jQuery.parseJSON(data);
+
+                var optionSelect = document.getElementById('updateOrAddImage');
+                if(data['success'] == 1)
+                {
+                    if(data['binding'] != null)
+                    {
+                        optionSelect.options.length = 0;
+                        for(var i = 0; i < data['binding'].length; i++)
+                        {
+                            var option = document.createElement("option");
+                            option.value = data['binding'][i]['imageid'];
+                            option.text = data['binding'][i]['imageDes'];
+                            optionSelect.add(option,optionSelect[0]);
+                        }
+                    }
+                }
+                else
+                {
+                    optionSelect.options.length = 0;
+                }
+                var opt = document.createElement("option");
+                opt.text = "Thêm một ảnh mới";
+                opt.value = "chon";
+                optionSelect.add(opt,optionSelect[0]);
+
+            },
+            error: function() {
+                alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+            }
+        });
+    }
+
+    function bindingDataAlbum(albumID)
+    {
+        var dataval = "albumID="+albumID;
+        jQuery.ajax({
+            type: "POST",
+            url: "<?php echo $this->url('fanpage', array('action' => 'bindingalbuminfo')); ?>",
+            data: dataval,
+            async:false,
+            success: function(data) {
+
+                data = jQuery.parseJSON(data);
+
+                if(data['success'] == 1)
+                {
+                    var albumName     = data['bindingAlbum']['albumname'];
+                    var albumDescript = data['bindingAlbum']['albumdescription'];
+                    var albumLong     = data['bindingAlbum']['albumlongtitude'];
+                    var albumLat      = data['bindingAlbum']['albumlatitude'];
+
+                    bindingDataLocation(albumLat, albumLong, 'update_loca_name');
+                    jQuery('#update_name_album').val(albumName);
+                    jQuery('#update_mota_album').val(albumDescript);
+                    jQuery('#update_longtitude').val(albumLong);
+                    jQuery('#update_latitude').val(albumLat);
+                }
+            },
+            error: function() {
+                alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+            }
+        });
+    }
+    /////////////////////////////END FUNCTION FOR BINDING DATA////////////////////
+
+
+    jQuery(document).ready(function(){
+
+    });
+
+
+</script>
+
+<script type="text/javascript">
+
+    var currIndex = 0;
+    var slideStep = 140;
+    var maxItems;
+    var waitingTime = 0;
+
+    function moveLeft()
+    {
+        if(currIndex == 0)
+        {
+            currIndex = maxItems;
+        }
+        currIndex -= 1;
+        if(currIndex < 0)
+        {
+            currIndex = 0;
+        }
+        move(currIndex);
+    }
+    function moveRight()
+    {
+        waitingTime++;
+        if(waitingTime<5)
+        {
+            return;
+        }
+        waitingTime = 0;
+        if(currIndex == maxItems - 1)
+        {
+            currIndex = -1;
+        }
+        currIndex += 1;
+        if(currIndex > maxItems -1)
+        {
+            currIndex = maxItems -1;
+        }
+        move(currIndex);
+    }
+
+    function move(index)
+    {
+        jQuery('.slide-avar').animate({'left': -(index*slideStep)}, 500, function(){
+
+        });
+        var smallDiv =jQuery('.small-div');
+
+
+        smallDiv.css('border', '2px solid transparent');
+        smallDiv.eq(index).css('border', '2px solid black');
+        var previewSlideShow = jQuery('.preview-slideShow>img');
+        var newSource = jQuery(smallDiv.eq(index)).children().attr('src');
+
+        var h = previewSlideShow.height();
+        var w = previewSlideShow.width();
+        previewSlideShow.animate({
+                marginLeft: -w/2,
+
+                opacity:0
+            },700, function(){
+                jQuery(this).css({'margin-top': '0px', 'margin-left': '0px'}).attr('src', newSource);
+                jQuery(this).animate({
+                   opacity:1
+                });
+            }
+        );
+
+        previewSlideShow.css('-webkit-transform','');
+
+
+    }
+
+    function onClickLeft()
+    {
+        waitingTime = 0;
+        moveLeft();
+    }
+    function onClickRight()
+    {
+        waitingTime = 5;
+        moveRight();
+    }
+
+    jQuery(document).ready(function(){
+
+        jQuery('.small-div').eq(0).css('border', '2px solid black');
+
+        maxItems = jQuery('.slide-avar .small-div').length;
+
+        var longDiv= maxItems*slideStep+maxItems*3;
+        jQuery('.slide-avar').css('width',longDiv+ "px");
+
+        jQuery('.slide-avar .small-div img').hover(function(){
+            waitingTime=0;
+        });
+
+        jQuery('.right-slide-arrow').click(onClickRight);
+        jQuery('.left-slide-arrow').click(onClickLeft);
+//        setInterval('moveRight();', 1000);
+
+    });
+
+</script>
+
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        jQuery('#st-accordion').accordion();
+    });
+</script>
+
+<script type="text/javascript">
+    function getTimestampNow()
+    {
+        var datenow = new Date();
+        datenow = parseInt(datenow.setFullYear(datenow.getFullYear(), datenow.getMonth(), datenow.getDate())/1000);
+        return datenow;
+    }
+
+    jQuery(document).ready(function(){
+
+        /////////////////////////START BINDING DATA////////////////////////////////
+        jQuery('#nameFanpage').val('<?php if(isset($pageInfo['pagename'])) echo $pageInfo['pagename']; ?>');
+        var txtarea = jQuery('#descriptFanpage').attr('data');
+        if(txtarea != ""){
+            jQuery('#descriptFanpage').val(txtarea);
+        }
+        var textPageMaparea = jQuery('#pageMapDescription').attr('data');
+        if(textPageMaparea != ""){
+            jQuery('#pageMapDescription').val(textPageMaparea);
+        }
+
+        var pageIDDDD = jQuery('#hidden-pageid').attr('name');
+        var srcPageHome = jQuery('.logo-zess>a');
+        var valueSrcPage = srcPageHome.attr('href');
+        valueSrcPage = valueSrcPage.replace('fanpage/', 'fanpage');
+        valueSrcPage = valueSrcPage + '?pageID=' + pageIDDDD;
+        srcPageHome.attr('href', valueSrcPage);
+
+        /////////////////////////END BINDING DATA////////////////////////////////
+
+
+
+        ////////////////////////////START UPDATE IMAGE OF ALBUM////////////////////////////////////
+        jQuery('#delete_updateImage').click(function(e){
+            e.preventDefault();
+            var imageID = jQuery('#updateOrAddImage').val();
+            var motaanh = jQuery('#descript_updateImage').val();
+            jQuery.alerts.okButton = "Đồng ý";
+            jQuery.alerts.cancelButton = "Từ chối";
+            jConfirm('Bạn có đồng ý xóa ảnh "'+motaanh+'" ?', 'Xác nhận xóa ảnh!', function(r)
+            {
+               if(r)
+               {
+                   var imageID = jQuery('#updateOrAddImage').val();
+                   var dataval = "imageID="+imageID;
+                   jQuery.ajax({
+                       type: "POST",
+                       url: "<?php echo $this->basePath().'/plugin/delete_image.php'; ?>",
+                       data: dataval,
+                       async:false,
+                       success: function(data) {
+//                           alert(data);
+                           if(data == '1')
+                           {
+                               deleteImageIDofAlbum(imageID);
+                           }
+                           else
+                           {
+                               jQuery('#tb_updateImages').text('Xóa ảnh thất bại!').show(600).delay(3000).hide(400);
+                           }
+                       },
+                       error: function() {
+                           alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                       }
+                   });
+               }
+            });
+
+        });
+
+        function deleteImageIDofAlbum(imageID)
+        {
+            var dataval = "imageID="+imageID;
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('fanpage', array('action' => 'deleteimageofalbum')); ?>",
+                data: dataval,
+                async:false,
+                success: function(data) {
+//                    alert(data);
+                    data = jQuery.parseJSON(data);
+                    if(data['success'] == 1)
+                    {
+                        jQuery('#tb_updateImages').text('Xóa ảnh thành công!').show(600).delay(3000).hide(400);
+                        jQuery('#update_images')[0].reset();
+                        var selectx = document.getElementById('updateOrAddImage');
+                        selectx.options.length = 1;
+                    }
+                    else
+                    {
+                        jQuery('#tb_updateImages').text('Xóa ảnh thất bại!').show(600).delay(3000).hide(400);
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+
+        jQuery('#update_updateImage').click(function(){
+            var imageDescript = jQuery('#descript_updateImage').val();
+            var imageLong = jQuery('#long_updateImage').val();
+            var imageLat = jQuery('#lat_updateImage').val();
+            var imageID = jQuery('#updateOrAddImage').val();
+            if(imageDescript != "" && imageLat != "")
+            {
+                var dataval = "imageID="+imageID+"&imageLong="+imageLong+"&imageLat="+imageLat+'&imageDescript='+imageDescript;
+
+                jQuery.ajax({
+                    type: "POST",
+                    url: "<?php echo $this->url('fanpage', array('action' => 'updateinfoimage')); ?>",
+                    data: dataval,
+                    async:false,
+                    success: function(data) {
+                        data = jQuery.parseJSON(data);
+                        if(data['success'] == 1)
+                        {
+                            jQuery('#tb_updateImages').text('Cập nhật thông tin ảnh thành công!').show(600).delay(3000).hide(400);
+                            jQuery('#update_images')[0].reset();
+
+                            var selectx = document.getElementById('updateOrAddImage');
+                            selectx.options.length = 1;
+                        }
+                        else
+                        {
+                            jQuery('#tb_updateImages').text('Cập nhật thông tin ảnh thất bại!').show(600).delay(3000).hide(400);
+                        }
+                    },
+                    error: function() {
+                        alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                    }
+                });
+                return false;
+            }
+            else
+            {
+                jQuery('#tb_updateImages').text('Nhập bình luận cho ảnh!').show(600).delay(3000).hide(400);
+            }
+            return false;
+        });
+
+        jQuery('#updateOrAddImage').change(function(){
+            var value = jQuery(this).val();
+            var label = jQuery('#lbl_btnUpdateImage');
+            var inputUpload = jQuery('#btnUpdateImage');
+            var btnDelete = jQuery('#delete_updateImage');
+            var btnAdd = jQuery('#add_updateImage');
+            var btnUpdate = jQuery('#update_updateImage');
+
+            if(value == "chon")
+            {
+                label.css('display', 'inline-block');
+                inputUpload.css('display', 'inline-block');
+                btnAdd.css('display', 'inline-block');
+                btnDelete.css('display', 'none');
+                btnUpdate.css('display', 'none');
+            }
+            else
+            {
+                label.css('display', 'none');
+                inputUpload.css('display', 'none');
+                btnAdd.css('display', 'none');
+                btnDelete.css('display', 'inline-block');
+                btnUpdate.css('display', 'inline-block');
+            }
+        });
+
+        jQuery('#add_updateImage').click(function(){
+            var albumID = jQuery('#update_image_selectAlbum').val();
+            var formSUb = jQuery('#update_images');
+
+            if(albumID == "chon")
+            {
+                jQuery('#tb_updateImages').text('Chưa chọn album để thêm ảnh mới!').show(400).delay(3000).hide(400);
+                formSUb.submit(function(e){
+                    e.preventDefault();
+                });
+            }
+            else
+            {
+                formSUb.validate({
+                    errorElement: "p",
+                    rules: {
+                        loca_updateImage:{
+                            required:true,
+                            minlength:6
+                        },
+                        descript_updateImage: {
+                            required:true,
+                            minlength:6
+                        }
+                    },
+                    messages:{
+                        loca_updateImage:{
+                            required:"Địa điểm chưa chính xác!",
+                            minlength :"Địa điểm chưa chính xác!"
+                        },
+                        descript_updateImage: {
+                            required:"Nhập mô tả cho ảnh!",
+                            minlength: "Tên ảnh phải có ít nhất 6 kí tự!"
+                        }
+                    },
+                    submitHandler : function(){
+                        addImagesFromAlbum(albumID);
+                    }
+                });
+
+            }
+
+
+        });
+
+        function addImagesFromAlbum(albumID)
+        {
+            var timeNow = getTimestampNow();
+            var formdata = new FormData(jQuery('#update_images')[0]);
+            var reader = new FileReader();
+            var value = reader.readAsDataURL(document.getElementById('btnUpdateImage').files[0]);
+            var pageID = jQuery('#hidden-pageid').attr('name');
+            var albumType = 'NOR';
+
+            formdata.append('image', value);
+            formdata.append('timestamp', timeNow);
+            formdata.append('actionUser', pageID);
+            formdata.append('albumType', albumType);
+
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->basePath().'/plugin/upload_normal.php' ;?>",
+                data: formdata,
+                cache: false,
+                contentType: false,
+                processData: false,
+                async:false,
+                success: function(data) {
+                    if(data!='error')
+                    {
+                        insertImageofAlbums(albumID, data);
+                        jQuery('#update_images')[0].reset();
+                    }
+                    else
+                    {
+                        alert('Ảnh tải lên không đúng định dạng hoặc dung lượng quá lớn!.');
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+
+        function insertImageofAlbums(albumID, dataImage)
+        {
+            var pageID = jQuery('#hidden-pageid').attr('name');
+            var imageLong = jQuery('#long_updateImage').val();
+            var imageLat = jQuery('#lat_updateImage').val();
+            var imageDescript = jQuery('#descript_updateImage').val();
+            var dataval = "pageID="+pageID+"&albumID="+albumID+"&dataImage="+dataImage+"&imageLong="+imageLong+"&imageLat="+imageLat+'&imageDescript='+imageDescript;
+
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('fanpage', array('action' => 'insertnewimageofalbum')); ?>",
+                data: dataval,
+                async:false,
+                success: function(data) {
+                    data = jQuery.parseJSON(data);
+                    if(data['success'] == 1)
+                    {
+                        jQuery('#tb_updateImages').text('Thêm ảnh cho album thành công!').show(600).delay(3000).hide(400);
+                    }
+                    else
+                    {
+                        jQuery('#tb_updateImages').text('Thêm ảnh cho album thất bại!').show(600).delay(3000).hide(400);
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+        ////////////////////////////END UPDATE IMAGE OF ALBUM////////////////////////////////////
+
+
+        ////////////////////////////START DELETE ALBUM IMAGES//////////////////////////////////////
+        jQuery('#btn_delete_album').click(function(){
+            var selectValue = jQuery('#select_album_update').val();
+            var pageID = jQuery('#hidden-pageid').attr('name');
+
+            var dataval = "pageID="+pageID+"&albumID="+selectValue;
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('fanpage', array('action' => 'deletealbumimage')); ?>",
+                data: dataval,
+                async:false,
+                success: function(data) {
+                    data = jQuery.parseJSON(data);
+                    if(data['success'] == 1)
+                    {
+                        jQuery('#tb-updateAlbumInfo').text('Xóa album và các ảnh trong album thành công!.').show(400).delay(3000).hide(400);
+                    }
+                    else
+                    {
+                        jQuery('#tb-updateAlbumInfo').text('Xóa album thất bại!.').show(400).delay(3000).hide(400);
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+
+        });
+        ////////////////////////////END DELETE ALBUM IMAGES//////////////////////////////////////
+
+        ///////////////////////////START UPDATE ALBUM IMAGES ///////////////////////////////
+
+        jQuery('#btn_update_album').click(function(){
+            jQuery('#form-updateAlbum').validate({
+                errorElement: "p",
+                rules: {
+                    update_loca_name:{
+                        required:true,
+                        minlength:6
+                    },
+                    update_name_album: {
+                        required:true,
+                        minlength:6
+                    },
+                    update_mota_album:{
+                        required : true,
+                        minlength: 6
+                    }
+                },
+                messages:{
+                    update_loca_name:{
+                        required:"Địa điểm chưa chính xác!",
+                        minlength :"Địa điểm chưa chính xác!"
+                    },
+                    update_name_album: {
+                        required:"Không thể bỏ trống tên album!",
+                        minlength: "Tên album phải có ít nhất 6 kí tự!"
+                    },
+                    update_mota_album:{
+                        required : "Không thể bỏ trống mô tả album!",
+                        minlength: "Mô tả album phải có ít nhất 6 kí tự!"
+                    }
+                },
+                submitHandler : function(){
+                    doAjaxUpdateAlbumInfo();
+                }
+            });
+        });
+
+        function doAjaxUpdateAlbumInfo()
+        {
+            var pageID = jQuery('#hidden-pageid').attr('name');
+            var albumID = jQuery('#select_album_update').val();
+            var update_albumName = jQuery('#update_name_album').val();
+            var update_albumDes = jQuery('#update_mota_album').val();
+            var updateLong = jQuery('#update_longtitude').val();
+            var updateLat = jQuery('#update_latitude').val();
+
+            var dataval = "pageID="+pageID+"&albumID="+albumID+"&nAlbumName="+update_albumName+"&nMotaAlbum="+update_albumDes+'&albumLong='+updateLong+'&albumLat='+updateLat;
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('fanpage', array('action' => 'updatealbuminfo')); ?>",
+                data: dataval,
+                async:false,
+                success: function(data) {
+                    data = jQuery.parseJSON(data);
+                    if(data['success'] == 1)
+                    {
+                        jQuery('#tb-updateAlbumInfo').text('Cập nhật thông tin album thành công!.').show(400).delay(3000).hide(400);
+                        jQuery('#form-updateAlbum')[0].reset();
+                    }
+                    else
+                    {
+                        jQuery('#tb-updateAlbumInfo').text('Cập nhật thông album thất bại!.');
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+
+        ///////////////////////////END UPDATE ALBUM IMAGES /////////////////////////////////
+
+
+        //////////////////////////START CREATE MAIN ALBUM WIDTH LOCATION//////////////////////
+        jQuery('#sub_create_album').click(function(){
+            jQuery('#form-createAlbum').validate({
+                errorElement: "p",
+                rules: {
+                    nLocaAlbum:{
+                        required:true,
+                        minlength:6
+                    },
+                    nAlbumName: {
+                        required:true,
+                        minlength:6
+                    },
+                    nMotaAlbum:{
+                        required : true,
+                        minlength: 6
+                    }
+                },
+                messages:{
+                    nLocaAlbum:{
+                        required:"Địa điểm chưa chính xác!",
+                        minlength :"Địa điểm chưa chính xác!"
+                    },
+                    nAlbumName: {
+                        required:"Nhập tên của địa điểm!",
+                        minlength: "Tên địa điểm phải có ít nhất 6 kí tự!"
+                    },
+                    nMotaAlbum:{
+                        required : "Nhập mô tả của địa điểm!",
+                        minlength: "Mô tả địa điểm phải có ít nhất 6 kí tự!"
+                    }
+                },
+                submitHandler : function(){
+                    ajaxUpdateLocationAlbum();
+                }
+            });
+        });
+
+        function ajaxUpdateLocationAlbum()
+        {
+            var pageID = jQuery('#hidden-pageid').attr('name');
+            var nAlbumName = jQuery('#nAlbumName').val();
+            var nMotaAlbum = jQuery('#nMotaAlbum').val();
+            var albumLong = jQuery('#album_long_value').val();
+            var albumLat = jQuery('#album_lat_value').val();
+
+            var dataval = "pageID="+pageID+"&nAlbumName="+nAlbumName+"&nMotaAlbum="+nMotaAlbum+'&albumLong='+albumLong+'&albumLat='+albumLat;
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('fanpage', array('action' => 'updatealbumlocation')); ?>",
+                data: dataval,
+                async:false,
+                success: function(data) {
+                    data = jQuery.parseJSON(data);
+                    if(data['success'] == 1)
+                    {
+                        jQuery('#tb-craeteAlbum').text('Tạo địa điểm cho các album ảnh thành công!.').show(400).delay(3000).hide(400);
+                    }
+                    else
+                    {
+                        jQuery('#tb-craeteAlbum').text('Bạn đã tạo địa điểm, hãy thêm album vào địa điểm!.').show(400).delay(3000).hide(400);
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+        //////////////////////////END CREATE MAIN ALBUM WIDTH LOCATION//////////////////////
+
+
+        /////////////////////////START CREATE SUB-MAIN-ALBUM WIDTH LOCATION///////////////////////////
+        jQuery('#add_subAlbum').click(function(){
+            jQuery('#form-albumInPlace').validate({
+                errorElement: "p",
+                rules: {
+                    loca_subAlbum: {
+                        required:true,
+                        minlength:6
+                    },
+                    name_subAlbum:{
+                        required:true,
+                        minlength:6
+                    },
+                    descript_subAlbum:{
+                        required : true,
+                        minlength: 6
+                    }
+                },
+                messages:{
+                    loca_subAlbum:{
+                        required:"Địa điểm album chưa chính xác!",
+                        minlength :"Địa điểm album chưa chính xác!"
+                    },
+                    name_subAlbum: {
+                        required:"Nhập tên của album!",
+                        minlength: "Tên album phải có ít nhất 6 kí tự!"
+                    },
+                    descript_subAlbum:{
+                        required : "Nhập mô tả của album!",
+                        minlength: "Mô tả album phải có ít nhất 6 kí tự!"
+                    }
+                },
+                submitHandler : function(){
+                    doActionSaveSubAlbum();
+                    jQuery('#form-albumInPlace')[0].reset();
+                }
+            });
+        });
+
+        function doActionSaveSubAlbum()
+        {
+            var pageID = jQuery('#hidden-pageid').attr('name');
+            var sub_albumName = jQuery('#name_subAlbum').val();;
+            var sub_albumDescript = jQuery('#descript_subAlbum').val();
+            var long_subAlbum = jQuery('#long_subAlbum').val();
+            var lat_subAlbum = jQuery('#lat_subAlbum').val();
+
+            var dataval = "pageID="+pageID+"&sub_albumName="+sub_albumName+"&sub_albumDescript="+sub_albumDescript+"&long_subAlbum="+long_subAlbum+"&lat_subAlbum="+lat_subAlbum;
+
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('fanpage', array('action' => 'createsubalbum')); ?>",
+                data: dataval,
+                async:false,
+                success: function(data) {
+                    data = jQuery.parseJSON(data);
+                    if(data['success'] == 1)
+                    {
+                        jQuery('#tb-addSubAlbum').text('Thêm album ảnh thành công!.').show(600).delay(3000).hide(400);
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+        /////////////////////////END CREATE SUB-ALBUM WIDTH LOCATION///////////////////////////
+
+
+        ////////////////////////START UPDATE PAGE INFO/////////////////////////////
+        jQuery('#sub-pageInfo').click(function(){
+            var pageID = jQuery('#hidden-pageid').attr('name');
+            var pageDescription = jQuery('#descriptFanpage').val();
+
+            var dataval = "pageID="+pageID+"&pageDescription="+pageDescription;
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('fanpage', array('action' => 'updatepageinfo')); ?>",
+                data: dataval,
+                async:false,
+                success: function(data) {
+                    data = jQuery.parseJSON(data);
+                    if(data['success'] == 1)
+                    {
+                        jQuery('#tb-updateBasicInfo').text('Cập nhật thông tin trang thành công!.').show(600).delay(3000).hide(400);
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        });
+        ////////////////////////END UPDATE PAGE INFO/////////////////////////////
+
+        ///////////////////START UPDATE LOCATION INFOMATION/////////////////
+        jQuery('#sub-pageLocation').click(function(){
+            var pageID = jQuery('#hidden-pageid').attr('name');
+            var pageMapDescription = jQuery('#pageMapDescription').val();
+            var pageLatitude = jQuery('#pageLoca-lattiute').val();
+            var pageLongtitude = jQuery('#pageLoca-longtitude').val();
+
+            var dataval = "pageID="+pageID+"&pageMapDescription="+pageMapDescription+"&pageLatitude="+pageLatitude+"&pageLongtitude="+pageLongtitude;
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('fanpage', array('action' => 'updatepagemapinfo')); ?>",
+                data: dataval,
+                async:false,
+                success: function(data) {
+                    data = jQuery.parseJSON(data);
+                    if(data['success'] == 1)
+                    {
+                      jQuery('#tb-updateMapInfo').text('Cập nhật thông tin vị trí trang thành công!.').show(600).delay(3000).hide(400);
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        });
+        ///////////////////END UPDATE LOCATION INFOMATION/////////////////
+
+        ///////////////////START UPLOAD MULTIIMAGES////////////////////////
+        jQuery('#sub-slideshow').click(function(){
+            var formID = jQuery('#form-slideshow');
+            var pageID = jQuery('#hidden-pageid').attr('name');
+            var btnFileID = 'file-imageAvatar';
+            var albumType = "SLI";
+            doActionSaveSlideShowPage(formID, pageID, btnFileID, albumType);
+        });
+
+        function doActionSaveSlideShowPage(formID, pageID, btnFileID, albumType)
+        {
+            var timeNow = getTimestampNow();
+            var formdata = new FormData(formID[0]);
+            var reader = new FileReader();
+            var value = reader.readAsDataURL(document.getElementById(btnFileID).files[0]);
+
+            formdata.append('files', value);
+            formdata.append('timestamp', timeNow);
+            formdata.append('pageid', pageID);
+            formdata.append('albumType', albumType);
+
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->basePath().'/plugin/fanpage_multi_upload.php' ;?>",
+                data: formdata,
+                cache: false,
+                contentType: false,
+                processData: false,
+                async:false,
+                success: function(data) {
+                    if(data!='error')
+                    {
+                        var max = parseInt(data);
+                        for(var i =0; i<max; i++)
+                        {
+                            var newTimeNow = parseInt(timeNow) + i;
+                            ajaxSaveImageLogoPage(pageID, newTimeNow, data, albumType, '');
+                        }
+
+                        formID[0].reset();
+                    }
+                    else
+                    {
+                        alert('Ảnh tải lên không đúng định dạng hoặc dung lượng quá lớn!.');
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+        ///////////////////END UPLOAD MULTIIMAGES////////////////////////
+
+        ///////////////STAR RESIZE UL LI //////////////////////
+        jQuery(window).scroll(function(){
+            jQuery('.st-accordion ul li').css('height', 'auto');
+        });
+        ///////////////END RESIZE UL LI //////////////////////
+
+
+        /////////////////////////START SAVE LOGO && AVATAR///////////////////////////////
+        function doActionSaveLogoAvatar(formID, pageid, btnFileID, albumType, imageSourceDiv)
+        {
+            var timeNow = getTimestampNow();
+            var formdata  = new FormData(formID[0]);
+            var reader = new FileReader();
+            var value = reader.readAsDataURL(document.getElementById(btnFileID).files[0]);
+
+
+            formdata.append('image', value);
+            formdata.append('timestamp', timeNow);
+            formdata.append('pageid', pageid);
+            formdata.append('albumType', albumType);
+
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->basePath().'/plugin/fanpage_upload.php' ;?>",
+                data: formdata,
+                cache: false,
+                contentType: false,
+                processData: false,
+                async:false,
+                success: function(data) {
+                    if(data!='error')
+                    {
+
+                        ajaxSaveImageLogoPage(pageid, timeNow, data, albumType, imageSourceDiv);
+                        formID[0].reset();
+                    }
+                    else
+                    {
+                        alert('Ảnh tải lên không đúng định dạng hoặc dung lượng quá lớn!.');
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+
+        jQuery('#sub-imageLogo').click(function(){
+
+            var formID = jQuery('#form-imageLogo');
+            var pageid = jQuery('#hidden-pageid').attr('name');
+            var btnFileID = "file-imageLogo";
+            var albumType = "LOGO";
+            var imageSourceDiv = jQuery('#prv-logo');
+
+            doActionSaveLogoAvatar(formID, pageid, btnFileID, albumType, imageSourceDiv);
+
+        });
+
+        jQuery('#sub-imageAvatar').click(function(){
+            var formID = jQuery('#form-imageAvatar');
+            var pageid = jQuery('#hidden-pageid').attr('name');
+            var btnFileID = "file-imageAvatar";
+            var albumType = "AVA";
+            var imageSourceDiv = jQuery('#prv-avatar');
+
+            doActionSaveLogoAvatar(formID, pageid, btnFileID, albumType, imageSourceDiv);
+        });
+
+        function ajaxSaveImageLogoPage(pageid, timeNow, image, albumType, imageSourceDiv)
+        {
+            var dataval = "pageid=" + pageid+"&createdTime=" + timeNow+"&imageType=" +image + "&albumType=" +albumType;
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('fanpage', array('action' => 'savepageimage')); ?>",
+                data: dataval,
+                async:false,
+                success: function(data) {
+                    data = jQuery.parseJSON(data);
+                        if(data['success'] == 1)
+                        {
+                            if(imageSourceDiv != "")
+                            {
+                                var previewLogo = imageSourceDiv;
+                                var path = '<?php echo $this->basePath(); ?>' + '/uploads/' + image;
+                                previewLogo.children().attr('src', path);
+                            }
+                        }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+        /////////////////////////END SAVE LOGO && AVATAR///////////////////////////////
+
+    });
+</script>

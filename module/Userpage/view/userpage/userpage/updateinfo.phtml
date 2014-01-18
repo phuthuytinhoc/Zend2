@@ -99,16 +99,18 @@
                             </div>
                             <div class="divAboutme">
                                 <label>Trường học: </label>
-                                <input name="school" id="school" type="text" placeholder="Nhập tên trường bạn đã học...">
+                                <input name="school" id="school" type="text" placeholder="Nhập tên trường bạn đã học..."
+                                    value="<?php if(isset($aboutMe)) echo $aboutMe['school']; ?>">
                             </div>
                             <div class="divAboutme">
                                 <label>Nơi làm việc: </label>
-                                <input name="work" id="work" type="text" placeholder="Nhập nơi bạn đang làm việc...">
+                                <input name="work" id="work" type="text" placeholder="Nhập nơi bạn đang làm việc..."
+                                    value="<?php if(isset($aboutMe)) echo $aboutMe['work']; ?>">
                             </div>
                             <div class="divAboutme">
                                 <label>Tình trạng hôn nhân: </label>
                                 <div class="select-wrapper">
-                                    <select name="relationship" id="relationship">
+                                    <select name="relationship" id="relationship" >
                                         <option value="none">Chọn...</option>
                                         <option value="Độc thân">Độc thân</option>
                                         <option value="Đang hẹn hò">Đang hẹn hò</option>
@@ -116,6 +118,12 @@
                                         <option value="Quan hệ phức tạp">Quan hệ phức tạp</option>
                                         <option value="Đã kết hôn">Đã kết hôn</option>
                                     </select>
+
+                                    <script type="text/javascript">
+                                        jQuery(document).ready(function(){
+                                            jQuery("#relationship option[value='<?php if(isset($aboutMe['relationship'])) echo $aboutMe['relationship']; ?>']").attr("selected","selected") ;
+                                        });
+                                    </script>
                                 </div>
                                 <span class="errorSelectRela"></span>
                             </div>
@@ -138,23 +146,28 @@
                             </div>
                             <div class="divAboutme">
                                 <label>Họ: </label>
-                                <input name="lastname" id="clastname" type="text" placeholder="Nhập họ của bạn...">
+                                <input name="lastname" id="clastname" type="text" placeholder="Nhập họ của bạn..."
+                                    value="<?php if(isset($basicInfo)) echo $basicInfo['lastname']; ?>">
                             </div>
                             <div class="divAboutme">
                                 <label>Tên: </label>
-                                <input name="firstname" id="cfirstname" type="text" placeholder="Nhập tên của bạn...">
+                                <input name="firstname" id="cfirstname" type="text" placeholder="Nhập tên của bạn..."
+                                    value="<?php if(isset($basicInfo)) echo $basicInfo['firstname']; ?>">
                             </div>
                             <div class="divAboutme">
                                 <label>Ngày sinh: </label>
-                                <input id="ngaysinh" name="dob" type="date">
+                                <input id="ngaysinh" name="dob" type="date"
+                                    value="<?php if(isset($basicInfo)) echo $basicInfo['dob']; ?>">
                             </div>
                             <div class="divAboutme">
                                 <label>Nơi ở hiện tại: </label>
-                                <input name="address" id="caddress" type="text" placeholder="Nhập nơi ở hiện tại của bạn...">
+                                <input name="address" id="caddress" type="text" placeholder="Nhập nơi ở hiện tại của bạn..."
+                                    value="<?php if(isset($basicInfo)) echo $basicInfo['address']; ?>">
                             </div>
                             <div class="divAboutme">
                                 <label>Câu nói tâm đắc: </label>
-                                <input name="quote" id="cquote" type="text" placeholder="Nhập câu nói tâm đắc của bạn...">
+                                <input name="quote" id="cquote" type="text" placeholder="Nhập câu nói tâm đắc của bạn..."
+                                    value="<?php if(isset($basicInfo)) echo $basicInfo['quote']; ?>">
                             </div>
                             <div class="divAboutme">
                                 <label></label>
@@ -207,7 +220,7 @@
 
         jQuery('.iconInfo').click(function(){
             var divLable =jQuery(this).attr('name');
-            var divImageSelect = jQuery("#"+divLable)
+            var divImageSelect = jQuery("#"+divLable);
             divImageSelect.attr('src', '');
             divImageSelect.imgAreaSelect({hide: true});
         });
@@ -539,19 +552,6 @@
                     lastname : {
                         required:true,
                         minlength:1
-                    },
-                    address: {
-                        required:true,
-                        minlength:1
-                    },
-                    quote:{
-                        required:true,
-                        minlength: 6
-                    },
-                    dob : {
-                        required : true,
-                        minage: true,
-                        maxage: true
                     }
                 },
                 messages:{
@@ -562,18 +562,6 @@
                     lastname:{
                         required: "Nhập vào họ của bạn.",
                         minlength: "Nhập vào ít nhất 1 kí tự."
-                    },
-                    address:{
-                        required: "Nhập vào địa chỉ của bạn.",
-                        minlength: "Nhập vào ít nhất 1 kí tự."
-                    },
-                    quote:{
-                        required: "Nhập vào câu nói ưa thích của bạn.",
-                        minlength: "Nhập vào ít nhất 6 kí tự."
-                    },
-                    dob:{
-                        required: "Bạn phải nhập vào ngày sinh của mình.",
-                        minage: "Bạn phải trên 15 tuổi mới được sử dụng dịch vụ."
                     }
                 },
                 submitHandler : function(){
@@ -630,32 +618,32 @@
             jQuery('#changeAboutme').validate({
                 errorElement: "span",
                 rules: {
-                    school : {
-                        required:true,
-                        minlength:6
-                    },
-                    work : {
-                        required:true,
-                        minlength:6
-                    },
-                    relationship :{
-//                        selectCheck:true
-                    }
+//                    school : {
+//                        required:true,
+//                        minlength:6
+//                    },
+//                    work : {
+//                        required:true,
+//                        minlength:6
+//                    },
+//                    relationship :{
+////                        selectCheck:true
+//                    }
                 },
                 messages:{
-                    school:{
-                        required: "Nhập vào trường bạn đã hoặc đang học.",
-                        minlength: "Tên trường phải có ít nhất 6 kí tự."
-                    },
-                    work:{
-                        required: "Nhập vào công việc hoặc nơi bạn đang làm việc",
-                        minlength: "Tên công việc hoặc nơi làm phải có ít nhất 3 kí tự."
-                    },
-                    relationship:{
-//                        selectCheck: function(){
-//                            jQuery('.errorSelectRela').html('Chọn tình trạng hôn nhân của bạn.');
-//                        }
-                    }
+//                    school:{
+//                        required: "Nh?p vào tr??ng b?n ?ã ho?c ?ang h?c.",
+//                        minlength: "Tên tr??ng ph?i có ít nh?t 6 kí t?."
+//                    },
+//                    work:{
+//                        required: "Nh?p vào công vi?c ho?c n?i b?n ?ang làm vi?c",
+//                        minlength: "Tên công vi?c ho?c n?i làm ph?i có ít nh?t 3 kí t?."
+//                    },
+//                    relationship:{
+////                        selectCheck: function(){
+////                            jQuery('.errorSelectRela').html('Ch?n tình tr?ng hôn nhân c?a b?n.');
+////                        }
+//                    }
                 },
                 submitHandler : function(){
                     ajaxChangeAboutme();

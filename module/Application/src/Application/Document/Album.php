@@ -29,6 +29,12 @@ class Album
     /** @ODM\Field(type="string") */
     private $userid;
 
+    /** @ODM\Field(type="string") */
+    private $albumlatitude;
+
+    /** @ODM\Field(type="string") */
+    private $albumlongtitude;
+
 
     //******* GET METHOD *******//
 
@@ -73,6 +79,22 @@ class Album
         return $this->userid;
     }
 
+    /**
+     * @return the $albumlatitude
+     */
+    public function getAlbumlatitude()
+    {
+        return $this->albumlatitude;
+    }
+
+    /**
+     * @return the $albumlongtitude
+     */
+    public function getAlbumlongtitude()
+    {
+        return $this->albumlongtitude;
+    }
+
 
 
     //*****SET METHOD*****//
@@ -115,5 +137,21 @@ class Album
     public function setUserid($userid)
     {
         $this->userid = $userid;
+    }
+
+    /**
+     * @param field_type $albumlatitude
+     */
+    public function setAlbumlatitude($albumlatitude)
+    {
+        $this->albumlatitude = $albumlatitude;
+    }
+
+    /**
+     * @param field_type $albumlongtitude
+     */
+    public function setAlbumlongtitude($albumlongtitude)
+    {
+        $this->albumlongtitude = $albumlongtitude;
     }
 }

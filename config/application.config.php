@@ -9,6 +9,8 @@ return array(
         'Application',
         'Userpage',
         'Example',
+        'Photo',
+        'Fanpage'
     ),
 
     // These are various options for the listeners attached to the ModuleManager

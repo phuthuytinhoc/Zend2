@@ -66,6 +66,22 @@ class ApplicationDocumentAlbumHydrator implements HydratorInterface
             $this->class->reflFields['userid']->setValue($document, $return);
             $hydratedData['userid'] = $return;
         }
+
+        /** @Field(type="string") */
+        if (isset($data['albumlatitude'])) {
+            $value = $data['albumlatitude'];
+            $return = (string) $value;
+            $this->class->reflFields['albumlatitude']->setValue($document, $return);
+            $hydratedData['albumlatitude'] = $return;
+        }
+
+        /** @Field(type="string") */
+        if (isset($data['albumlongtitude'])) {
+            $value = $data['albumlongtitude'];
+            $return = (string) $value;
+            $this->class->reflFields['albumlongtitude']->setValue($document, $return);
+            $hydratedData['albumlongtitude'] = $return;
+        }
         return $hydratedData;
     }
 }

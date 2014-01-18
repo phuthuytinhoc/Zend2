@@ -1,28 +1,206 @@
 
-<div class="mainContent-Friend" style="">
-    <div style="margin: 0 auto; width: 300px; padding-top: 15px;font-size: 20px;">
-        <div style="font-family: 'Terminal Dosis';">
-            <span>156 bạn bè, 6 bạn chung.</span>
-        </div>
+<style type="text/css">
+    #circle a.huy-ketban, a.chapnhan-ketban:hover {
+        text-decoration: underline !important;
+    }
+</style>
 
+<div id="avai-userid" style="display: none;"><?php echo $userid;?></div>
+
+<div class="mainContent-Friend" style="">
+
+    <?php if($actionUserID == $actionLocationID) { ?>
+
+    <span style="display: block; margin-left: 30px; margin-top:30px;font-size: 16px;">
+        <span id="numberRequest"><?php echo count($listFriendSent); ?></span> lời mời kết bạn
+    </span>
+    <hr class="hr-friend" style="width: 100%">
+
+    <?php
+    foreach($listFriendSent  as $friendID)
+    {
+//        var_dump($banchung);die();
+        if($checkStatusFriend[$friendID] == "SENT")
+        {
+    ?>
+            <div class="list-friend" style=" float: left;">
+                <div id="circle" style="background-image: url('<?php echo $this->basePath(); ?>/uploads/<?php echo $listFriendID['infoFriends'][$friendID]['pathAvatar']; ?>')" class="ec-circle">
+
+                    <a href="#" class="song-tai"><?php
+                        if($relationship[$friendID]['relationship']!= null)
+                        {
+                            echo $relationship[$friendID]['relationship'].',';
+                        }
+                        else
+                        {
+                            echo "Chưa cập nhật,";
+                        }
+
+                        ?>
+                    </a>
+
+
+                    <a href="#" href="" class="ban-chung">
+                        <?php
+                            if(isset($banchung[$friendID]))
+                            {
+                                echo 'có '.count($banchung[$friendID]) . ' bạn chung.';
+                            }
+                        else
+                            echo 'Không có bạn chung.';
+
+                        ?> </a>
+                    <a class="chapnhan-ketban" name="<?php echo $friendID; ?>">Chấp nhận lời mời</a>
+                </div>
+                <h3 class="friend-link">
+                    <a href="<?php echo $this->basePath().'/success?user='. $friendID; ?>"><?php echo $listFriendID['infoFriends'][$friendID]['fullname']; ?> <a/>
+                </h3>
+            </div>
+    <?php
+        }
+    }
+    ?>
+    <a></a>
+
+    <?php  } ?>
+
+
+    <div style="width: 100%; float: left;">
+        <span style="display: block; font-size: 16px; margin-left: 30px; margin-top: 30px;"><p id="countBanbe" style="display: inline-block;"><?php echo $listFriendID['countFriend'] ?></p> bạn bè.</span>
+        <hr class="hr-friend" style="width: 100%">
     </div>
-    <hr class="hr-friend">
+
+
+    <?php
+    foreach($listFriendID['arrayFriendID']  as $friendID)
+    {
+        if($checkStatusFriend[$friendID] == "ACCEPTED")
+        {
+    ?>
+
     <div class="list-friend" style=" float: left;">
-        <div id="circle" class="ec-circle">
-            <a href="#" class="song-tai">Sống tại Vietnam,</a>
-            <a href="#" href="" class="ban-chung">có 3 bạn chung</a>
-            <a href="#" class="huy-ketban">Hủy kết bạn</a>
+        <div id="circle" style="background-image: url('<?php echo $this->basePath();?>/uploads/<?php echo $listFriendID['infoFriends'][$friendID]['pathAvatar']; ?>')" class="ec-circle">
+
+            <a href="#" class="song-tai"><?php
+                if($relationship[$friendID]['relationship']!= null)
+                {
+                    echo $relationship[$friendID]['relationship'].',';
+                }
+                else
+                {
+                    echo "Chưa cập nhật,";
+                }
+
+                ?>
+            </a>
+            <a href="#" href="" class="ban-chung">
+                <?php
+                if(isset($banchung[$friendID]))
+                {
+                    echo 'có '.count($banchung[$friendID]) . ' bạn chung.';
+                }
+                else
+                    echo "Không có bạn chung.";
+
+                ?> </a>
+            <a href="#" class="huy-ketban" name="<?php echo $friendID; ?>">Hủy kết bạn</a>
         </div>
-        <h3 class="friend-link"><a href="#">Nguyễn Phúc Hưng<a/></h3>
+        <h3 class="friend-link">
+            <a href="<?php echo $this->basePath().'/success?user='. $friendID; ?>"><?php echo $listFriendID['infoFriends'][$friendID]['fullname']; ?> <a/>
+        </h3>
     </div>
-    <div class="list-friend" style=" float: left;">
-        <div id="circle" class="ec-circle">
-            <a href="#" class="song-tai">Sống tại Vietnam,</a>
-            <a href="#" href="" class="ban-chung">có 3 bạn chung</a>
-            <a href="#" class="huy-ketban">Hủy kết bạn</a>
-        </div>
-        <h3 class="friend-link"><a href="#">Nguyễn Phúc Hưng<a/></h3>
-    </div>
+
+    <?php
+        }
+
+    }
+    ?>
 
 
 </div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        jQuery('.huy-ketban').each(function(){
+           var unFriend = jQuery(this);
+            unFriend.click(function(){
+                var actionLocation = jQuery(this).attr('name');
+                var actionUser = jQuery('#avai-userid').text();
+                var friendStatus = "ACCEPTED";
+                var data = "actionUser=" + actionUser+"&actionLocation=" + actionLocation+ "&friendStatus="+friendStatus;
+
+//                alert(data);
+                jQuery.ajax({
+                    type: "POST",
+                    url: "<?php echo $this->url('success', array('action' => 'unfriend')); ?>",
+                    data: data,
+                    async:false,
+                    success: function(data) {
+//                        alert(data);
+                        data = JSON.parse(data);
+                        var success = data['success'];
+                        if(success == "1")
+                        {
+                            alert("Hủy kết bạn thành công");
+                            unFriend.parent().parent().hide();
+                            var count = jQuery('#countBanbe').text();
+                            count = parseInt(count) - 1;
+                            jQuery('#countBanbe').html(count);
+                        }
+                        else
+                        {
+                            alert('Bạn đã gửi yêu cầu hủy kết bạn');
+                        }
+                    },
+                    error: function() {
+                        alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                    }
+                });
+                return false;
+            });
+        });
+
+        jQuery('.chapnhan-ketban').click(function(){
+            var addFriend = jQuery(this);
+            addFriend.click(function(){
+                var actionLocation = jQuery(this).attr('name');
+                var actionUser = jQuery('#avai-userid').text();
+                var friendStatus = "ACCEPTED";
+                var data = "actionUser=" + actionUser+"&actionLocation=" + actionLocation+ "&friendStatus="+friendStatus;
+
+//                alert(data);
+                jQuery.ajax({
+                    type: "POST",
+                    url: "<?php echo $this->url('success', array('action' => 'confirmaddfriend')); ?>",
+                    data: data,
+                    async:false,
+                    success: function(data) {
+//                        alert(data);
+                        data = JSON.parse(data);
+                        var success = data['success'];
+                        if(success == "1")
+                        {
+                            alert("Chấp nhận lời mời kết bạn thành công");
+                            addFriend.parent().parent().hide();
+                            var a = jQuery('#numberRequest');
+                            var numberRequest = parseInt(a.text()) - 1;
+                            if(numberRequest <0)
+                            {
+                                numberRequest = 0;
+                            }
+                            a.text(numberRequest);
+                        }
+                        else
+                        {
+                            alert('Chấp nhận lời mời kết bạn thất bại.');
+                        }
+                    },
+                    error: function() {
+                        alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                    }
+                });
+                return false;
+            });
+        });
+    });
+</script

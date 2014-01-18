@@ -6,6 +6,10 @@
     .statusType > div {
         cursor: pointer;
     }
+    pre {
+        font-family: "Roboto Slab", Tahoma !important;
+        border:none;
+    }
 
 </style>
 
@@ -73,13 +77,46 @@ function time_difference($date)
             </div>
         </a>
         <div class="divSearch">
-            <form action="#">
-                <input id="txtSearch" type="text" placeholder="Search ..." />
-                <input id="btnSearch" type="submit" value=" " />
+            <form method="post" id="searchEverything">
+                <input id="txtSearch" type="text" placeholder="Tìm kiếm mọi thứ ..." />
+                <input id="btnSearch" type="button" value=" " />
             </form>
+
+            <style type="text/css">
+                    #searchResult{background-color: #E5E5E5; width: 304px; height: auto; position: absolute; margin-top: 39px;
+                            padding-top: 5px; padding-bottom: 5px; border-bottom-left-radius: 7px; border-bottom-right-radius: 7px;
+                        box-shadow: 0 3px 3px rgba(0, 0, 0, 0.7), inset 0 2px 2px rgba(255, 255, 255, 0.5);
+                        border: 1px solid #1E9DF9; border-left: 2px solid #1FA3FF; border-right: 2px solid #1FA3FF;}
+                .searchUser{ padding: 2px 5px 0 5px; border-bottom: 1px solid #1FA3FF;}
+                .searchUser :hover { }
+                .image-searchUser{display: inline-block;}
+                .image-searchUser > img{width: 50px; height: 50px; vertical-align: baseline; border-radius: 10px;}
+                .content-searchUser{display: inline-block; padding-left: 8px;}
+                .content-searchUser a{ cursor: pointer;}
+                .content-searchUser a span{display: block; color: #000000;}
+                .name-searchUser{font-size: 13px;}
+                .banchung-searchUser{ font-size: 12px;}
+                .btnKetban-searchUser, .btnKetban-copy{font-size: 11px;}
+                .readmore{ font-size: 12px; cursor: pointer; display: block; text-align: center;
+                padding-top: 5px; padding-bottom: 5px;}
+                .newBackground{background: -webkit-linear-gradient(top, rgba(179,220,237,1) 0%,rgba(41,184,229,1) 50%,rgba(188,224,238,1) 100%); /* Chrome10+,Safari5.1+ */}
+            </style>
+
+            <div id="searchResult" style="display: none;">
+                <div class="searchUser">
+                    <div class="image-searchUser">
+                        <img src="<?php echo $this->basePath(); ?>/img/avatar.jpg" >
+                    </div>
+                    <div class="content-searchUser">
+                        <a href="#"><span class="name-searchUser">Nguyễn Phúc Hưng</span></a>
+                        <a href="#"><span class="banchung-searchUser" >4 bạn chung</span></a>
+                        <a href="#" name=""><span class="btnKetban-searchUser">Kết bạn</span></a>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="divSub about">
-            <div class="divHead"> About me </div>
+            <div class="divHead">Giới thiệu bản thân</div>
             <div class="divContent">
                 <div class="aboutImg job">
                 </div>
@@ -130,62 +167,251 @@ function time_difference($date)
             </div>
         </div>
         <div class="divSub friend">
-            <div class="divHead"> Friend </div>
-            <div class="divContent">
+            <a href="
+            <?php
+                if($actionUserID == $actionLocationID)
+                    echo $this->basePath().'/success/friend/';
+                else
+                    echo $this->basePath().'/success/friend?user='.$actionLocationID;
+
+            ?>">
+                <div class="divHead"> Bạn bè </div>
+            </a>
+            <div class="divContent" id="listF" style="overflow-y: scroll;max-height: 214px;">
+
+                <style type="text/css">
+                    #listF .subImage img { width: 50px; border-radius: 10px;}
+                    #listF .subImage img:hover{ cursor: pointer}
+                    #listF a :hover{
+                        cursor: pointer;
+                        color: #020202;
+                    }
+                    #listF .subImage label{font-weight: normal !important;}
+                    #listF .subImage :hover{font-weight: bold !important; ;}
+                </style>
+
                 <?php
-                for ($i = 0; $i < 12; $i++){
-                    echo '<div class="subImage"></div>';
+                if($listFriendAccepted != null)
+                {
+//                    var_dump($listFriendID);die();
+                    foreach($listFriendAccepted as $friendID)
+                    {
+
+                ?>
+                    <a href="<?php echo $this->basePath().'/success?user='.$friendID;?>">
+                        <div class="subImage" >
+                            <img src="<?php echo $this->basePath().'/uploads/'.$listFriendID['infoFriends'][$friendID]['pathAvatar']; ?>"
+                                 alt="">
+                            <label style="font-size: 13px; margin-left: 25px;"><?php echo $listFriendID['infoFriends'][$friendID]['fullname']; ?></label>
+                        </div>
+                    </a>
+
+                <?php
+                    }
                 }
+                else{
+                    echo "Hiện tại chưa có bạn bè nào.";
+                }
+
                 ?>
             </div>
         </div>
         <div class="divSub photo">
-            <div class="divHead"> Photos </div>
-            <div class="divContent">
-                <?php
-                for ($i = 0; $i < 12; $i++){
-                    echo '<div class="subImage"></div>';
-                }
-                ?>
+            <a href="<?php
+            if($actionUserID == $actionLocationID)
+                echo $this->basePath().'/photos/';
+            else
+                echo $this->basePath().'/photos?user='.$actionLocationID;
+            ?>">
+                <div class="divHead"> Album ảnh & Video </div>
+            </a>
+            <style type="text/css">
+                #listPics .subImage:hover{background: none;}
+                #listPics .subImage img {width: 180px; border-radius: 10px; position: relative;}
+                .wrapper-slide {height: 190px;overflow: hidden;width: 183px;margin-left: 55px;}
+                .slide-avar{position: relative;}
+                .slide-avar div{ display: inline-block}
+                .slide-avar div img:hover{cursor: pointer;}
+
+            </style>
+            <div class="divContent" id="listPics">
+
+               <div class="subImage" id="trigger-ava">
+                   <label style="font-weight: normal;">Ảnh đại diện thay đổi gần đây</label>
+
+                   <?php
+                   if($albumAvatarHome != null)
+                   {
+                   ?>
+
+                   <div class="left-slide-arrow"></div>
+                   <div class="wrapper-slide" style="width: 180px;">
+                        <div class="slide-avar">
+                            <?php
+                                foreach($albumAvatarHome as $image)
+                                {
+                           ?>
+                           <div class="small-div">
+                               <img src="<?php echo $this->basePath().'/uploads/'.$image;?>">
+                           </div>
+                           <?php
+                                }
+                            ?>
+                           </div>
+                   </div>
+                   <div class="right-slide-arrow"></div>
+
+                       <?php
+                    }
+                   else
+                   {
+                       echo "</br>Chưa cập nhật ảnh đại diện.";
+                   }
+
+                   ?>
+
+               </div>
+
+
+
+                <div class="subImage" style="margin-top: 10px; padding-left: 15px; margin-bottom: 10px; padding-bottom: 10px;">
+                    <a href="<?php
+                    if($actionUserID == $actionLocationID)
+                        echo $this->basePath().'/photos/normal/';
+                    else
+                        echo $this->basePath().'/photos/normal?user='.$actionLocationID;
+                    ?>">
+                        Xem thêm các album khác ...
+                    </a>
+                </div>
+
             </div>
+
+            <script type="text/javascript">
+
+                    var currIndex = 0;
+                    var slideStep = 182;
+                    var maxItems;
+                    var waitingTime = 0;
+//                    alert(maxItems);
+
+                    function moveLeft()
+                    {
+//                        alert(currIndex);
+                        if(currIndex == 0)
+                        {
+                            currIndex = maxItems;
+                        }
+                        currIndex -= 1;
+                        if(currIndex < 0)
+                        {
+                            currIndex = 0;
+                        }
+                        move(currIndex);
+                    }
+                    function moveRight()
+                    {
+//                        alert(currIndex);
+                        waitingTime++;
+                        if(waitingTime<5)
+                        {
+                            return;
+                        }
+                        waitingTime = 0;
+                        if(currIndex == maxItems - 1)
+                        {
+                            currIndex = -1;
+                        }
+                        currIndex += 1;
+                        if(currIndex > maxItems -1)
+                        {
+                            currIndex = maxItems -1;
+                        }
+                        move(currIndex);
+                    }
+
+                    function move(index)
+                    {
+                        jQuery('.slide-avar').animate({'left': -(index*slideStep)}, 500, function(){
+
+                        });
+                    }
+
+                    function onClickLeft()
+                    {
+                        waitingTime = 0;
+                        moveLeft();
+                    }
+                    function onClickRight()
+                    {
+                        waitingTime = 5;
+                        moveRight();
+                    }
+
+                jQuery(document).ready(function(){
+                    jQuery(document).trigger('trigger-ava');
+                    maxItems = jQuery('.slide-avar .small-div').length;
+
+                    var longDiv= maxItems*slideStep+maxItems*3;
+                    jQuery('.slide-avar').css('width',longDiv+ "px");
+
+                    jQuery('.slide-avar .small-div img').hover(function(){
+                        waitingTime=0;
+                    });
+
+                    jQuery('.right-slide-arrow').click(onClickRight);
+                    jQuery('.left-slide-arrow').click(onClickLeft);
+
+                    setInterval('moveRight();', 1000);
+
+                    jQuery(document).trigger("bind");
+                });
+
+            </script>
+
         </div>
     </div>
 
     <div class="divMenu">
-        <a>
+        <a href="<?php echo $this->basePath().'/homepage/'; ?>">
             <div class="menuSub home">
                 <div class="divMenuIcon home"></div>
-                <div class="divMenuName home">Home</div>
+                <div class="divMenuName home">Trang chủ</div>
             </div>
         </a>
-        <a>
+        <a href="<?php echo $this->basePath().'/success/'; ?>">
             <div class="menuSub me">
                 <div class="divMenuIcon me"></div>
-                <div class="divMenuName me">Me</div>
+                <div class="divMenuName me">Cá Nhân</div>
             </div>
         </a>
         <a>
             <div class="menuSub noti">
                 <div class="divMenuIcon noti"></div>
-                <div class="divMenuName noti">Shake</div>
+                <div class="divMenuName noti">Chọc</div>
             </div>
         </a>
-<!--        <a href="--><?php //echo $this->url('success', array('action' => 'friend')); ?><!--">-->
-        <a href="#">
+
+        <a href="<?php
+        if($actionUserID == $actionLocationID)
+            echo $this->url('success', array('action' => 'friend'));
+        else
+            echo $this->basePath().'/success/friend?user='. $actionLocationID;
+        ?>">
             <div class="menuSub friend">
                 <div class="divMenuIcon friend"></div>
                 <?php
                 if($getNotifFriend != null && $getNotifFriend > 0)
                 {
                 ?>
-                <div class="divMenuName friend" id="menuFriend" data-notifications="<?php echo $getNotifFriend;?>">Friend</div>
+                <div class="divMenuName friend" id="menuFriend" data-notifications="<?php echo $getNotifFriend;?>">Bạn bè</div>
 
                 <?php
                 }
                 else
                 {
                 ?>
-                    <div class="divMenuName friend" id="menuFriend" >Friend</div>
+                    <div class="divMenuName friend" id="menuFriend" >Bạn bè</div>
                 <?php
                 }
                 ?>
@@ -196,18 +422,23 @@ function time_difference($date)
                 </div>
             </div>
         </a>
+
+        <?php if($actionUserID == $actionLocationID) { ?>
+
         <a>
             <div class="menuSub mail">
                 <div class="divMenuIcon mail"></div>
-                <div class="divMenuName mail">Mail</div>
+                <div class="divMenuName mail">Hộp thư</div>
             </div>
-        </a>
+            </a>
         <a href="<?php echo $this->url('success', array('action' => 'update-info')); ?>">
             <div class="menuSub config">
                 <div class="divMenuIcon config"></div>
-                <div class="divMenuName config">Config</div>
+                <div class="divMenuName config">Cài đặt</div>
             </div>
         </a>
+
+        <?php } ?>
     </div>
 
     <div class="divUserPanel">
@@ -273,9 +504,10 @@ function time_difference($date)
                 elseif($checkFriend == "ACCEPTED")
                 {
                 ?>
-                    <a href="#" style="margin-top:30px; " class="a-btn" id="unFriend">
+                    <span style="display: block; margin-top: 40px; margin-left: 22px; font-size: 14px">Hủy kết bạn</span>
+                    <a href="#" style="margin-top:12px; " class="a-btn" id="unFriend">
 						<span class="a-btn-text">+</span>
-						<span class="a-btn-slide-text">Unfriend</span>
+						<span class="a-btn-slide-text">Hủy</span>
 						<span class="a-btn-icon-right"><span></span></span>
 					</a>
 
@@ -352,7 +584,7 @@ function time_difference($date)
                         <textarea name="contentStatus" id="statusPostContent" placeholder="Nhập vào trạng thái của bạn... "></textarea>
                     </div>
                     <div class="btnSubmit">
-                        <input id="btnPost" class="postStatus" type="submit" value="Feel" />
+                        <input id="btnPost" class="postStatus" type="submit" value="Đăng" />
                     </div>
                 </form>
             </div>
@@ -373,7 +605,7 @@ function time_difference($date)
 
                     </div>
                     <div class="btnSubmit">
-                        <input id="btnPost" class="postShare" type="submit" value="Feel" />
+                        <input id="btnPost" class="postShare" type="submit" value="Đăng" />
                     </div>
                 </form>
             </div>
@@ -476,9 +708,11 @@ function time_difference($date)
 
                     ?>
 
-                    <video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="100%" height="375"
-                           poster="<?php echo $this->basePath().'/img/Logo_Video.png'; ?>"
+                    <video id="example_video_1" class="video-js vjs-default-skin" controls preload="true" width="100%" height="375"
+                           poster=""
                            data-setup="{}">
+
+<!--                        --><?php //echo $this->basePath().'/img/Logo_Video.png'; ?>
                         <source src="<?php echo $this->basePath().'/uploads/'.$pathViddeo;?>"
                                 type='video/<?php echo $typteVideo ?>'>
                     </video>
@@ -510,14 +744,49 @@ function time_difference($date)
                 </div>
                 <div class="statusFooter">
                     <div class="summary" >
-                        <a class="like" name="<?php echo $actionID; ?>" style="cursor: pointer;" >Like</a>
-                        <a class="comment" href="javascript:void(0)">Comment</a>
-                        <a class="share" href="javascript:void(0)">Share</a>
+                        <?php
+
+//                        var_dump($checkLikeYourself);die();
+
+                        $checkStatusLike = "like";
+                        if(isset($checkLikeYourself[$actionID]))
+                        {
+                            foreach($checkLikeYourself[$actionID] as $value)
+                            {
+                                    if($value['userLiked'] == $actionUserID)
+                                    $checkStatusLike = "unlike";
+                            }
+                        }
+//                        var_dump($checkStatusLike);die();
+
+                        ?>
+
+                        <a class="<?php  echo $checkStatusLike; ?>" name="<?php echo $actionID; ?>"
+                           id="<?php if($checkStatusLike=="unlike") echo $checkLikeYourself[$actionID][$actionUserID]['actOfLike'] ?>" style="cursor: pointer;" >
+                        <?php
+//                        var_dump($checkLikeYourself);die();
+
+                       if($checkStatusLike == "like")
+                            echo "Thích";
+                        else
+                            echo "Bỏ thích";
+
+                        ?>
+                        </a>
+                        <a class="comment" href="javascript:void(0)">Bình luận</a>
+                        <a class="share" href="javascript:void(0)">Chia sẻ</a>
                     </div>
                     <div class="icon">
-                        <a class="like" href="javascript:void(0)"></a><span>30</span>
-                        <a class="comment" href="javascript:void(0)"></a><span>30</span>
-                        <a class="share" href="javascript:void(0)"></a><span>30</span>
+                        <a class="like" href="javascript:void(0)"></a>
+                        <span class="like-span<?php echo $actionID;?>">
+                            <?php
+                            if(isset($countLikes[$actionID]))
+                                echo $countLikes[$actionID];
+                            else
+                                echo 0;
+                            ?></span>
+                        <a class="comment" href="javascript:void(0)"></a><span class="commemt">0</span>
+                        <a class="share" href="javascript:void(0)"></a><span class="share">0</span>
                     </div>
                 </div>
                 <div class="divComment" >
@@ -530,12 +799,14 @@ function time_difference($date)
                     return strcmp($a, $b);
                 });
 
+//                var_dump($allCommentID);die();
+
                 foreach($allCommentID as $comentid)
                 {
 
                     if(isset($arrayCommentContent[$actionID][$comentid]))
                     {
-//                        var_dump($allCommentID);die();
+//                        var_dump($actionIDofCMT);die();
 
                 ?>
                     <div class="commentAction">
@@ -552,8 +823,39 @@ function time_difference($date)
                             </div>
                             <div class="commentFooter">
                                 <div class="commentLike">
-                                    <a href="#"> Like</a>
-                                    <a href="#" class="number">10</a>
+                                    <?php
+                                    $checResult = "like";
+//                                    var_dump($commentid);die();
+                                    if(isset($checkLikeYourself[$actionIDofCMT[$comentid]]))
+                                    {
+
+                                        $actionIDForCMT = $actionIDofCMT[$comentid];
+                                        foreach($checkLikeYourself[$actionIDForCMT] as $node)
+                                        {
+                                            if($node['userLiked'] == $actionUserID)
+                                                $checResult =  "unlike";
+                                        }
+                                    }
+                                    ?>
+
+                                    <a class="<?php echo $checResult;?>"
+                                       style="cursor: pointer;" name="<?php echo $actionIDofCMT[$comentid]; ?>"
+                                       id="<?php if($checResult == "unlike") echo $checkLikeYourself[$actionIDofCMT[$comentid]][$actionUserID]['actOfLike'] ?>">
+                                        <?php
+                                       if($checResult == "like")
+                                            echo "Thích";
+                                        else
+                                            echo "Bỏ thích";
+                                        ?>
+                                    </a>
+                                    <a href="#" class="number">
+                                        <?php
+                                        if(isset($countLikes[$actionIDofCMT[$comentid]]))
+                                            echo $countLikes[$actionIDofCMT[$comentid]];
+                                        else
+                                            echo 0;
+                                        ?>
+                                    </a>
                                 </div>
                                 <div class="commentTime" title="<?php
                                 $dateComment =  substr($comentid, -10,10);
@@ -582,7 +884,7 @@ function time_difference($date)
                             <div class="commentRight">
                                 <textarea name="cmtContentArea" class="contentPostComment"></textarea>
                             </div>
-                            <input type="submit" class="postComment" value="Post" />
+                            <input type="submit" class="postComment" value="Đăng" />
                         </form>
                     </div>
                     <?php
@@ -637,10 +939,12 @@ function time_difference($date)
                 var objForm = "#" + form;
 //                var actionIDforCMT = jQuery(objForm).attr('name');
 
-                var valueComment = jQuery('form#'+form + ' textarea.contentPostComment').val();
+                var textAreaComment = jQuery('form#'+form + ' textarea.contentPostComment');
+                var valueComment = textAreaComment.val();
 //                alert(actionIDforCMT);
 //                alert(valueComment);
                 checkFormCommentArea(jQuery(objForm), valueComment, actionIDforCMT);
+//                textAreaComment.val('');
             });
         });
 
@@ -673,7 +977,7 @@ function time_difference($date)
             var actionUser = jQuery('#avai-userid').attr('name');
             var actionLocation = jQuery('#actionLocation').attr('name');
             var data = "actionUser=" +actionUser+"&actionLocation="+actionLocation+"&cmtContent="+ cmtContent +"&timeCreatedComment="+timeNow + "&actionStatusSave="+actionIDforCMT;
-            alert(data);
+//            alert(data);
             jQuery.ajax({
                 type: "POST",
                 url: "<?php echo $this->url('success', array('action' => 'savecomment')); ?>",
@@ -687,6 +991,7 @@ function time_difference($date)
                     {
 //                        @TODO:
                         instanceShowComment(cmtContent, timeNow, form);
+                        form[0].reset();
                     }
                     else
                     {
@@ -698,7 +1003,7 @@ function time_difference($date)
                     alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
                 }
             });
-            return false;
+//            return false;
         }
 
         function instanceShowComment(commentContent, timestamp, form)
@@ -732,11 +1037,15 @@ function time_difference($date)
             divcommentLike.className='commentLike';
 
             var tagaLike = document.createElement('a');
-            jQuery(tagaLike).text('Like');
+            tagaLike.className='like';
+            jQuery(tagaLike).text('Thích');
+            jQuery(tagaLike).css('cursor', 'pointer');
+            jQuery(tagaLike).attr('name', 'ACT'+timestamp);
+
 
             var tagaCountLike = document.createElement('a');
             tagaCountLike.className="number";
-            jQuery(tagaCountLike).text('10');
+            jQuery(tagaCountLike).text('0');
 
             var divcommentTime = document.createElement('div');
             divcommentTime.className='commentTime';
@@ -757,6 +1066,39 @@ function time_difference($date)
 
             var actID = form.attr('name');
 //            jQuery(form.parent().attr('id')).before(divCommentAction);
+            var buttonLikeCMT =  jQuery(tagaLike);
+            buttonLikeCMT.click(function(){
+                var actionID = buttonLikeCMT.attr('name');
+                var actionUser = jQuery('#avai-userid').attr('name');
+                var actionLocation = jQuery('#actionLocation').attr('name');
+                var timeStamp = getTimestampNow();
+                var checkUnlikeLike = buttonLikeCMT.attr('class');
+
+//                alert(checkUnlikeLike);
+
+                if(checkUnlikeLike == "like"){
+                    buttonLikeCMT.attr('class', 'unlike');
+                    var likeID = 'LIK'+actionLocation+timeStamp;
+                    buttonLikeCMT.attr('id', likeID);
+                    setLikeStatus(actionID, timeStamp, actionUser, actionLocation, buttonLikeCMT);
+                    var divCMTLike = buttonLikeCMT.next();
+
+//                    var countLike = jQuery('.'+divCMTLike+'> a.number');
+                    var newCount = divCMTLike.text();
+                    newCount = parseInt(newCount) + 1;
+                    divCMTLike.html(newCount);
+                }
+                else{
+                    var likeID = buttonLikeCMT.attr('id');
+                    buttonLikeCMT.attr('class', 'like');
+                    buttonLikeCMT.attr('id', '');
+                    setUnlikeStatus(likeID, buttonLikeCMT);
+                    var divCMTLike = buttonLikeCMT.next();
+                    var newCount = divCMTLike.text();
+                    newCount = parseInt(newCount) - 1;
+                    divCMTLike.html(newCount);
+                }
+            });
 
             var hung = jQuery("#placeNewCMT_" + actID);
 //
@@ -781,7 +1123,7 @@ function time_difference($date)
 
 
             var data = "status="+status+"&timestamp="+timeNow + "&actionUser=" +actionUser+"&actionLocation=" +actionLocation;
-            alert(data);
+//            alert(data);
 
             jQuery.ajax({
                 type: "POST",
@@ -799,6 +1141,7 @@ function time_difference($date)
                         divError.show().delay(4000).fadeOut();
 
                         instancePostStatus(status, timeNow);
+                        jQuery('#statusPostContent').val('');
                         var divFirstAction =  jQuery('.statusBlock').next();
                         divFirstAction.css("opacity", 0);
                         divFirstAction.animate({
@@ -886,39 +1229,45 @@ function time_difference($date)
 
             var tagaLike = document.createElement('a');
             tagaLike.className='like';
-            tagaLike.innerHTML='Like';
+            tagaLike.innerHTML='Thích';
+            jQuery(tagaLike).css('cursor', 'pointer');
+            jQuery(tagaLike).attr('name', 'ACT'+timeStamp );
+            jQuery(tagaLike).attr('id', '');
 
             var tagsComment = document.createElement('a');
             tagsComment.className='comment';
-            tagsComment.innerHTML='Comment';
+            tagsComment.innerHTML='Bình luận';
 
             var tagaShare = document.createElement('a');
             tagaShare.className='share';
-            tagaShare.innerHTML='Share';
+            tagaShare.innerHTML='Chia sẻ';
 
             var divIcon = document.createElement('div');
             divIcon.className='icon';
 
             var tagaLikeCount = document.createElement('a');
             tagaLikeCount.className='like';
-            jQuery(tagaLikeCount).attr('href', 'javascript:void(0)');
+            jQuery(tagaLikeCount).css('cursor', 'pointer');
 
             var spanLikeCount = document.createElement('span');
-            jQuery(spanLikeCount).text('30');
+            spanLikeCount.className='like-spanACT'+timeStamp;
+            jQuery(spanLikeCount).text('0');
 
             var tagaCommentCount = document.createElement('a');
             tagaCommentCount.className='comment';
             jQuery(tagaCommentCount).attr('href', 'javascript:void(0)');
 
             var spanCommentCount = document.createElement('span');
-            jQuery(spanCommentCount).text('30');
+            spanCommentCount.className='comment';
+            jQuery(spanCommentCount).text('0');
 
             var tagaShareCount = document.createElement('a');
             tagaShareCount.className = 'share';
             jQuery(tagaShareCount).attr('href', 'javascript:void(0)');
 
             var spanShareCount = document.createElement('span');
-            jQuery(spanShareCount).text('30');
+            spanShareCount.className = 'share';
+            jQuery(spanShareCount).text('0');
 
             var divComment = document.createElement('div');
             divComment.className='divComment';
@@ -948,7 +1297,7 @@ function time_difference($date)
             var postComment = document.createElement('input');
             postComment.className = 'postComment';
             jQuery(postComment).attr('type', 'submit');
-            jQuery(postComment).attr('value', 'Post');
+            jQuery(postComment).attr('value', 'Đăng');
 
             divAction.appendChild(divStatus);
                 divStatus.appendChild(divStatusAvatar);
@@ -982,11 +1331,42 @@ function time_difference($date)
             jQuery(postComment).on('click', function(){
 
                 var value = jQuery(textareaComment).val();
-//                var timeStamp= getTimestampNow();
-
-//                alert('CommentContent=' + value + 'actionID=' + timeStamp);
-                    //ko phai timestamp
                 checkFormCommentArea(jQuery(formSubtmit), value,'ACT'+ timeStamp);
+            });
+
+            var buttonLike = jQuery(tagaLike);
+            buttonLike.on('click', function(){
+                var actionid = buttonLike.attr('name');
+                var timeStamp = getTimestampNow();
+                var actionUser = jQuery('#avai-userid').attr('name');
+                var actionLocation = jQuery('#actionLocation').attr('name');
+
+                var checkLikeUnlike = buttonLike.attr('class');
+
+                if(checkLikeUnlike == "like")
+                {
+                    buttonLike.attr('class', 'unlike');
+                    var like = 'LIK'+actionLocation+timeStamp;
+                    buttonLike.attr('id',like );
+                    setLikeStatus(actionid, timeStamp, actionUser, actionLocation, buttonLike);
+                    var likeRightNow = jQuery('.like-span' + actionid);
+                    var changeLike = parseInt(likeRightNow.text()) + 1;
+//                    alert(changeLike);
+                    jQuery(likeRightNow).html(changeLike);
+
+                }
+                else
+                {
+                    buttonLike.attr('class', 'like');
+                    var likeID = buttonLike.attr('id');
+                    buttonLike.attr('id', '');
+                    setUnlikeStatus(likeID, buttonLike);
+                    var likeRightNow = jQuery('.like-span' + actionid);
+                    var changeLike = parseInt(likeRightNow.text()) - 1;
+//                    alert(changeLike);
+                    jQuery(likeRightNow).html(changeLike);
+                }
+
             });
 
             jQuery('.statusBlock').after(divAction);
@@ -1034,7 +1414,7 @@ function time_difference($date)
             formdata.append('image', value);
             formdata.append('timestamp', timeNow);
             formdata.append('descript', descript);
-            formdata.append('userid', userid);
+            formdata.append('actionUser', userid);
 
 //            var data = "descript="+ descript +"&actionID="+actionID+"&timestamp="+ timeNow;
 
@@ -1050,6 +1430,7 @@ function time_difference($date)
                     if(data!='error')
                     {
                         ajaxSaveImageNormal(userid, timeNow, descript, data);
+                        jQuery('#form-postImage')[0].reset();
                     }
                 },
                 error: function() {
@@ -1136,6 +1517,7 @@ function time_difference($date)
                     if(data!='error')
                     {
                         ajaxSaveVideo(userid, timeNow, descript, data);
+                        jQuery('#form-postVideo')[0].reset();
                     }
                     else
                     {
@@ -1166,8 +1548,8 @@ function time_difference($date)
                         var videoType = dataType.substr(-3,3);
                         var videoName = 'VID'+userid+timeStamp+'.'+videoType;
                         var instanceVideo = descript;
-                        instanceVideo += ' <video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" ';
-                        instanceVideo += ' width="100%" height="375" poster="<?php echo $this->basePath();?>/img/Logo_Video.png" data-setup="{}"> ';
+                        instanceVideo += ' <video id="example_video_1" class="video-js vjs-default-skin" controls preload="true" ';
+                        instanceVideo += ' width="100%" height="375" poster="" data-setup="{}"> ';
                         instanceVideo += '  <source src="<?php echo $this->basePath();?>' + '/uploads/'+videoName+ '" ';
                         instanceVideo += ' type="video/'+ videoType+' ">';
                         instanceVideo += ' </video>';
@@ -1254,12 +1636,13 @@ function time_difference($date)
                     if(data!='error')
                     {
                         var pathImage = data;
-                        alert('thanh cong');
+//                        alert('thanh cong');
                         ajaxSaveNewSharePlace(actionUser, actionLocation, timeNow, placeName, descript, pathImage);
+                        jQuery('#form-postShare')[0].reset();
                     }
                     else
                     {
-                        alert('Video tải lên không đúng định dạng hoặc dung lượng quá lớn!.');
+                        alert('Ảnh chia sẻ tải lên không đúng định dạng hoặc dung lượng quá lớn!.');
                     }
                 },
                 error: function() {
@@ -1295,7 +1678,7 @@ function time_difference($date)
             var dataval = "actionUser=" + actionUser+ "&actionLocation="+actionLocation+"&createdTime=" + timeNow+"&placeName="+placeName;
             dataval += "&descript="+descript+"&imageType=" +pathImage + "&hashTag=" + hashTag;
 
-            alert(dataval);
+//            alert(dataval);
 
             jQuery.ajax({
                 type: "POST",
@@ -1303,7 +1686,7 @@ function time_difference($date)
                 data: dataval,
                 async:false,
                 success: function(data) {
-                    alert(data);
+//                    alert(data);
                     data = JSON.parse(data);
                     var instanceImage = " <img src='<?php echo $this->basePath();?>" +"/uploads/"+pathImage + "'/>";
                     instanceImage +=    "<div class='status-place-name'>";
@@ -1311,7 +1694,7 @@ function time_difference($date)
                     instanceImage +=        "<span class='hashtag'>"+hashTag+"</span></br>";
                     instanceImage +=    "</div>";
                     instanceImage += "<div class='status-place-des'><pre>"+descript+"</pre></div>";
-                    alert(instanceImage);
+//                    alert(instanceImage);
                     instancePostStatus(instanceImage, timeNow);
                     var divFirstAction =  jQuery('.statusBlock').next();
                     divFirstAction.css("opacity", 0);
@@ -1327,25 +1710,144 @@ function time_difference($date)
         }
 
         //FUNCTION FOR LIKE &SHARE
-
-        jQuery('div.summary > a.like').each(function(){
+        //Like status image, video, share
+        jQuery('div.summary > a').each(function(){
             var buttonLike = jQuery(this);
             buttonLike.click(function(){
                 var actionid = buttonLike.attr('name');
                 var timeStamp = getTimestampNow();
-                var userid = jQuery('#actionLocation').attr('name');
+                var actionUser = jQuery('#avai-userid').attr('name');
+                var actionLocation = jQuery('#actionLocation').attr('name');
 
-                if(buttonLike.text() == "Like")
+                var checkLikeUnlike = buttonLike.attr('class');
+//                    alert(checkLikeUnlike);
+                if(checkLikeUnlike == "like")
                 {
-                    setLikeStatus(actionid, timeStamp, userid, buttonLike);
+                    buttonLike.attr('class', 'unlike');
+                    var like = 'LIK'+actionLocation+timeStamp;
+                    buttonLike.attr('id',like );
+                    setLikeStatus(actionid, timeStamp, actionUser, actionLocation, buttonLike);
+
+                    var likeRightNow = jQuery('.like-span' + actionid);
+                    var changeLike = parseInt(likeRightNow.text()) + 1;
+//                    alert(changeLike);
+                    jQuery(likeRightNow).html(changeLike);
+
                 }
                 else
                 {
-                    buttonLike.text('Like');
-                    setUnlikeStatus(actionid, timeStamp, userid, buttonLike);
+                    buttonLike.attr('class', 'like');
+                    var likeID = buttonLike.attr('id');
+                    buttonLike.attr('id', '');
+                    setUnlikeStatus(likeID, buttonLike);
+                    var likeRightNow = jQuery('.like-span' + actionid);
+                    var changeLike = parseInt(likeRightNow.text()) - 1;
+//                    alert(changeLike);
+                    jQuery(likeRightNow).html(changeLike);
+
                 }
             });
         });
+
+        function setLikeStatus(actionid, timeStamp, actionUser, actionLocation, buttonLike)
+        {
+            var data = "actionid="+ actionid +"&timeStamp="+timeStamp + "&actionUser="+actionUser + "&actionLocation=" +actionLocation;
+//            alert('chua bi saveLikeStatus'+data);
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('success', array('action' => 'savelikestatus')); ?>",
+                data: data,
+                async:false,
+                success: function(data) {
+//                    alert(data);
+                    data = JSON.parse(data);
+                    var success = data['success'];
+                    if(success == "1")
+                    {
+                        buttonLike.text('Bỏ thích');
+                    }
+                    else
+                    {
+                        alert('Thích thất bại. Hãy thử lại sau một ít phút nữa.');
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+
+        function setUnlikeStatus(likeID, buttonLike)
+        {
+            var data = "likeID=" + likeID;
+//            alert('chuan bị unlike'+data);
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->url('success', array('action' => 'unlikestatus')); ?>",
+                data: data,
+                async:false,
+                success: function(data) {
+//                    alert(data);
+                    data = JSON.parse(data);
+                    var success = data['success'];
+                    if(success == "1")
+                    {
+                        buttonLike.text('Thích');
+                    }
+                    else
+                    {
+                        alert('Bỏ thích thất bại. Hãy thử lại sau một ít phút nữa');
+                    }
+                },
+                error: function() {
+                    alert("Hệ thống đang bảo trì, xin hãy thử lại sau một ít phút nữa!");
+                }
+            });
+            return false;
+        }
+
+        //like comment cua status image video share
+        jQuery('div.commentLike > a').each(function(){
+//            alert(jQuery(this).attr('class'));
+            var buttonLikeCMT = jQuery(this);
+
+
+
+            buttonLikeCMT.click(function(){
+                var actionID = buttonLikeCMT.attr('name');
+                var actionUser = jQuery('#avai-userid').attr('name');
+                var actionLocation = jQuery('#actionLocation').attr('name');
+                var timeStamp = getTimestampNow();
+                var checkUnlikeLike = buttonLikeCMT.attr('class');
+
+//                alert(checkUnlikeLike);
+
+                if(checkUnlikeLike == "like"){
+                    buttonLikeCMT.attr('class', 'unlike');
+                    var likeID = 'LIK'+actionLocation+timeStamp;
+                    buttonLikeCMT.attr('id', likeID);
+                    setLikeStatus(actionID, timeStamp, actionUser, actionLocation, buttonLikeCMT);
+                    var divCMTLike = buttonLikeCMT.next();
+
+//                    var countLike = jQuery('.'+divCMTLike+'> a.number');
+                    var newCount = divCMTLike.text();
+                    newCount = parseInt(newCount) + 1;
+                    divCMTLike.html(newCount);
+                }
+                else{
+                    var likeID = buttonLikeCMT.attr('id');
+                    buttonLikeCMT.attr('class', 'like');
+                    buttonLikeCMT.attr('id', '');
+                    setUnlikeStatus(likeID, buttonLikeCMT);
+                    var divCMTLike = buttonLikeCMT.next();
+                    var newCount = divCMTLike.text();
+                    newCount = parseInt(newCount) - 1;
+                    divCMTLike.html(newCount);
+                }
+            });
+        });
+
 
         //FUNCTION FOR ADD FRIEND
         jQuery('#addFriend').click(function(){
@@ -1354,18 +1856,23 @@ function time_difference($date)
             var friendStatus = "SENT";
             var data = "actionUser=" + actionUser+"&actionLocation=" + actionLocation+ "&friendStatus="+friendStatus;
 
+            addFriend(data);
+        });
+
+        function addFriend(alldata)
+        {
             jQuery.ajax({
                 type: "POST",
                 url: "<?php echo $this->url('success', array('action' => 'addfriend')); ?>",
-                data: data,
+                data: alldata,
                 async:false,
                 success: function(data) {
-                    alert(data);
+//                    alert(data);
                     data = JSON.parse(data);
                     var success = data['success'];
                     if(success == "1")
                     {
-                       alert("Yêu cầu kết bạn đã được gửi đi. Bạn hãy chờ xác nhận!");
+                        alert("Yêu cầu kết bạn đã được gửi đi. Bạn hãy chờ xác nhận!");
                     }
                     else
                     {
@@ -1377,7 +1884,7 @@ function time_difference($date)
                 }
             });
             return false;
-        });
+        }
 
         jQuery('#unFriend').click(function(){
             var actionUser = jQuery('#avai-userid').attr('name');
@@ -1391,16 +1898,16 @@ function time_difference($date)
                 data: data,
                 async:false,
                 success: function(data) {
-                    alert(data);
+//                    alert(data);
                     data = JSON.parse(data);
                     var success = data['success'];
                     if(success == "1")
                     {
-                        alert("thanh cong");
+                        alert("Hủy kết bạn thành công");
                     }
                     else
                     {
-                        alert('Bạn đã gửi yêu cầu kết bạn, hãy chờ xác nhận từ người này');
+                        alert('Bạn đã gửi yêu cầu hủy kết bạn.');
                     }
                 },
                 error: function() {
@@ -1410,30 +1917,143 @@ function time_difference($date)
             return false;
         });
 
-        jQuery('#menuFriend').click(function(){
 
-        });
+        //FUNCTION FOR SEARCH
 
-        function setLikeStatus(actionid, timeStamp, userid, buttonLike)
+        function instanceShowSearchResult(fullName, pathAva, userID, friendStatus)
         {
-            var data = "actionid="+ actionid +"&timeStamp="+timeStamp + "&userid="+userid;
-            alert(data);
+            var divsearchUser = document.createElement('div');
+            divsearchUser.className = "searchUser";
+
+            var divimagesearchUser = document.createElement('div');
+            divimagesearchUser.className = "image-searchUser";
+                var imgsearchUser = document.createElement('img');
+                jQuery(imgsearchUser).attr('src', '<?php echo $this->basePath().'/uploads/'; ?>' + pathAva);
+
+            var divcontentsearchUser = document.createElement('div');
+            divcontentsearchUser.className = "content-searchUser";
+
+                var tagaOfNameSearchUser = document.createElement('a');
+                jQuery(tagaOfNameSearchUser).attr('href', '<?php echo $this->basePath().'/success?user=';?>' +userID);
+                    var tagSpanOfNameUser = document.createElement('span');
+                    tagSpanOfNameUser.className = "name-searchUser";
+                    jQuery(tagSpanOfNameUser).text(fullName);
+
+                var tagaOfBanChungUser = document.createElement('a');
+                jQuery(tagaOfBanChungUser).attr('href', '#');
+                    var tagSpanOfBanChungUser = document.createElement('span');
+                    tagSpanOfBanChungUser.className = "banchung-searchUser";
+                    jQuery(tagSpanOfBanChungUser).text("4 bạn chung");
+
+                var tagaOfKetBan = document.createElement('a');
+                jQuery(tagaOfKetBan).attr('name', userID);
+
+                    var tagSpanOfKetBan = document.createElement('span');
+                    tagSpanOfKetBan.className = "";
+
+                    var friendCheckStatus = "Kết bạn";
+                    var nameClassStatus = "btnKetban-copy";
+                    if(friendStatus == "ME"){
+                        friendCheckStatus = "Chính bản thân";
+                    }else{
+                        if(friendStatus == "SENT") {
+                            friendCheckStatus ="Đã gửi yêu cầu kết bạn";
+
+                        }
+                        else{
+                            if(friendStatus == "ACCEPTED") friendCheckStatus ="Đã kết bạn";
+                            else
+                                nameClassStatus = "btnKetban-searchUser";
+                        }
+                    }
+                    tagaOfKetBan.className = nameClassStatus;
+                    jQuery(tagSpanOfKetBan).text(friendCheckStatus);
+
+
+            divsearchUser.appendChild(divimagesearchUser);
+                divimagesearchUser.appendChild(imgsearchUser);
+            divsearchUser.appendChild(divcontentsearchUser);
+                divcontentsearchUser.appendChild(tagaOfNameSearchUser);
+                    tagaOfNameSearchUser.appendChild(tagSpanOfNameUser);
+                divcontentsearchUser.appendChild(tagaOfBanChungUser);
+                    tagaOfBanChungUser.appendChild(tagSpanOfBanChungUser);
+                divcontentsearchUser.appendChild(tagaOfKetBan);
+                    tagaOfKetBan.appendChild(tagSpanOfKetBan);
+
+
+            jQuery('#searchResult').append(divsearchUser);
+
+            jQuery(tagSpanOfKetBan).each(function(){
+                jQuery(this).on('click',function(){
+                    var actionUser = jQuery('#avai-userid').attr('name');
+                    var actionLocation = jQuery(this).parent().attr('name');
+
+                    if(actionUser == actionLocation) {
+                        alert('Bạn không thể tự kết bạn với chính mình.');
+                        return;
+                    }
+
+                    var friendStatus = "SENT";
+                    var data = "actionUser=" + actionUser+"&actionLocation=" + actionLocation+ "&friendStatus="+friendStatus;
+
+                    addFriend(data);
+                });
+            });
+
+        }
+
+        function searchEverything()
+        {
+            var searchContent = jQuery('#txtSearch').val();
+            var divSearchResult = jQuery('#searchResult');
+            var actionUser = jQuery('#avai-userid').attr('name');
+            var data = "actionUser="+actionUser+"&searchContent="+searchContent;
+
+            if(searchContent == "") {
+                divSearchResult.hide();
+                return;
+            }
+//            alert(data);
             jQuery.ajax({
                 type: "POST",
-                url: "<?php echo $this->url('success', array('action' => 'savelikestatus')); ?>",
+                url: "<?php echo $this->url('success', array('action' => 'search')); ?>",
                 data: data,
                 async:false,
                 success: function(data) {
-                    alert(data);
+//                    alert(data);
                     data = JSON.parse(data);
                     var success = data['success'];
+                    var checkNull = false;
                     if(success == "1")
                     {
-                        buttonLike.text('Unlike');
+                        divSearchResult.hide().empty();
+                        if(data['result'] != null){
+                            for(var i = 0; i<data['result'].length; i++){
+                                var info = data['result'][i];
+                                var searchUserID = info['userid']
+                                var friendStatus = info['friendStatus'];
+                                if(searchUserID == actionUser) {
+                                    friendStatus = "ME";
+                                }
+                                instanceShowSearchResult(info['fullName'], info['path'],searchUserID , friendStatus);
+                            }
+                            divSearchResult.append('<div class="searchUser" style="border-bottom:0px;"><a href="#"><span class="readmore">Xem thêm kết quả...</span></a></div>');
+                        }
+                        else{
+                            divSearchResult.append('<div class="searchUser" style="border-bottom:0px;"><a href="#"><span class="readmore">Không có kết quả nào phù hợp!</span></a></div>');
+                        }
+                        divSearchResult.show();
+
+                        jQuery('.searchUser').hover(function(){
+                           jQuery(this).addClass('newBackground');
+                        }, function(){
+                            jQuery(this).removeClass('newBackground');
+                        });
+
                     }
                     else
                     {
-                        alert('Đăng bình luận thất bại. Hãy thử lại sau một ít phút nữa.');
+                        alert('Tìm kiếm thất bại');
                     }
                 },
                 error: function() {
@@ -1441,12 +2061,19 @@ function time_difference($date)
                 }
             });
             return false;
-        }
-
-        function setUnlikeStatus(actionid, timeStamp, userid, buttonLike)
-        {
 
         }
+
+
+
+
+        jQuery('#txtSearch').on('keyup', function(){
+            searchEverything();
+        });
+        jQuery('#btnSearch').click(function(){
+            searchEverything();
+        });
+
 
 
 

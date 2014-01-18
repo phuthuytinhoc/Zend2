@@ -37,6 +37,13 @@ class ExampleModel
 //            ->execute(); // ra danh sach nhieu gia tri
             ->getSingleResult(); //lay ra mot gia tri duy nhat
 
+        //Neu lay ra một giá trị duy nhất thì ko cần foreach để getLastname()...
+        //nhưng nếu dùng execute thì phải foreach để lấy giá trị vì nó có nhiều dữ liệu trong đó
+//        ví dụ như
+//      foreach($document as $doc)
+//      {
+//          echo $doc->getLastname();
+//      }
 
         if(isset($document))
         {
