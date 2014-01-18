@@ -346,12 +346,20 @@ class HomepageModel {
     }
 
     public function getUserName($dm, $userid) {
-        $query = $dm->createQueryBuilder('Application\Document\User')
-            ->field('userid')->equals($userid);
+        $find = strpos($userid, 'page');
+        if ($find === false) {
+            $query = $dm->createQueryBuilder('Application\Document\User')
+                ->field('userid')->equals($userid);
 
-        $result = $query->getQuery()->getSingleResult();
+            $result = $query->getQuery()->getSingleResult();
+            return $result->getLastname().' '.$result->getFirstname();
+        }else {
+            $query = $dm->createQueryBuilder('Application\Document\Fanpage')
+                ->field('pageid')->equals($userid);
 
-        return $result->getLastname().' '.$result->getFirstname();
+            $result = $query->getQuery()->getSingleResult();
+            return $result->getPagename();
+        }
     }
 
     public function getUserAvatarPath($dm, $userid) {

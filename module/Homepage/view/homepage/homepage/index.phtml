@@ -73,8 +73,13 @@ function getFullTime($date)
                 <div class="time-content">
                     <span title="<?php echo getFullTime($action['createdtime']); ?>">
                         <?php if ($action['actionuser'] != $action['actionlocation']): ?>
-                            <?php echo '> '.'<a href="'.$this->basePath().'/success?user='.$action['actionlocation'].'">'.$action['actionlocationname'].'</a>'.'<br>' ?>
-                            <?php echo time_difference($action['createdtime']); ?>
+                            <?php if(strpos($action['actionlocation'], 'page') === false): ?>
+                                <?php echo '> '.'<a href="'.$this->basePath().'/success?user='.$action['actionlocation'].'">'.$action['actionlocationname'].'</a>'.'<br>' ?>
+                                <?php echo time_difference($action['createdtime']); ?>
+                            <?php else: ?>
+                                <?php echo '> '.'<a href="'.$this->basePath().'/fanpage?pageID='.$action['actionlocation'].'">'.$action['actionlocationname'].'</a>'.'<br>' ?>
+                                <?php echo time_difference($action['createdtime']); ?>
+                            <?php endif; ?>
                         <?php endif; ?>
                         <?php if ($action['actionuser'] == $action['actionlocation']): ?>
                             <?php echo time_difference($action['createdtime']); ?>
