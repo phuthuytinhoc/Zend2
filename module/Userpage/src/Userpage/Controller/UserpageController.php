@@ -10,6 +10,7 @@
 namespace Userpage\Controller;
 
 use Symfony\Component\Console\Application;
+use Userpage\Model\CreatePageModel;
 use Userpage\Model\FriendModel;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Session\Container;
@@ -97,9 +98,42 @@ class UserpageController extends AbstractActionController
             $infoUseronWal =  $successModel->getInfoUserByID($dm);
             $infoUserCommented = $successModel->getInfoUserbyActionType($dm);
             $getNotifFriend = $successModel->getRequestFriend($actionUser, $actionLocation, $dm);
-//            var_dump('gia tri la:' .$getNotifFriend); die();
+
+            //Phan Friend
+            $friendModel = new FriendModel();
+            $listFriendID = $friendModel->getListFriend($actionLocation, $dm);
+
+//            var_dump($actionLocation);die();
+
+            //lay anh bum anh dai dien gan day cua user
+            $albumAvatarHome = $successModel->getAlbumAvatarHome($actionLocation, $dm, 'AVA');
+            $listFriendAccepted = $successModel->getFriendByStatus($actionLocation, $dm, 'ACCEPTED');
+
+            //lay danh sach like status , comment
+            $countLikes = $successModel->getCountLikeActionID($actionLocation, $dm);
+
+//            var_dump($actionLocation);
+            //getListActionID of Comment
+            $actionIDofCMT = $successModel->getActionIDofCommentbyCMTID($actionLocation, $dm);
+
+
+//            $friendModel = new FriendModel();
+//            $result = $friendModel->getResultSearch($actionUser, $dm);
+
+//            var_dump($result); die();
+
+
 
             return array(
+                //actionID of comment
+                'actionIDofCMT'            => $actionIDofCMT,
+                //count likes
+                'countLikes'                => $countLikes['countLikes'],
+                'checkLikeYourself'         => $countLikes['checkLikeYourself'],
+                //tra ve thong tin ban be user
+                'listFriendID'              => $listFriendID,
+                'albumAvatarHome'           => $albumAvatarHome,
+                'listFriendAccepted'        => $listFriendAccepted,
                 //tra ve actionUser va actionLocation
                 'actionUserID'              => $actionUser,
                 'actionLocationID'          => $actionLocation,
@@ -170,13 +204,13 @@ class UserpageController extends AbstractActionController
         {
             return $response->setContent(\Zend\Json\Json::encode(array(
                 'success' => 1,
-                'messages' => 'Đăng trạng thái thành công')));
+                'messages' => '??ng tr?ng thái thành công')));
         }
         else
         {
             return $response->setContent(\Zend\Json\Json::encode(array(
                 'success' => 0,
-                'error' => 'Đăng trạng thái thất bại.')));
+                'error' => '??ng tr?ng thái th?t b?i.')));
         }
     }
 
@@ -217,7 +251,11 @@ class UserpageController extends AbstractActionController
 
     public function friendAction()
     {
-        $this->indexAction();
+        $result = $this->getAuthenService();
+        if(!$result->hasIdentity())
+        {
+            return $this->redirect()->toRoute('home');
+        }
 //        $this->layout('layout/layout');
         $layoutSetting = $this->layout();
         $layoutSetting->setTemplate('layout/settingpage');
@@ -225,34 +263,85 @@ class UserpageController extends AbstractActionController
         $result = new ViewModel();
         $result->setTemplate('userpage/userpage/friend');
 
+        $actionUser = $this->getUserIdentity()->getUserid();
+        $actionLocation = $this->params()->fromQuery('user');
+        if(!isset($actionLocation))
+        {
+            $actionLocation = $actionUser;
+        }
+
+//        var_dump($actionLocation);die();
+
         $dm = $this->getDocumentService();
         $friendModel = new FriendModel();
+        $successModel = new SuccessModel();
         $actionUser = $this->getUserIdentity()->getUserid();
 
-        $listFriend = $friendModel->getListFriend($actionUser, $dm);
+        $listFriendID = $friendModel->getListFriend($actionLocation, $dm);
+        $listFriendSent = $successModel->getFriendByStatus($actionLocation, $dm, 'SENT');
 
-//        var_dump($listFriend); die();
+//        var_dump($listFriendID); die();
 
-        return null;
+        return array(
+            'actionUserID'     => $actionUser,
+            'actionLocationID' => $actionLocation,
+            'userid'           => $actionLocation,
+            'listFriendID'     => $listFriendID,
+            'banchung'         => $listFriendID['banchung'],
+            'relationship'     => $listFriendID['infoFriends'],
+            'infoUser'         => $listFriendID['infoFriends'],
+            'checkStatusFriend'=> $listFriendID['checkStatusFriend'],
+            'listFriendSent'   => $listFriendSent,
+        );
 
     }
 
     //FUNCTION of Update info
     public function updateinfoAction()
     {
-        $this->indexAction();
+        $result = $this->getAuthenService();
+        if(!$result->hasIdentity())
+        {
+            return $this->redirect()->toRoute('home');
+        }
+
         $layoutSetting = $this->layout();
         $layoutSetting->setTemplate('layout/settingpage');
 
         $result = new ViewModel();
         $result->setTemplate('userpage/userpage/updateinfo');
+
+        $allInfo = $this->getUserIdentity();
+
+        $aboutMe = array(
+            'school' => $allInfo->getSchool(),
+            'work'   => $allInfo->getWork(),
+            'relationship' => $allInfo->getRelationship(),
+        );
+        $bacsicInfo = array(
+            'lastname'  => $allInfo->getLastname(),
+            'firstname' => $allInfo->getFirstname(),
+            'dob'       => $allInfo->getDOB(),
+            'address'   => $allInfo->getAddress(),
+            'quote'     => $allInfo->getQuote(),
+        );
+
+
+        $result->setVariables(array(
+            'aboutMe'    => $aboutMe,
+            'basicInfo'  => $bacsicInfo,
+        ));
         return $result;
     }
 
     public function autogetuseridAction()
     {
         $response = $this->getResponse();
-        $userid = $this->getUserIdentity()->getUserid();
+        $allInfo = $this->getUserIdentity();
+        $userid = $allInfo->getUserid();
+
+
+
         $successModel = new SuccessModel();
 
         $documentService = $this->getDocumentService();
@@ -262,10 +351,12 @@ class UserpageController extends AbstractActionController
 
 
         return $response->setContent(\Zend\Json\Json::encode(array(
-            'success' => 1,
-            'userid' => $userid,
+            'success'    => 1,
+            'userid'     => $userid,
             'pathavatar' => $pathAva,
-            'pathCover' => $pathCover,)));
+            'pathCover'  => $pathCover,
+
+        )));
     }
 
     //AJAX UPDATE INFO
@@ -524,6 +615,29 @@ class UserpageController extends AbstractActionController
         }
     }
 
+    public function unlikestatusAction()
+    {
+        $response = $this->getResponse();
+        $data = $this->params()->fromPost();
+        $dm = $this->getDocumentService();
+        $successModel = new SuccessModel();
+
+        $result = $successModel->unlikeStatus($data, $dm);
+
+        if($result)
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 1,
+            )));
+        }
+        else
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0,
+            )));
+        }
+    }
+
     //FUNCTION FOR Ket ban
 
     public function addfriendAction()
@@ -560,6 +674,29 @@ class UserpageController extends AbstractActionController
 
     }
 
+    public function confirmaddfriendAction()
+    {
+        $response = $this->getResponse();
+        $data = $this->params()->fromPost();
+        $dm = $this->getDocumentService();
+        $friendModel = new FriendModel();
+
+        $result = $friendModel->confirmaddfriend($data, $dm);
+
+        if($result)
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 1,
+            )));
+        }
+        else
+        {
+            return $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0,
+            )));
+        }
+    }
+
     public function unfriendAction()
     {
         $response = $this->getResponse();
@@ -580,8 +717,76 @@ class UserpageController extends AbstractActionController
                 'success' => 0,
             )));
         }
-
-
     }
+
+    //FUNCTION FOR SERACH
+    public function searchAction()
+    {
+        $response = $this->getResponse();
+
+        $dm = $this->getDocumentService();
+        $data = $this->params()->fromPost();
+
+        $friendModel = new FriendModel();
+        $result = $friendModel->getResultSearch($data, $dm);
+
+//        var_dump($result);
+
+        return $response->setContent(\Zend\Json\Json::encode(array(
+            'success' => 1,
+            'result'  => $result,
+        )));
+    }
+
+    //FUNCTION FOR CREATE FANPAGE
+    public function createfanpageAction()
+    {
+        $result = $this->getAuthenService();
+        if(!$result->hasIdentity())
+        {
+            return $this->redirect()->toRoute('home');
+        }
+
+        $error = null;
+
+        $userID = $this->getUserIdentity()->getUserid();
+        $dm = $this->getDocumentService();
+        $fanpageModel = new CreatePageModel();
+
+        $request = $this->getRequest();
+
+        if($request->isPost())
+        {
+            $data = $this->params()->fromPost();
+            $rs = $fanpageModel->createNewFanpage($data, $userID, $dm);
+
+            if($rs!=null)
+            {
+                return $this->redirect()->toUrl('../../fanpage?pageID='.$rs);
+            }
+            else
+            {
+                $error = "Tạo mới trang không thành công. Hãy thử lại sau một ít phút nữa!";
+            }
+        }
+
+        $layoutSetting = $this->layout();
+        $layoutSetting->setTemplate('layout/settingpage');
+
+        $result = new ViewModel();
+        $result->setTemplate('userpage/userpage/createfanpage');
+
+        $binding = $fanpageModel->getListPageofUser($userID, $dm);
+
+//        var_dump($binding);die();
+
+        $result->setVariables(array(
+            'error' => $error,
+            'bindingPage' => $binding,
+        ));
+
+        return $result;
+    }
+
 
 }

@@ -14,7 +14,7 @@
     <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
         ->prependStylesheet($this->basePath() . '/css/lightbox.css')
         ->prependStylesheet($this->basePath() . '/css/style.css')
-        ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
+//        ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
         ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
 
     <!-- Scripts -->
@@ -47,7 +47,7 @@
         </div>
         <ul class="ca-menu">
             <li>
-                <a href="<?php echo $this->basePath();?>/">
+                <a href="<?php echo $this->basePath().'/homepage/'; ?>">
                     <span class="ca-icon">F</span>
                     <div class="ca-content">
                         <h2 class="ca-main">Trang chủ</h2>
@@ -56,7 +56,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="<?php echo $this->basePath().'/success/'; ?>">
                     <span class="ca-icon">Z</span>
                     <div class="ca-content">
                         <h2 class="ca-main">Trang cá nhân</h2>
@@ -75,10 +75,10 @@
             </li>
             <li>
                 <a href="<?php echo $this->url('success', array('action' => 'friend')); ?>">
-                    <span class="ca-icon">U</span>
+                    <span class="ca-icon">UU</span>
                     <div class="ca-content">
                         <h2 class="ca-main">Bạn bè</h2>
-                        <h3 class="ca-sub">162 bạn bè, 5 bạn chung</h3>
+                        <h3 class="ca-sub">Bạn bè & lời mời kết bạn</h3>
                     </div>
                 </a>
             </li>
@@ -97,6 +97,16 @@
                     <div class="ca-content">
                         <h2 class="ca-main">Cài đặt</h2>
                         <h3 class="ca-sub">Chỉnh sửa cài đặt cá nhân</h3>
+                    </div>
+                </a>
+            </li>
+
+            <li>
+                <a href="<?php echo $this->url('success', array('action' => 'create-fanpage')); ?>">
+                    <span class="ca-icon">a</span>
+                    <div class="ca-content">
+                        <h2 class="ca-main">Tạo fanpage</h2>
+                        <h3 class="ca-sub">Tạo trang miễn phí</h3>
                     </div>
                 </a>
             </li>
@@ -126,22 +136,25 @@
 
 
 <script type="text/javascript">
+    jQuery('body').addClass('bodyFriendPage');
+    calWidthSearchDiv();
+    function calWidthSearchDiv()
+    {
+        var winWidth = jQuery(window).width();
+        var winHeight = jQuery(window).height();
+        var widthBlack = winWidth - 280;
+        jQuery('.fiend-container').css('width', winWidth + "px");
+        jQuery('.rightContent-friend').css('width', widthBlack + "px");
+    }
     jQuery(document).ready(function(){
         //set class for body
-        jQuery('body').addClass('bodyFriendPage');
+
 
         //set with for some div
-        function calWidthSearchDiv()
-        {
-            var winWidth = jQuery(window).width();
-            var winHeight = jQuery(window).height();
-            var widthBlack = winWidth - 280;
-            jQuery('.fiend-container').css('width', winWidth + "px");
-            jQuery('.rightContent-friend').css('width', widthBlack + "px");
-        }
+
 
         //dieu chinh div truoc khi load.
-        calWidthSearchDiv();
+
 
         //on window resize
         jQuery(window).resize(function(){
